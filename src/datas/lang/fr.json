@@ -1,0 +1,53 @@
+{
+    "head": {
+        "bienvenue": "Bienvenue sur notre site !",
+        "titre": "DataDunk - Systeme de gestion des performances sportives",
+        "description": "DataDunk est un système de mesure, d'analyse et de gestion des données de la performance sportive indoor en temps réel.",
+        "keywords": "DataDunk, Basketball, Performance, Sport, Analyse, Mesure, Gestion, Données, Temps réel"
+    },
+    "navbar": {
+        "logo": {
+            "icon": "icon-datadunk.svg",
+            "name": "",
+            "path": "/"
+        }
+    },
+    
+    "navigation": {
+        "home": {
+            "icon": "icon-home.svg",
+            "name": "Accueil",
+            "path": "/home"
+        },
+        "articles": {
+            "icon": "icon-articles.svg",
+            "name": "Articles",
+            "path": "/articles"
+        },
+        "guides": {
+            "icon": "icon-guides.svg",
+            "name": "Guides",
+            "path": "/guides"
+        },
+        "league": {
+            "icon": "icon-leagues.svg",
+            "name": "Ligues",
+            "path": "/leagues"
+        },
+        "matchs": {
+            "icon": "icon-matches.svg",
+            "name": "Matchs",
+            "path": "/matches"
+        },
+        "teams": {
+            "icon": "icon-teams.svg",
+            "name": "Equipes",
+            "path": "/teams"
+        },
+        "players": {
+            "icon": "icon-players.svg",
+            "name": "Joueurs",
+            "path": "/players"
+        }
+    }
+}
