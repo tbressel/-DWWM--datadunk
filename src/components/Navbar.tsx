@@ -11,13 +11,17 @@ import { useState } from 'react';
 ///////////////////////  Styled Components ///////////////////////
 
 
-const BurgerContainer = styled.div`
-    cursor: pointer;
-    width: 30px;
 
-    @media screen and (min-width: 768px) {
-        display: none;
-    }
+const BurgerLine = styled.div`
+    width: 100%;
+    height: 4px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    background-color: #ffffff;
+`;
+const Img = styled.img`
+    width: 35px;
+    height: 37px;
 `;
 
 const NavbarWrapper = styled.div`
@@ -36,16 +40,13 @@ const NavbarWrapper = styled.div`
         }
 `;
 
-const BurgerLine = styled.div`
-    width: 100%;
-    height: 4px;
-    margin-top: 6px;
-    margin-bottom: 6px;
-    background-color: #ffffff;
-`;
-const Img = styled.img`
-    width: 35px;
-    height: 37px;
+const BurgerContainer = styled.div`
+    cursor: pointer;
+    width: 30px;
+
+    @media screen and (min-width: 768px) {
+        display: none;
+    }
 `;
 
 ///////////////////////  RCC  ///////////////////////

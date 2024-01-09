@@ -15,9 +15,12 @@ export type NavbarDataType = {
 
 export type TeamDataType = {
     [key: string]: {
-        clubname: string;
-        teamname: string;
-        city: string;
-        pic: string;
+        id_team: number;
+        team_clubname: string;
+        team_nickname: string;
+        team_city: string;
+        team_picture: string;
+        team_league: string;
+        team_competition: string;
     };
 }
