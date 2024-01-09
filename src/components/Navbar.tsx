@@ -10,6 +10,16 @@ import { useState } from 'react';
 
 ///////////////////////  Styled Components ///////////////////////
 
+
+const BurgerContainer = styled.div`
+    cursor: pointer;
+    width: 30px;
+
+    @media screen and (min-width: 768px) {
+        display: none;
+    }
+`;
+
 const NavbarWrapper = styled.div`
         display: flex;
         flex-direction: row;
@@ -18,20 +28,11 @@ const NavbarWrapper = styled.div`
         background-color: ${colors.bleu};
         max-height: 77px;
         padding: 13px 20px 13px 20px;
+        
         @media screen and (min-width: 768px) {
             align-items: center;
             padding-top: 0px;
             padding-bottom: 0px;
-        }
-
-`;
-
-const BurgerContainer = styled.div`
-    cursor: pointer;
-    width: 30px;
-
-    @media screen and (min-width: 768px) {
-display: none;
         }
 `;
 

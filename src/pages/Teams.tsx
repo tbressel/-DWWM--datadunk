@@ -1,6 +1,11 @@
 import Navbar from "../components/Navbar";
 import TeamsList from "../components/TeamsList";
+import { useEffect, useState } from "react";
+
 const Teams = () => {
+
+
+
     return (
         <>
   <Navbar />

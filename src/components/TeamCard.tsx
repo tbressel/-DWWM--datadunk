@@ -22,16 +22,16 @@ const TeamCard = () => {
         line-height: normal; 
         transition: 200ms ease-in-out;
     `;
-const BackImg = styled.div<{ bgUrl: string }>`
-width: 140px;
-height: 77.778px;
-flex-shrink: 0; 
-background-image: url(${props => props.bgUrl});
-background-repeat: no-repeat;
-background-position: center;
-background-size: 60%;
-transition: 200ms ease-in-out;
-`;
+    const BackImg = styled.div<{ bgUrl: string }>`
+        width: 140px;
+        height: 77.778px;
+        flex-shrink: 0; 
+        background-image: url(${props => props.bgUrl});
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 60%;
+        transition: 200ms ease-in-out;
+    `;
     const TeamCardContainer = styled.div`
         display: flex;
         flex-direction: column;
@@ -58,9 +58,6 @@ transition: 200ms ease-in-out;
             }
         }
     `;
-
-
-
     const TeamImage = styled.div`
         display: flex;
         width: 150px;
@@ -71,11 +68,8 @@ transition: 200ms ease-in-out;
         flex-shrink: 0;  
     `;
 
-
-     
     return (
         <>
-
             {Object.keys(teamData).map((teamKey) => (
                 <TeamCardContainer key={teamKey}>
                     <TeamImage>
@@ -86,7 +80,6 @@ transition: 200ms ease-in-out;
                     </ClubName>
                 </TeamCardContainer>
             ))}
-
         </>
     )
 }
