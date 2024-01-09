@@ -1,0 +1,98 @@
+{
+    "angers": {
+        "clubname": "Etoile Angers Basket",
+        "teamname": "EAB",
+        "city": "Angers",
+        "pic": "team-angers.png",
+        "league": "Pro B",
+        "competition": "France"
+    },
+    "amsb": {
+        "clubname": "AMSB Basket",
+        "teamname": "AMSB",
+        "city": "AMSB",
+        "pic": "team-amsb.png",
+        "league": "Pro B",
+        "competition": "France"
+    },
+    "antibes": {
+        "clubname": "antibes Basket",
+        "teamname": "antibes",
+        "city": "antibes",
+        "pic": "team-antibes.png",
+        "league": "Pro B",
+        "competition": "France"
+    },
+    "lille": {
+        "clubname": "Lille Métropole Basket",
+        "teamname": "RED GIANTS",
+        "city": "Lille",
+        "pic": "team-lille.png",
+        "league": "Pro B",
+        "competition": "France"
+    },
+    "rouen": {
+        "clubname": "Rouen Métropole SPO Basket",
+        "teamname": "SPO",
+        "city": "Rouen",
+        "pic": "team-rouen.png",
+        "league": "Pro B",
+        "competition": "France"
+    } ,  
+    "blois": {
+        "clubname": "Blois Basket",
+        "teamname": "AUCUN",
+        "city": "blois",
+        "pic": "team-blois.png",
+        "league": "Pro B",
+        "competition": "France"
+    },   
+    "bourg": {
+        "clubname": "Bourg Basket",
+        "teamname": "AUCUN",
+        "city": "bourg",
+        "pic": "team-bourg.png",
+        "league": "Pro B",
+        "competition": "France"
+    },
+    "evreux": {
+        "clubname": "evreux Basket",
+        "teamname": "AUCUN",
+        "city": "evreux",
+        "pic": "team-evreux.png",
+        "league": "Pro B",
+        "competition": "France"
+    },
+    "chalon": {
+        "clubname": "chalon Basket",
+        "teamname": "AUCUN",
+        "city": "chalon",
+        "pic": "team-chalon.png",
+        "league": "Pro B",
+        "competition": "France"
+    },
+    "nancy": {
+        "clubname": "nancy Basket",
+        "teamname": "AUCUN",
+        "city": "nancy",
+        "pic": "team-nancy.png",
+        "league": "Pro B",
+        "competition": "France"
+    },
+    "paris": {
+        "clubname": "paris Basket",
+        "teamname": "AUCUN",
+        "city": "paris",
+        "pic": "team-paris.png",
+        "league": "Pro B",
+        "competition": "France"
+    },
+    "nantes": {
+        "clubname": "nantes Basket",
+        "teamname": "AUCUN",
+        "city": "nantes",
+        "pic": "team-nantes.png",
+        "league": "Pro B",
+        "competition": "France"
+    }
+}

@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import { colors } from './colors';
 
 export const GlobalStyle = createGlobalStyle`
   body {
@@ -7,6 +8,7 @@ export const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
     overflow-x: hidden;
     min-width: 320px;
+    background-color: ${colors.violet1};
   }
   a {
     text-decoration: none;
@@ -16,20 +18,22 @@ export const GlobalStyle = createGlobalStyle`
         font-family: 'Gibson Bold';
         src: url('/assets/fonts/GibsonBold.woff2') format('woff2');
   }
-  @font-face {
-        font-family: 'Gibson Light';
-        src: url('/assets/fonts/GibsonLight.woff2') format('woff2');
-  }
+
   @font-face {
         font-family: 'Gibson Medium';
         src: url('/assets/fonts/GibsonMedium.woff2') format('woff2');
   }
+
   @font-face {
-        font-family: 'Gibson SemiBold';
-        src: url('/assets/fonts/GibsonSemiBold.woff2') format('woff2');
+        font-family: 'Barlow Medium';
+        src: url('/assets/fonts/Barlow-Medium.woff2') format('woff2');
   }
   @font-face {
-        font-family: 'Gibson Thin';
-        src: url('/assets/fonts/GibsonThin.woff2') format('woff2');
+        font-family: 'Barlow Regular';
+        src: url('/assets/fonts/Barlow-Regular.woff2') format('woff2');
   }
+
+--transition: 500ms;
+
+
 `;

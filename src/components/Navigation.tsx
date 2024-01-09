@@ -24,6 +24,7 @@ const Navigation = (props: NavigationProps) => {
         gap: 20px;
 
         position: absolute;
+        z-index: 2;
         top: 60px;
         right: ${props.burgerClicked ? '0px' : '-350px'};
         width: 276px;

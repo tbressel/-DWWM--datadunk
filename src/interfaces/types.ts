@@ -12,3 +12,12 @@ export type NavbarDataType = {
         path: string;
     };
 }
+
+export type TeamDataType = {
+    [key: string]: {
+        clubname: string;
+        teamname: string;
+        city: string;
+        pic: string;
+    };
+}
