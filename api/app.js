@@ -1,66 +1,55 @@
 const express = require('express');
-const mysql = require('mysql');
-const cors = require('cors'); // Importe le module cors
 const app = express();
-require('dotenv').config();
 
-app.use(cors()); // Utilise cors middleware pour autoriser les requêtes cross-origin
 
-app.listen(3001, () => {
-    console.log('Serveur en écoute sur le port 3001');
-});
+const mysql = require('mysql');
 
+const cors = require('cors');
 
 require('dotenv').config();
 
-const connection = mysql.createConnection({
+const port = 5000;
+
+app.use(cors());
+
+// Utilise un pool de connexions
+const pool = mysql.createPool({
+    connectionLimit: 10, // Limite le nombre de connexions dans le pool
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASS,
-    database: process.env.DB_NAME,
-    socketPath: process.env.SOCKET_PATH
+    database: process.env.DB_DATA,
+    port: process.env.DB_PORT, // Ajoute cette ligne pour spécifier le port
 });
 
-connection.connect((err) => {
+// Vérifie si la connexion à la base de données est réussie
+pool.getConnection((err, connection) => {
     if (err) {
         console.error(err);
-    } else {
-        console.log('Connected to MySQL');
+        return;
     }
+    console.log('Connected to MySQL');
+    connection.release(); // Libère la connexion du pool après utilisation
 });
 
-
+app.listen(port, () => {
+    console.log('Serveur en écoute sur le port', port);
+});
 
 app.get('/api/app.js', (req, res) => {
     // Crée une requête SQL préparée
     const sql = 'SELECT * FROM team'; 
 
-    // Exécute la requête
-    connection.query(sql, (error, results) => {
+    // Exécute la requête à partir du pool de connexions
+    pool.query(sql, (error, results) => {
         if (error) {
-            // Si une erreur se produit, renvoie un message d'erreur
+            console.error(error);
             res.json({
                 'message': 'Error occurred',
                 'status': 'Failure'
             });
         } else {
-            // Sinon, renvoie les résultats de la requête
             res.json(results);
         }
     });
 });
-
-/**
- * 
- * Si le serveur renvoie ce message d'erreur : 
- *
- *  code: 'ER_NOT_SUPPORTED_AUTH_MODE',
- *  errno: 1251,
- *  sqlMessage: 'Client does not support authentication protocol requested by server; consider upgrading MySQL client',
- *  sqlState: '08004',
- *  fatal: true
- * 
- */
-
-// ALTER USER 'zisquier'@'localhost' IDENTIFIED WITH mysql_native_password BY 'pass';
-// FLUSH PRIVILEGES;

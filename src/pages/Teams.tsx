@@ -2,9 +2,10 @@ import Navbar from "../components/Navbar";
 import TeamsList from "../components/TeamsList";
 import { useEffect } from 'react';
 
+
 const fetchData = async () => {
     try {
-        const response = await fetch('http://localhost:3001/api/app.js');
+        const response = await fetch('http://localhost:5000/api/app.js');
         const data = await response.json();
 
         // Écrire la variable 'data' dans le stockage local
@@ -14,6 +15,7 @@ const fetchData = async () => {
         console.error('Error fetching data:', error);
     }
 };
+
 
 const Teams = () => {
     useEffect(() => {
