@@ -3,5 +3,6 @@ export const colors = {
     bleu: '#242038',
     corail: '#E98272',
     blanc: '#FFFFFF',
-    violet1: '#F3F2F9'
+    violet1: '#F3F2F9',
+    gris1: '#8a8a8a',
 };

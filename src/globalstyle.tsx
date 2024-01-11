@@ -32,6 +32,10 @@ export const GlobalStyle = createGlobalStyle`
         font-family: 'Barlow Regular';
         src: url('/assets/fonts/Barlow-Regular.woff2') format('woff2');
   }
+  @font-face {
+        font-family: 'Barlow Bold';
+        src: url('/assets/fonts/Barlow-Bold.woff2') format('woff2');
+  }
 
 --transition: 500ms;
 

@@ -1,12 +1,12 @@
 import Navbar from "../components/Navbar";
-import Navigation from "../components/Navigation";
-
+import MatchesList from "../components/MatchesList";
 const Matches = () => {
     return (
         <>
   <Navbar />
 
             <h1>Matches</h1>
+            <MatchesList/>
         </>
     );
 };

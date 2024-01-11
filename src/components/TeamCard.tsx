@@ -24,13 +24,14 @@ const TeamCard = () => {
 
 
     const ClubName = styled.div`
-        font-family: 'Barlow Regular'; 
+        font-family: 'Barlow Medium'; 
         text-transform: uppercase;
         text-align: center; 
         font-size: 16px;
         font-style: normal;
-        font-weight: 500;
-        line-height: normal; 
+        font-weight: 600;
+        line-height: normal;
+
         transition: 200ms ease-in-out;
     `;
     const BackImg = styled.div<{ bgurl: string }>`
@@ -40,31 +41,37 @@ const TeamCard = () => {
         background-image: url(${props => props.bgurl});
         background-repeat: no-repeat;
         background-position: center;
-        background-size: 60%;
+        background-size: 55%;
         transition: 200ms ease-in-out;
     `;
     const TeamCardContainer = styled.div`
+    cursor: pointer;
         display: flex;
         flex-direction: column;
         align-items: center;
         border-radius: 15px;
         background-color: ${colors.violet1};
-        padding: 5px 0px 16px 0px; 
+        padding: 0px 0px 16px 0px; 
         max-width: 150px;
-        max-height: 172px;
-        opacity: 0.5;
+        max-height: 162px;
+        min-height: 162px;
+        box-shadow: #d0d0d0 5px 5px 5px;
+        opacity: 0.7;
         transition: 200ms ease-in-out;
+        overflow-y: hidden;
+       
 
         &:hover {
             opacity: 1;
             transition: 200ms ease-in-out;
             
             ${ClubName} {
-                font-size: 18px;
+              
+                font-size: 1.05rem;
                 transition: 200ms ease-in-out;
             }
             ${BackImg} {
-                background-size: 70%;
+                background-size: 60%;
                 transition: 200ms ease-in-out;
             }
         }
@@ -72,7 +79,7 @@ const TeamCard = () => {
     const TeamImage = styled.div`
         display: flex;
         width: 150px;
-        height: 113px;
+        height: 120px;
         flex-direction: column;
         justify-content: center;
         align-items: center;

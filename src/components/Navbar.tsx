@@ -41,6 +41,7 @@ const NavbarWrapper = styled.div`
 `;
 
 const BurgerContainer = styled.div`
+    
     cursor: pointer;
     width: 30px;
 
@@ -60,9 +61,7 @@ const Navbar = () => {
     return (
         <>
             <NavbarWrapper>
-
                 <Img src={`assets/images/icons/${navbarData.logo.icon}`} alt="" />
-
                 <BurgerContainer onClick={() => setBurgerClicked(!burgerClicked)}>
                     <BurgerLine></BurgerLine>
                     <BurgerLine></BurgerLine>

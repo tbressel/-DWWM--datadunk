@@ -1,31 +1,139 @@
-DROP DATABASE IF EXISTS `datadunk`;
+DROP TABLE franchise, league, season, games, player, stats, franchise_game;
 
-CREATE DATABASE `datadunk`;
+CREATE TABLE franchise(
+   id_franchise INT AUTO_INCREMENT,
+   franchise_name VARCHAR(50),
+   franchise_logo VARCHAR(50),
+   franchise_city VARCHAR(50),
+   PRIMARY KEY(id_franchise)
+);
 
+CREATE TABLE league(
+   id_league INT AUTO_INCREMENT,
+   league_name VARCHAR(20),
+   league_logo VARCHAR(50),
+   PRIMARY KEY(id_league)
+);
 
-CREATE TABLE team(
-   id_team INT AUTO_INCREMENT,
-   team_clubname VARCHAR(50),
-   team_nickname VARCHAR(50),
-   team_city VARCHAR(50),
-   team_picture VARCHAR(50),
-   team_league VARCHAR(50),
-   team_competition VARCHAR(50),
-   PRIMARY KEY(id_team)
+CREATE TABLE season(
+   id_season INT AUTO_INCREMENT,
+   start_date DATE,
+   end_date DATE,
+   season_name VARCHAR(50),
+   PRIMARY KEY(id_season)
+);
+
+CREATE TABLE games(
+   id_games INT AUTO_INCREMENT,
+   game_day VARCHAR(50),
+   game_location VARCHAR(50),
+   game_date DATE,
+   trainerHome VARCHAR(50),
+   teamHome VARCHAR(50),
+   teamHomeScore TINYINT,
+   trainerVisitor VARCHAR(50),
+   teamVisitor VARCHAR(50),
+   teamVisitorScore TINYINT,
+   PRIMARY KEY(id_games)
+);
+
+CREATE TABLE player(
+   id_player INT AUTO_INCREMENT,
+   player_firstname VARCHAR(50),
+   player_name VARCHAR(50),
+   player_number TINYINT,
+   PRIMARY KEY(id_player)
+);
+
+CREATE TABLE stats(
+   id_stats INT AUTO_INCREMENT,
+   fiveD BOOLEAN,
+   ct TINYINT,
+   in_ TINYINT,
+   pts TINYINT,
+   threeR TINYINT,
+   Ir TINYINT,
+   It TINYINT,
+   cs TINYINT,
+   threetPerc DECIMAL(3,1),
+   threeT TINYINT,
+   twoT TINYINT,
+   twoR TINYINT,
+   twoPerc DECIMAL(3,1),
+   IPerc TINYINT,
+   ro TINYINT,
+   rt TINYINT,
+   rd TINYINT,
+   pd TINYINT,
+   bp TINYINT,
+   fte TINYINT,
+   fpr TINYINT,
+   eval TINYINT,
+   plusMinus TINYINT,
+   id_games INT NOT NULL,
+   id_player INT NOT NULL,
+   PRIMARY KEY(id_stats),
+   FOREIGN KEY(id_games) REFERENCES games(id_games),
+   FOREIGN KEY(id_player) REFERENCES player(id_player)
+);
+
+CREATE TABLE franchise_game(
+   id_franchise INT,
+   id_league INT,
+   id_season INT,
+   id_games INT,
+   PRIMARY KEY(id_franchise, id_league, id_season, id_games),
+   FOREIGN KEY(id_franchise) REFERENCES franchise(id_franchise),
+   FOREIGN KEY(id_league) REFERENCES league(id_league),
+   FOREIGN KEY(id_season) REFERENCES season(id_season),
+   FOREIGN KEY(id_games) REFERENCES games(id_games)
 );
 
 
-INSERT INTO team (team_clubname, team_nickname, team_city, team_picture, team_league, team_competition) VALUES
-('Etoile Angers Basket', 'EAB', 'Angers', 'team-angers.png', 'Pro B', 'France'),
-('AMSB Basket', 'AMSB', 'AMSB', 'team-amsb.png', 'Pro B', 'France'),
-('antibes Basket', 'antibes', 'antibes', 'team-antibes.png', 'Pro B', 'France'),
-('Lille Métropole Basket', 'RED GIANTS', 'Lille', 'team-lille.png', 'Pro B', 'France'),
-('Rouen Métropole SPO Basket', 'SPO', 'Rouen', 'team-rouen.png', 'Pro B', 'France'),
-('Blois Basket', 'AUCUN', 'blois', 'team-blois.png', 'Pro B', 'France'),
-('Bourg Basket', 'AUCUN', 'bourg', 'team-bourg.png', 'Pro B', 'France'),
-('evreux Basket', 'AUCUN', 'evreux', 'team-evreux.png', 'Pro B', 'France'),
-('chalon Basket', 'AUCUN', 'chalon', 'team-chalon.png', 'Pro B', 'France'),
-('nancy Basket', 'AUCUN', 'nancy', 'team-nancy.png', 'Pro B', 'France'),
-('paris Basket', 'AUCUN', 'paris', 'team-paris.png', 'Pro B', 'France'),
-('nantes Basket', 'AUCUN', 'nantes', 'team-nantes.png', 'Pro B', 'France');
-
+INSERT INTO franchise (franchise_name, franchise_logo, franchise_city)
+SELECT DISTINCT
+  teamHome,
+  CONCAT(
+    'item-',
+    LOWER(
+      REPLACE(
+        REPLACE(
+          REPLACE(
+            REPLACE(
+              REPLACE(
+                REPLACE(
+                  REPLACE(
+                    REPLACE(
+                      REPLACE(
+                        REPLACE(
+                      teamHome,
+                      '/',
+                      ''
+                    ),
+                    '-',
+                    ''
+                  ),
+                  ' ',
+                  ''
+                ),
+                'à', 'a'
+              ),
+              'ê', 'e'
+            ),
+            'é', 'e'
+          ),
+          'è', 'e'
+        ),
+        'â', 'a'
+      ),
+      'ô','o'
+      ),
+      'ç','c'
+      )
+    ),'.png'
+  ) AS logo,
+  teamHome AS Ville
+FROM
+  games_scrap
+ORDER BY
+  teamHome ASC;
