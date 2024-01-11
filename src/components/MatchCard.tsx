@@ -2,10 +2,12 @@ import styled from 'styled-components';
 import { colors } from '../colors';
 
 // import data from '../datas/teams/proa.json';
-// import { TeamDataType } from '../interfaces/types';
+import { MatchDataType } from '../interfaces/types';
 
 
-const MatchCard = () => {
+const MatchCard: React.FC< {match: MatchDataType} > = (props) => {
+const  { game_day, game_location, game_date, trainerHome, teamHome, teamHomeScore, trainerVisitor, teamVisitor, teamVisitorScore } = props.match;
+
 
     const MatchCardContainer = styled.div`
         cursor: pointer;
@@ -118,7 +120,7 @@ const MatchCard = () => {
                     <MatchTeam>
                         <div className="match__team--name">
                             <p>
-                                DRAKKARS HCC CLUB
+                            {`${teamHome}`}
                             </p>
                         </div>
                         <div className="match__logo win">
@@ -134,16 +136,16 @@ const MatchCard = () => {
 
 
                         <p>
-                            <span className="match__score--text">86</span>
+                            <span className="match__score--text">{`${teamHomeScore}`}</span>
                             <span className="match__score--text"> - </span>
-                            <span className="match__score--text">64</span>
+                            <span className="match__score--text">{`${teamVisitorScore}`}</span>
                         </p>
                     </MatchScore>
 
                     <MatchTeam>
                         <div className="match__team--name">
                             <p>
-                                SPO BASKET ROUEN
+                            {`${teamVisitor}`}
                             </p>
                         </div>
                         <div className="match__logo loose">
@@ -154,9 +156,9 @@ const MatchCard = () => {
 
                 <MatchBoxDown>
                     <div className="match__gameday--text">
-                        <span>13eme journée</span>
+                        <span>{`${game_day}`}</span>
                         <span> - </span>
-                        <span>12.12.2023</span>
+                        <span>{`${game_date}`}</span>
                     </div>
                 </MatchBoxDown>
             </MatchCardContainer>

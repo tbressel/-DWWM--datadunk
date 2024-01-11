@@ -15,27 +15,12 @@ const MatchListContainer = styled.div`
 `;
 
 
-const MatchesList = () => {
+const MatchesList: React.FC < {matches : any[]}> = (props) => {
     return (
         <MatchListContainer>
-        <MatchCard/>
-        <MatchCard/>
-        <MatchCard/>
-        <MatchCard/>
-        <MatchCard/>
-        <MatchCard/>
-        <MatchCard/>
-        <MatchCard/>
-        <MatchCard/>
-        <MatchCard/>
-        <MatchCard/>
-        <MatchCard/>
-        <MatchCard/>
-        <MatchCard/>
-        <MatchCard/>
-        <MatchCard/>
-        <MatchCard/>
-        <MatchCard/>
+            {props.matches.map((match) => (
+        <MatchCard key={match.id_games} match={match}/>
+            ))}
         </MatchListContainer>   
     )
 }

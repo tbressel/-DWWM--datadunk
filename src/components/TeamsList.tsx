@@ -16,12 +16,14 @@ const TeamsListContainer = styled.div`
     border-radius: 10px;
 `;
 
-const TeamsList = () => {
+
+const TeamsList: React.FC< {teams: any[]} > = (props) => {
     return (
         <TeamsListContainer>
-            <TeamCard />
+            {props.teams.map((team) => (
+                <TeamCard key={team.id_franchise} team={team} />
+            ))}
         </TeamsListContainer>
     );
 };
-
 export default TeamsList;

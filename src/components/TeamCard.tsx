@@ -1,28 +1,10 @@
 import styled from 'styled-components';
 import { colors } from '../colors';
 
-// import data from '../datas/teams/proa.json';
-import { useState, useEffect } from 'react'; // Importer useState et useEffect depuis React
-
 import { TeamDataType } from '../interfaces/types';
 
 
 ///////////////////////  Styled Components ///////////////////////
-
-const TeamCard = () => {
-    // const teamData: TeamDataType = data;
-    const [teamData, setTeamData] = useState<TeamDataType | null>(null); // Ajouter un état pour stocker les données
-
-    useEffect(() => {
-        // Lire les données du localStorage lorsque le composant est monté
-        const teamData = localStorage.getItem('dataTeams'); // Remplacez 'teamData' par la clé que vous avez utilisée pour stocker les données
-        if (teamData) {
-            setTeamData(JSON.parse(teamData));
-        }
-    }, []);
-
-
-
     const ClubName = styled.div`
         font-family: 'Barlow Medium'; 
         text-transform: uppercase;
@@ -52,7 +34,8 @@ const TeamCard = () => {
         border-radius: 15px;
         background-color: ${colors.violet1};
         padding: 0px 0px 16px 0px; 
-        max-width: 150px;
+        max-width: 170px;
+        min-width: 170px;
         max-height: 162px;
         min-height: 162px;
         box-shadow: #d0d0d0 5px 5px 5px;
@@ -65,8 +48,7 @@ const TeamCard = () => {
             opacity: 1;
             transition: 200ms ease-in-out;
             
-            ${ClubName} {
-              
+            ${ClubName} {            
                 font-size: 1.05rem;
                 transition: 200ms ease-in-out;
             }
@@ -86,18 +68,23 @@ const TeamCard = () => {
         flex-shrink: 0;  
     `;
 
+
+const TeamCard: React.FC< {team: TeamDataType} > = (props) => {
+    const { franchise_name, franchise_logo } = props.team;
+
+
 return (
     <>
-        {teamData && Object.keys(teamData).map((teamKey) => (
-            <TeamCardContainer key={teamKey}>
-                <TeamImage>
-                    <BackImg bgurl={`assets/images/teamsh/${teamData[teamKey].team_picture}`}></BackImg>
-                </TeamImage>
-                <ClubName>
-                    <p>{teamData[teamKey].team_clubname}</p>
-                </ClubName>
-            </TeamCardContainer>
-        ))}
+
+<TeamCardContainer>
+    <TeamImage>
+        <BackImg bgurl={`assets/images/teamsh/${franchise_logo}`}></BackImg>
+    </TeamImage>
+    <ClubName>
+        <p>{`${franchise_name}`}</p>
+    </ClubName>
+</TeamCardContainer>
+      
     </>
 )
 }

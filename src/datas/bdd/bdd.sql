@@ -27,13 +27,13 @@ CREATE TABLE games(
    id_games INT AUTO_INCREMENT,
    game_day VARCHAR(50),
    game_location VARCHAR(50),
-   game_date DATE,
+   game_date VARCHAR(50),
    trainerHome VARCHAR(50),
    teamHome VARCHAR(50),
-   teamHomeScore TINYINT,
+   teamHomeScore INT,
    trainerVisitor VARCHAR(50),
    teamVisitor VARCHAR(50),
-   teamVisitorScore TINYINT,
+   teamVisitorScore INT,
    PRIMARY KEY(id_games)
 );
 
@@ -90,50 +90,46 @@ CREATE TABLE franchise_game(
 );
 
 
+
+
 INSERT INTO franchise (franchise_name, franchise_logo, franchise_city)
 SELECT DISTINCT
   teamHome,
-  CONCAT(
-    'item-',
-    LOWER(
+  CONCAT('team-', LOWER(
       REPLACE(
-        REPLACE(
           REPLACE(
-            REPLACE(
               REPLACE(
-                REPLACE(
                   REPLACE(
-                    REPLACE(
                       REPLACE(
-                        REPLACE(
-                      teamHome,
-                      '/',
-                      ''
-                    ),
-                    '-',
-                    ''
-                  ),
-                  ' ',
-                  ''
-                ),
-                'à', 'a'
-              ),
-              'ê', 'e'
-            ),
-            'é', 'e'
-          ),
-          'è', 'e'
-        ),
-        'â', 'a'
-      ),
-      'ô','o'
-      ),
-      'ç','c'
+                          REPLACE(
+                            REPLACE(
+                              REPLACE(
+                                  REPLACE(
+                                      REPLACE(
+                                          REPLACE(
+                                              REPLACE(
+                                                  teamHome, ' ', ''),
+                                              '/','sur'),
+                                              '-',''),
+                                          'ô','o'),
+                                      'â','a'),
+                                  'à','a'),
+                              'é','e'),
+                          'è','e'),
+                      'ê','e'),
+                  'ù','u'),
+              'ç','c'),
+          'espoirs',''
       )
-    ),'.png'
-  ) AS logo,
+  ), '.png') AS logo,
   teamHome AS Ville
 FROM
-  games_scrap
+  games_scraper
 ORDER BY
   teamHome ASC;
+
+
+
+INSERT INTO games (id_games, game_date, game_day, game_location, teamHome, teamHomeScore, teamVisitor, teamVisitorScore, trainerHome, trainerVisitor)
+                   SELECT gameId, gameDate, gameDay, gameLocation, teamHome, teamHomeScore, teamVisitor, teamVisitorScore, trainerHome, trainerVisitor
+                   FROM games_scraper

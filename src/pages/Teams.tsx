@@ -1,24 +1,21 @@
 import Navbar from "../components/Navbar";
 import TeamsList from "../components/TeamsList";
-import { useEffect } from 'react';
-
-
-const fetchData = async () => {
-    try {
-        const response = await fetch('http://localhost:5000/api/app.js');
-        const data = await response.json();
-
-        // Écrire la variable 'data' dans le stockage local
-        localStorage.setItem('dataTeams', JSON.stringify(data));
-
-    } catch (error) {
-        console.error('Error fetching data:', error);
-    }
-};
-
+import { useEffect, useState } from 'react';
 
 const Teams = () => {
+    const [teams, setTeams] = useState([]);
+
     useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch('http://localhost:5000/api/franchise');
+                const data = await response.json();
+                setTeams(data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
         fetchData();
     }, []);
 
@@ -26,7 +23,7 @@ const Teams = () => {
         <>
             <Navbar />
             <h1>Teams</h1>
-            <TeamsList/>
+            <TeamsList teams={teams} />
         </>
     );
 };
