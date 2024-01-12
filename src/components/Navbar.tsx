@@ -20,6 +20,7 @@ const BurgerLine = styled.div`
     background-color: #ffffff;
 `;
 const Img = styled.img`
+    margin-left: 20px;
     width: 35px;
     height: 37px;
 `;
@@ -31,7 +32,7 @@ const NavbarWrapper = styled.div`
 
         background-color: ${colors.bleu};
         max-height: 77px;
-        padding: 13px 20px 13px 20px;
+        padding: 13px 0 13px 0;
         position: fixed;
   width: 100%;
   z-index: 1;
@@ -45,9 +46,9 @@ const NavbarWrapper = styled.div`
 `;
 
 const BurgerContainer = styled.div`
-    
     cursor: pointer;
     width: 30px;
+    margin-right: 20px;
 
     @media screen and (min-width: 768px) {
         display: none;

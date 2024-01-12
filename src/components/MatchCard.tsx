@@ -1,14 +1,15 @@
 import styled from 'styled-components';
 import { colors } from '../colors';
 
-// import data from '../datas/teams/proa.json';
 import { MatchDataType } from '../interfaces/types';
 
-
-const MatchCard: React.FC< {match: MatchDataType} > = (props) => {
-const  { game_day, game_location, game_date, trainerHome, teamHome, teamHomeScore, trainerVisitor, teamVisitor, teamVisitorScore } = props.match;
+import React, { useState, useEffect } from 'react';
 
 
+
+
+
+///////////////////////  Styled Components ///////////////////////
     const MatchCardContainer = styled.div`
         cursor: pointer;
         display: flex;
@@ -106,59 +107,67 @@ const  { game_day, game_location, game_date, trainerHome, teamHome, teamHomeScor
                 padding: 20px;
             }
     ;`
-
-
+const MatchCard: React.FC< {match: MatchDataType} > = (props) => {
+    const  { id_games, league_name, league_logo, id_franchises, franchise_names, franchise_logos, teamHomeScores, teamVisitorScores, game_days, game_dates } = props.match;
+    
+    const [teamHomeClass, setTeamHomeClass] = useState('');
+    const [teamVisitorClass, setTeamVisitorClass] = useState('');
+    
+    useEffect(() => {
+        if (teamHomeScores > teamVisitorScores) {
+            setTeamHomeClass('win');
+            setTeamVisitorClass('loose');
+        } else {
+            setTeamHomeClass('loose');
+            setTeamVisitorClass('win');
+        }
+    }, [teamHomeScores, teamVisitorScores]);
     return (
         <>
-
             <MatchCardContainer>
-
                 <MatchBoxUp>
-
                     <MatchTeam>
                         <div className="match__team--name">
-                            <p>
-                            {`${teamHome}`}
-                            </p>
+                            <p>                            {`${franchise_names.split(',')[0]}`}</p>
                         </div>
-                        <div className="match__logo win">
-                            <img src="assets/images/teamsh/team-blois.png" alt="" />
+                        <div className={`match__logo ${teamHomeClass}`}>
+                        <img src={`assets/images/teamsh/${franchise_logos.split(',')[0]}`} alt="" />
                         </div>
                     </MatchTeam>
-
                     <MatchScore>
-
                         <div className="match__league">
-                            <img src="assets/images/leagues/lnbprob.png" alt="" />
+                            <img src={`assets/images/leagues/${league_logo}`} alt="" />
                         </div>
-
                         <p>
-                            <span className="match__score--text">{`${teamHomeScore}`}</span>
+                            <span className="match__score--text">{`${teamHomeScores}`}</span>
                             <span className="match__score--text"> - </span>
-                            <span className="match__score--text">{`${teamVisitorScore}`}</span>
+                            <span className="match__score--text">{`${teamVisitorScores}`}</span>
                         </p>
                     </MatchScore>
 
                     <MatchTeam>
                         <div className="match__team--name">
                             <p>
-                            {`${teamVisitor}`}
+                            {`${franchise_names.split(',')[1]}`}
                             </p>
                         </div>
-                        <div className="match__logo loose">
-                            <img src="assets/images/teamsh/team-monaco.png" alt="" />
+                        <div className={`match__logo ${teamVisitorClass}`}>
+                            <img src={`assets/images/teamsh/${franchise_logos.split(',')[1]}`} alt="" />
                         </div>
                     </MatchTeam>
                 </MatchBoxUp>
 
                 <MatchBoxDown>
                     <div className="match__gameday--text">
-                        <span>{`${game_day}`}</span>
+                        <span>{`${game_days}`}</span>
                         <span> - </span>
-                        <span>{`${game_date}`}</span>
+                        <span>{`${game_dates}`}</span>
                     </div>
                 </MatchBoxDown>
             </MatchCardContainer>
+
+
+
         </>
     )
 

@@ -8,6 +8,65 @@ import data from '../datas/lang/fr.json';
 import { NavigationDataType } from '../interfaces/types';
 import { NavbarDataType } from '../interfaces/types';
 
+const Li = styled.li`
+display: flex;
+flex-direction: row;
+align-items: center;
+gap: 10px;
+padding: 20px;
+margin: 4px;
+border-radius: 20px;
+
+&:hover {
+    background-color: ${colors.corail};
+}
+@media screen and (min-width: 768px) {
+    padding: 20px;
+}
+`;
+
+const MenuItem = styled.span`
+font-family: 'Gibson Medium';
+color: ${colors.blanc};
+`;
+
+const Img = styled.img`
+height: 1.3rem;
+@media screen and (min-width: 768px) {
+    display: none;
+}
+`;
+
+const Logo = styled.img`
+height: 5rem;
+padding-right: 5px;
+
+@media screen and (min-width: 768px) {
+    display: none;
+}
+`;
+
+const H1 = styled.h1`
+font-family: 'Gibson Bold';
+color: ${colors.corail};
+font-size: 1.3rem;
+@media screen and (min-width: 768px) {
+    display: none;
+}
+`;
+
+const Menu = styled.ul`
+display: flex;
+flex-direction: column;
+justify-content: space-around;
+width: 100%;
+
+@media screen and (min-width: 768px) {
+    flex-direction: row;
+    gap: 5px;
+}
+
+`;
 
 interface NavigationProps {
     burgerClicked: boolean;
@@ -41,66 +100,7 @@ const Navigation = (props: NavigationProps) => {
         }
     `;
 
-    const Li = styled.li`
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 10px;
-        padding: 20px;
-        margin: 4px;
-        border-radius: 20px;
 
-        &:hover {
-            background-color: ${colors.corail};
-        }
-        @media screen and (min-width: 768px) {
-            padding: 20px;
-        }
-    `;
-
-    const MenuItem = styled.span`
-        font-family: 'Gibson Medium';
-        color: ${colors.blanc};
-    `;
-
-    const Img = styled.img`
-        height: 1.3rem;
-        @media screen and (min-width: 768px) {
-            display: none;
-        }
-    `;
-
-    const Logo = styled.img`
-        height: 5rem;
-        padding-right: 5px;
-
-        @media screen and (min-width: 768px) {
-            display: none;
-        }
-    `;
-
-    const H1 = styled.h1`
-        font-family: 'Gibson Bold';
-        color: ${colors.corail};
-        font-size: 1.3rem;
-        @media screen and (min-width: 768px) {
-            display: none;
-        }
-    `;
-
-    const Menu = styled.ul`
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        width: 100%;
-
-        @media screen and (min-width: 768px) {
-            flex-direction: row;
-            gap: 5px;
-        }
-
-    `;
-    
 
     // console.log(Object.keys(navigationData));
     // console.log(Object.keys(navigationData).map(key => navigationData[key].path));

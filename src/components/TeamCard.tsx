@@ -75,7 +75,6 @@ const TeamCard: React.FC< {team: TeamDataType} > = (props) => {
 
 return (
     <>
-
 <TeamCardContainer>
     <TeamImage>
         <BackImg bgurl={`assets/images/teamsh/${franchise_logo}`}></BackImg>
@@ -83,8 +82,7 @@ return (
     <ClubName>
         <p>{`${franchise_name}`}</p>
     </ClubName>
-</TeamCardContainer>
-      
+</TeamCardContainer>      
     </>
 )
 }

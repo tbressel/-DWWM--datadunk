@@ -2,6 +2,9 @@ import styled from 'styled-components';
 import { colors } from '../colors';
 
 import MatchCard from "./MatchCard";
+import { MatchDataType } from '../interfaces/types';
+
+///////////////////////  Styled Components ///////////////////////
 
 const MatchListContainer = styled.div`
     display: flex;
@@ -15,14 +18,13 @@ const MatchListContainer = styled.div`
 `;
 
 
-const MatchesList: React.FC < {matches : any[]}> = (props) => {
+const MatchesList: React.FC < {matches : MatchDataType[]}> = (props) => {
     return (
         <MatchListContainer>
-            {props.matches.map((match) => (
-        <MatchCard key={match.id_games} match={match}/>
+            {props.matches.map((match, index) => (
+        <MatchCard key={index} match={match}/>
             ))}
         </MatchListContainer>   
-    )
-}
-
+    );
+};
 export default MatchesList;

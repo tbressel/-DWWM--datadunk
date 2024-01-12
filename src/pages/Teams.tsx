@@ -11,6 +11,7 @@ const Teams = () => {
                 const response = await fetch('http://localhost:5000/api/franchise');
                 const data = await response.json();
                 setTeams(data);
+                console.log(data);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
