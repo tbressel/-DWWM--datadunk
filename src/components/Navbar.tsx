@@ -32,11 +32,15 @@ const NavbarWrapper = styled.div`
         background-color: ${colors.bleu};
         max-height: 77px;
         padding: 13px 20px 13px 20px;
+        position: fixed;
+  width: 100%;
+  z-index: 1;
         
         @media screen and (min-width: 768px) {
             align-items: center;
             padding-top: 0px;
             padding-bottom: 0px;
+
         }
 `;
 

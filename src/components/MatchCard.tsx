@@ -108,8 +108,6 @@ const  { game_day, game_location, game_date, trainerHome, teamHome, teamHomeScor
     ;`
 
 
-
-
     return (
         <>
 
@@ -133,7 +131,6 @@ const  { game_day, game_location, game_date, trainerHome, teamHome, teamHomeScor
                         <div className="match__league">
                             <img src="assets/images/leagues/lnbprob.png" alt="" />
                         </div>
-
 
                         <p>
                             <span className="match__score--text">{`${teamHomeScore}`}</span>
