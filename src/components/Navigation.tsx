@@ -75,9 +75,6 @@ interface NavigationProps {
 const Navigation = (props: NavigationProps) => {
     const navigationData: NavigationDataType = data.navigation;
     const navbarData: NavbarDataType = data.navbar;
-
-
-    
     const Nav = styled.nav`
         display: flex;
         flex-direction: column;
@@ -99,6 +96,9 @@ const Navigation = (props: NavigationProps) => {
             padding: 0;
         }
     `;
+
+
+    
 
 
 

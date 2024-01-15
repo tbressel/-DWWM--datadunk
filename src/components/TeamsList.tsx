@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { colors } from '../colors';
 
 import TeamCard from "./TeamCard";
+import { TeamDataType } from '../interfaces/types';
 
 ///////////////////////  Styled Components ///////////////////////
 
@@ -17,7 +18,7 @@ const TeamsListContainer = styled.div`
 `;
 
 
-const TeamsList: React.FC< {teams: any[]} > = (props) => {
+const TeamsList: React.FC< {teams: TeamDataType[]} > = (props) => {
     return (
         <TeamsListContainer>
             {props.teams.map((team) => (

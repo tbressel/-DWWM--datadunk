@@ -18,7 +18,7 @@ export type TeamDataType = {
         id_franchise: number;
         franchise_name: string;
         franchise_logo: string;
-        franchise_city: string;
+        league_logo: string;
   
 }
 export type MatchDataType = {

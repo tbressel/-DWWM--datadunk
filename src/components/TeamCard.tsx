@@ -44,6 +44,8 @@ import { TeamDataType } from '../interfaces/types';
         overflow-y: hidden;
        
 
+        
+
         &:hover {
             opacity: 1;
             transition: 200ms ease-in-out;
@@ -61,21 +63,36 @@ import { TeamDataType } from '../interfaces/types';
     const TeamImage = styled.div`
         display: flex;
         width: 150px;
-        height: 120px;
+        height: 100px;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         flex-shrink: 0;  
     `;
+    const LeagueImage = styled.div`
+        position: relative;
+        top: 2px;
+        left: 6px;
+
+        & img {
+            width: 70px;
+            height: 25px;
+            left: -50px;
+            position: relative;
+        }
+    `;
 
 
 const TeamCard: React.FC< {team: TeamDataType} > = (props) => {
-    const { franchise_name, franchise_logo } = props.team;
+    const { franchise_name, franchise_logo, league_logo } = props.team;
 
 
 return (
     <>
 <TeamCardContainer>
+    <LeagueImage>
+        <img src={`assets/images/leagues/${league_logo}`} alt="" />
+    </LeagueImage>
     <TeamImage>
         <BackImg bgurl={`assets/images/teamsh/${franchise_logo}`}></BackImg>
     </TeamImage>

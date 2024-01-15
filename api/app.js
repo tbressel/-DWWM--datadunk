@@ -31,7 +31,18 @@ pool.getConnection((err, connection) => {
 
 // Endpoint pour récupérer les données de la table 'franchise'
 app.get('/api/franchise', (req, res) => {
-    const sql = 'SELECT * FROM franchise';
+    const sql = `SELECT DISTINCT
+    f.id_franchise,
+    f.franchise_name,
+    f.franchise_logo,
+    l.league_logo
+FROM
+    franchise f
+JOIN franchise_game fg USING (id_franchise)
+JOIN
+    league l ON fg.id_league = l.id_league
+
+ORDER BY f.id_franchise ASC`;    
 
     pool.query(sql, (error, results) => {
         if (error) {
