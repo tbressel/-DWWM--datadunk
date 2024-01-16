@@ -16,6 +16,7 @@ export type NavbarDataType = {
 export type TeamDataType = {
 
         id_franchise: number;
+        id_league: number;
         franchise_name: string;
         franchise_logo: string;
         league_logo: string;

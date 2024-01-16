@@ -34,8 +34,8 @@ const NavbarWrapper = styled.div`
         max-height: 77px;
         padding: 13px 0 13px 0;
         position: fixed;
-  width: 100%;
-  z-index: 1;
+        width: 100%;
+        z-index: 1;
         
         @media screen and (min-width: 768px) {
             align-items: center;

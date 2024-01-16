@@ -32,17 +32,18 @@ pool.getConnection((err, connection) => {
 // Endpoint pour récupérer les données de la table 'franchise'
 app.get('/api/franchise', (req, res) => {
     const sql = `SELECT DISTINCT
-    f.id_franchise,
+    f.id AS id_franchise,
+    l.id AS id_league,
     f.franchise_name,
     f.franchise_logo,
     l.league_logo
 FROM
     franchise f
-JOIN franchise_game fg USING (id_franchise)
-JOIN
-    league l ON fg.id_league = l.id_league
+JOIN franchise_game fg ON f.id = fg.id_franchise
+JOIN league l ON fg.id_league = l.id
 
-ORDER BY f.id_franchise ASC`;    
+ORDER BY f.id ASC;
+`;    
 
     pool.query(sql, (error, results) => {
         if (error) {
@@ -73,15 +74,15 @@ app.get('/api/games', (req, res) => {
 FROM
     franchise_game fg
 JOIN
-    franchise f ON fg.id_franchise = f.id_franchise
+    franchise f ON fg.id_franchise = f.id
 JOIN
-    games g ON g.id_games = fg.id_games
+    games g ON g.id = fg.id_games
 JOIN
-    league l ON fg.id_league = l.id_league
+    league l ON fg.id_league = l.id
 
 GROUP BY
     fg.id_games, l.league_name, l.league_logo
-ORDER BY g.game_date DESC LIMIT 50
+ORDER BY g.game_date DESC LIMIT 50;
 
 
 `;

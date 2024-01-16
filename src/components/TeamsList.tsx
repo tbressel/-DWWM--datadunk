@@ -22,7 +22,7 @@ const TeamsList: React.FC< {teams: TeamDataType[]} > = (props) => {
     return (
         <TeamsListContainer>
             {props.teams.map((team) => (
-                <TeamCard key={team.id_franchise} team={team} />
+                <TeamCard key={`${team.id_franchise}${team.id_league}`} team={team} />
             ))}
         </TeamsListContainer>
     );

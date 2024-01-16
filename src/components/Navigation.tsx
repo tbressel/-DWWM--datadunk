@@ -8,74 +8,79 @@ import data from '../datas/lang/fr.json';
 import { NavigationDataType } from '../interfaces/types';
 import { NavbarDataType } from '../interfaces/types';
 
-const Li = styled.li`
-display: flex;
-flex-direction: row;
-align-items: center;
-gap: 10px;
-padding: 20px;
-margin: 4px;
-border-radius: 20px;
 
-&:hover {
-    background-color: ${colors.corail};
-}
-@media screen and (min-width: 768px) {
-    padding: 20px;
-}
-`;
 
-const MenuItem = styled.span`
-font-family: 'Gibson Medium';
-color: ${colors.blanc};
-`;
 
 const Img = styled.img`
-height: 1.3rem;
+    height: 1.3rem;
 @media screen and (min-width: 768px) {
     display: none;
 }
 `;
 
 const Logo = styled.img`
-height: 5rem;
-padding-right: 5px;
+    height: 5rem;
+    padding-right: 5px;
 
 @media screen and (min-width: 768px) {
     display: none;
-}
-`;
+}`;
 
 const H1 = styled.h1`
-font-family: 'Gibson Bold';
-color: ${colors.corail};
-font-size: 1.3rem;
+    font-family: 'Gibson Bold';
+    color: ${colors.corail};
+    font-size: 1.3rem;
 @media screen and (min-width: 768px) {
     display: none;
-}
-`;
+}`;
 
 const Menu = styled.ul`
-display: flex;
-flex-direction: column;
-justify-content: space-around;
-width: 100%;
-
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 100%;
+    height: 450px;
+    padding: 10px;
 @media screen and (min-width: 768px) {
     flex-direction: row;
     gap: 5px;
-}
+    height: fit-content;
+}`;
 
+const Li = styled.li`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 20px;
+    transition: 200ms ease-in-out;
+    border-radius: 20px;
+
+    &:hover {
+        background-color: ${colors.corail};
+        transition: 200ms ease-in-out;
+
+}
+@media screen and (min-width: 768px) {
+    padding: 20px;
+}
 `;
+const MenuItem = styled.span`
+    font-family: 'Gibson Medium';
+    color: ${colors.blanc};
+`;
+
+
 
 interface NavigationProps {
     burgerClicked: boolean;
-}
+};
 
 const Navigation = (props: NavigationProps) => {
     const navigationData: NavigationDataType = data.navigation;
     const navbarData: NavbarDataType = data.navbar;
-    const Nav = styled.nav`
+
+   
+   const Nav = styled.nav`
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -96,10 +101,6 @@ const Navigation = (props: NavigationProps) => {
             padding: 0;
         }
     `;
-
-
-    
-
 
 
     // console.log(Object.keys(navigationData));
