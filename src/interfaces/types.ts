@@ -36,3 +36,16 @@ export type MatchDataType = {
    
 };
 
+export type PlayerDataType = {
+    id_franchise: number;
+    id_games: number;
+    id_player: number;
+    last_game_date: string;
+    player_birthdate: string; 
+    player_firstname: string;
+    player_height: number; 
+    player_name: string;
+    player_photo: string;
+    player_weight: number;
+    franchise_logo: string;
+};
