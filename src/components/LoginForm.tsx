@@ -107,19 +107,24 @@ img {
 
 `;
 
-const LoginForm = () => {
 
-    const [hideLoginForm, setHideLoginForm] = useState(false);
+interface LoginFormProps {
+    showLoginForm: boolean;
+    onHideLoginForm: () => void;
+}
+
+const LoginForm = (props: LoginFormProps) => {
 
     const handleCrossClick = () => {
-        setHideLoginForm(false);
+        // Au lieu de setHideLoginForm(true), utilise onHideLoginForm
+        props.onHideLoginForm();
     };
 
 
 
     return (
         <>
-
+        {props.showLoginForm && (
 
 
             <Mask>
@@ -166,7 +171,7 @@ const LoginForm = () => {
 
             </LoginFormContainer>
         </Mask >
-
+        )}
         </>
 
 

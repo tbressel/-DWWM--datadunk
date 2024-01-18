@@ -78,12 +78,14 @@ const Login = () => {
     const [showLoginForm, setShowLoginForm] = useState(false);
 
     const handleLoginClick = () => {
-        setShowLoginForm(true);
+        // Inverser l'état actuel
+        setShowLoginForm(!showLoginForm);
     };
+
 
     return (
         <>
-{showLoginForm && <LoginForm />}
+{showLoginForm && <LoginForm showLoginForm={showLoginForm} onHideLoginForm={() => setShowLoginForm(false)} />}
 
             <LoginContainer>
                 <LoginBoxLeft>
