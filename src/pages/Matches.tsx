@@ -1,6 +1,7 @@
-import Navbar from "../components/Navbar";
 import MatchesList from "../components/MatchesList";
 import { useEffect, useState } from 'react';
+
+
 
 const Matches = () => {
     const [matches, setMatches] = useState([]);
@@ -23,8 +24,9 @@ const Matches = () => {
 
     return (
         <>
-            <Navbar />
-                <h1>Matches</h1>
+       
+    
+              
             <MatchesList matches = {matches}/>
         </>
     );

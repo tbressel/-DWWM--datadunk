@@ -10,7 +10,14 @@ import Matches from './pages/Matches';
 import Teams from './pages/Teams';
 import Players from './pages/Players';
 import Error from './pages/Error';
+import Navbar from './components/Navbar';
+import Header from './components/Header';
+import styled from 'styled-components';
 
+const Space = styled.div`
+    height: 100px;
+    width: 100%;
+`;
 
 
 const App = () => {
@@ -19,16 +26,22 @@ const App = () => {
       <Reset />
       <GlobalStyle />
       <BrowserRouter>
+      <Navbar />
+            <Space>
+ 
+            </Space>
+            <Header />
+
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path='/home' element={<Home />} />      
-          <Route path='/articles' element={<Articles />} />      
+          <Route path='/home' element={<Home />} />
+          <Route path='/articles' element={<Articles />} />
           <Route path='/guides' element={<Guides />} />
           <Route path='/leagues' element={<Leagues />} />
           <Route path='/matches' element={<Matches />} />
           <Route path='/teams' element={<Teams />} />
           <Route path='/players' element={<Players />} />
-          <Route path="*" element={<Error />} />    
+          <Route path="*" element={<Error />} />
         </Routes>
       </BrowserRouter>
     </>

@@ -14,9 +14,9 @@ export type NavbarDataType = {
 }
 
 export type TeamDataType = {
-
-        id_franchise: number;
-        id_league: number;
+        season_id: number;
+        franchise_id: number;
+        league_id: number;
         franchise_name: string;
         franchise_logo: string;
         league_logo: string;
@@ -24,15 +24,17 @@ export type TeamDataType = {
 }
 export type MatchDataType = {
         id_games: number;
-        league_name: string;
+        game_date: string;
+        game_day: string;
         league_logo: string;
-        id_franchises: string; 
-        franchise_names: string; 
-        franchise_logos: string; 
-        teamHomeScores: string;
-        teamVisitorScores: string;     
-        game_days: string;
-        game_dates: string;
+        home_franchise_id: number;
+        home_franchise_name: string;
+        home_franchise_logo: string;
+        home_score: number;
+        visitor_franchise_id: number;
+        visitor_franchise_name: string;
+        visitor_franchise_logo: string;
+        visitor_score: number;
    
 };
 

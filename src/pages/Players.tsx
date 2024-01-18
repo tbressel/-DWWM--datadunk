@@ -1,6 +1,6 @@
-import Navbar from "../components/Navbar";
 import PlayersList from "../components/PlayersList";
 import { useEffect, useState } from 'react';
+
 
 const Players = () => {
     const [players, setPlayers] = useState([]);
@@ -22,8 +22,8 @@ const Players = () => {
 
     return (
         <>
-            <Navbar />
-            <h1>Players</h1>
+        
+
             <PlayersList players={players} />
         </>
     );

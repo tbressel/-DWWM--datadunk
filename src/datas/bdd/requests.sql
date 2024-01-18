@@ -33,29 +33,56 @@ ORDER BY fg.id_franchise ASC;
 --
 -- LISTE DES X DERNIERS MATCHS
 -- 
-SELECT
-    fg.id_games,
-    l.league_name,
-    l.league_logo,
-    GROUP_CONCAT(DISTINCT fg.id_franchise) AS id_franchises,
-    GROUP_CONCAT(DISTINCT f.franchise_name) AS franchise_names,
-    GROUP_CONCAT(DISTINCT f.franchise_logo) AS franchise_logos,
-    GROUP_CONCAT(DISTINCT g.teamHomeScore) AS teamHomeScores,
-    GROUP_CONCAT(DISTINCT g.teamVisitorScore) AS teamVisitorScores,
-    GROUP_CONCAT(DISTINCT g.game_day) AS game_days,
-    GROUP_CONCAT(DISTINCT g.game_date) AS game_dates
+-- SELECT
+--     fg.id_games,
+--     l.league_name,
+--     l.league_logo,
+--     GROUP_CONCAT(DISTINCT fg.id_franchise) AS id_franchises,
+--     GROUP_CONCAT(DISTINCT f.franchise_name) AS franchise_names,
+--     GROUP_CONCAT(DISTINCT f.franchise_logo) AS franchise_logos,
+--     GROUP_CONCAT(DISTINCT g.teamHomeScore) AS teamHomeScores,
+--     GROUP_CONCAT(DISTINCT g.teamVisitorScore) AS teamVisitorScores,
+--     GROUP_CONCAT(DISTINCT g.game_day) AS game_days,
+--     GROUP_CONCAT(DISTINCT g.game_date) AS game_dates
+-- FROM
+--     franchise_game fg
+-- JOIN
+--     franchise f ON fg.id_franchise = f.id
+-- JOIN
+--     games g ON g.id = fg.id_games
+-- JOIN
+--     league l ON fg.id_league = l.id
+
+-- GROUP BY
+--     fg.id_games, l.league_name, l.league_logo
+-- ORDER BY g.game_date DESC LIMIT 50
+
+SELECT DISTINCT
+    g.id AS 'ig_games',
+    g.game_date AS 'game_date',
+    g.game_day AS 'game_day',
+    l.league_logo AS 'league_logo',
+    g.teamIdHome AS 'home_franchise_id',
+    f_home.franchise_name AS 'home_franchise_name',
+    f_home.franchise_logo AS 'home_franchise_logo',
+    g.teamHomeScore AS 'home_score',
+    g.teamIdVisitor AS 'visitor_franchise_id',
+    f_visitor.franchise_name AS 'visitor_franchise_name',
+    f_visitor.franchise_logo AS 'visitor_franchise_logo',
+    g.teamVisitorScore AS 'visitor_score'
 FROM
-    franchise_game fg
+    games g
 JOIN
-    franchise f ON fg.id_franchise = f.id
+    franchise f_home ON g.teamIdHome = f_home.id
 JOIN
-    games g ON g.id = fg.id_games
+    franchise f_visitor ON g.teamIdVisitor = f_visitor.id
+JOIN
+	franchise_game fg ON fg.id_games = g.id 
 JOIN
     league l ON fg.id_league = l.id
+ORDER BY
+    game_date DESC LIMIT 50;
 
-GROUP BY
-    fg.id_games, l.league_name, l.league_logo
-ORDER BY g.game_date DESC LIMIT 50
 
 
 --

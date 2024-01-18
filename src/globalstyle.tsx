@@ -9,6 +9,7 @@ export const GlobalStyle = createGlobalStyle`
     overflow-x: hidden;
     min-width: 320px;
     background-color: ${colors.violet1};
+
   }
   a {
     text-decoration: none;
@@ -22,6 +23,10 @@ export const GlobalStyle = createGlobalStyle`
   @font-face {
         font-family: 'Gibson Medium';
         src: url('/assets/fonts/GibsonMedium.woff2') format('woff2');
+  }
+  @font-face {
+        font-family: 'Gibson Light';
+        src: url('/assets/fonts/GibsonLight.woff2') format('woff2');
   }
 
   @font-face {

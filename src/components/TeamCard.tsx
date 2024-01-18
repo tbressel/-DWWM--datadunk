@@ -84,12 +84,12 @@ import { TeamDataType } from '../interfaces/types';
 
 
 const TeamCard: React.FC< {team: TeamDataType} > = (props) => {
-    const { franchise_name, franchise_logo, league_logo } = props.team;
+    const {season_id, franchise_id, league_id, franchise_name, franchise_logo, league_logo } = props.team;
 
 
 return (
     <>
-<TeamCardContainer>
+<TeamCardContainer id={`${season_id}${franchise_id}${league_id}`}>
     <LeagueImage>
         <img src={`assets/images/leagues/${league_logo}`} alt="" />
     </LeagueImage>

@@ -1,5 +1,5 @@
 -- EFFACER LES TABLES DE RECEPTION DES DONNEES
-DROP TABLE IF EXISTS franchise, franchise_game, games, games_scraper, to_play, game_details, league, player, season, game_stats, temp_table;
+DROP TABLE IF EXISTS franchise, franchise_game, games, games_scraper, to_play, game_details, league, player, season, game_stats, temp_table, team_stats, team_gamestats;
 DROP PROCEDURE IF EXISTS insert_franchise_game_team_visitor;
 DROP PROCEDURE IF EXISTS insert_franchise_game_team_home;
 
@@ -171,6 +171,40 @@ CREATE TABLE game_stats(
 );
 
 
+CREATE TABLE team_stats(
+    id INT AUTO_INCREMENT,
+    gameId INT,    -- effacé un peu plus tard
+    playerId INT,   -- effacé un peu plus tard
+    id_franchise INT,
+   fiveD BOOLEAN,
+   min INT,
+   pts INT,
+   twoR INT,
+   twoT INT,
+   twoPerc DECIMAL(5,2),
+   threeR INT,
+   threeT INT,
+   threetPerc DECIMAL(5,2),
+   lr INT,
+   lt INT,
+   lPerc DECIMAL(5,2),
+   ro INT,
+   rt INT,
+   rd INT,
+   pd INT,
+   ct INT,
+   cs INT,
+   `in` INT,
+   bp INT,
+   fte INT,
+   fpr INT,
+   eval INT,
+   plusMinus INT,
+   FOREIGN KEY(id_franchise) REFERENCES franchise(id),
+   PRIMARY KEY(id)
+);
+
+
 CREATE TABLE franchise_game(
    id_franchise INT,
    id_league INT,
@@ -193,6 +227,15 @@ CREATE TABLE to_play(
    FOREIGN KEY(id_game_stats) REFERENCES game_stats(id),
    FOREIGN KEY(id_player) REFERENCES player(id)
 );
+
+CREATE TABLE team_gamestats(
+   id_games INT,
+   id_team_stats INT,
+   PRIMARY KEY(id_games, id_team_stats),
+   FOREIGN KEY(id_games) REFERENCES games(id),
+   FOREIGN KEY(id_team_stats) REFERENCES team_stats(id)
+);
+
 
 -- COPIE DE DONNEES DANS LA TABLE franchise
 
@@ -389,7 +432,8 @@ INSERT INTO season (start_date, end_date, season_name) VALUES
 ('2019-09-20','2020-06-30', 'Jeep Elite'),
 ('2020-09-26','2021-06-30', 'Jeep Elite'),
 ('2021-10-02','2022-05-13', 'Bet Clic'),
-('2022-09-24','2023-05-16', 'Bet Clic');
+('2022-09-24','2023-05-16', 'Bet Clic'),
+('2023-09-01','2024-06-30', 'Bet Clic');
 
 
 
@@ -425,7 +469,7 @@ DELIMITER //
 CREATE PROCEDURE insert_franchise_game_team_home()
 BEGIN
     DECLARE current_season INT DEFAULT 1;
-    DECLARE iterations INT DEFAULT 23;
+    DECLARE iterations INT DEFAULT 24;
 
     WHILE iterations > 0 DO
         INSERT INTO franchise_game (id_season, id_franchise, id_league, id_games)
@@ -452,7 +496,7 @@ DELIMITER //
 CREATE PROCEDURE insert_franchise_game_team_visitor()
 BEGIN
     DECLARE current_season INT DEFAULT 1;
-    DECLARE iterations INT DEFAULT 23;
+    DECLARE iterations INT DEFAULT 24;
 
     WHILE iterations > 0 DO
         INSERT INTO franchise_game (id_season, id_franchise, id_league, id_games)
@@ -570,6 +614,53 @@ DROP COLUMN playerId;
 ALTER TABLE game_stats 
 DROP COLUMN gameId;
 
+
+
+INSERT INTO team_stats (gameId, playerId, id_franchise,
+fiveD, `min`, pts, twoR, twoT, twoPerc, threeR, threeT, threetPerc, lr, lt, lPerc, ro, rt, rd, pd, ct, cs, `in`, bp, fte, fpr, eval, plusMinus)
+SELECT gameId, playerId, teamId, fiveD,
+    ROUND (`min`, 1) AS `min`,
+    ROUND (pts, 1) AS pts,
+    ROUND (twoR, 1) AS twoR,
+    ROUND (twoT, 1) AS twoT,
+    ROUND(twoPerc, 2) AS twoPerc,
+    ROUND (threeR, 1) AS threeR,
+    ROUND (threeT, 1) AS threeT,
+	ROUND(threetPerc, 2)AS threetPerc,
+    ROUND (lr,1) AS lr,
+    ROUND (lt,1) AS lt,
+	ROUND(lPerc, 2) AS lPerc,
+    ROUND (ro,1) AS ro,
+    ROUND (rt,1) AS rt,
+    ROUND (rd,1) AS rd,
+    ROUND (pd,1) AS pd,
+    ROUND (ct,1) AS ct,
+    ROUND (cs,1) AS cs,
+    ROUND (`in`,1) AS `in`,
+    ROUND (bp,1) AS bp,
+    ROUND (fte,1) AS fte,
+    ROUND (fpr,1) AS fpr,
+    ROUND (eval,1) AS eval,
+    ROUND (plusMinus,1) AS plusMinus 
+    FROM game_details 
+    WHERE player LIKE "%quipe";
+
+
+
+-- ON COPIE CE DONT ON A BESOIN DANS LA TABLE 
+INSERT INTO team_gamestats (id_games, id_team_stats) 
+SELECT gameId, id
+FROM team_stats ts;
+
+
+-- ON EFFACE LES 2 COLONNNES INNUTILE DE GAME STAT
+ALTER TABLE team_stats 
+DROP COLUMN playerId;
+
+ALTER TABLE team_stats 
+DROP COLUMN gameId;
+
+
 -- DROP TABLE IF EXISTS games_scraper, games_scraper_save, game_details, game_details_save;
 
 
@@ -592,120 +683,6 @@ DROP COLUMN gameId;
 ---------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------
-
-
-
-
----------------------------------------------------------------------
------------- OPERATION DE VISUALISATION DANS GAME SCRAPER------------
----------------------------------------------------------------------
-
--- Équipes présentes dans teamHome mais pas dans teamVisitor :
-SELECT DISTINCT teamHome
-FROM games_scraper
-WHERE teamHome NOT IN (SELECT DISTINCT teamVisitor FROM games_scraper);
-
--- Équipes présentes dans teamVisitor mais pas dans teamHome :
-SELECT DISTINCT teamVisitor
-FROM games_scraper
-WHERE teamVisitor NOT IN (SELECT DISTINCT teamHome FROM games_scraper);
-
--- Equipe teamHome et teamVisitor :
-SELECT teamName
-FROM (
-    SELECT DISTINCT teamHome AS teamName FROM games_scraper
-    UNION
-    SELECT DISTINCT teamVisitor AS teamName FROM games_scraper
-) AS teams
-ORDER BY teamName ASC;
-
--- Equipe teamHome et teamVisitor (en supprimant "Espoirs" dans lme nom de l'équipe)):
-SELECT DISTINCT REPLACE(teamName, 'Espoirs', '') AS teamName
-FROM (
-    SELECT DISTINCT teamHome AS teamName FROM games_scraper
-    UNION
-    SELECT DISTINCT teamVisitor AS teamName FROM games_scraper
-) AS teams
-ORDER BY teamName ASC;
-
-
--- Récupérer tous les id d'une équipe de game_scraper en recherchant par le nom de la franchise,
- récupéré dans la table franchise
-SELECT teamIdHome, teamHome, f.id
-FROM games_scraper
-JOIN franchise f ON teamHome = f.franchise_name
-WHERE teamHome IN ('Angers');
-
-
--- Récupèrer l'année de chaque date
-SELECT SUBSTR(gameDate, -4) AS years
-FROM games_scraper
-ORDER BY years ASC;
-
-
-
--- Ajouter la clé étrangère
-ALTER TABLE games
-ADD CONSTRAINT fk_teamIdHome FOREIGN KEY (teamIdHome)
-REFERENCES franchise(id);
-
--- Ajouter la clé étrangère
-ALTER TABLE games
-ADD CONSTRAINT fk_teamIdVisitor FOREIGN KEY (teamIdVisitor)
-REFERENCES franchise(id);
-
-
--- Tous les matchs par saison ?
-SELECT game_date, game_day, id_games, teamIdHome, teamIdVisitor
-FROM games gs 
-JOIN season s ON gs.game_date BETWEEN s.start_date AND s.end_date 
-WHERE s.id_season = 1 ORDER BY game_date DESC; 
-
--- Combien de  matchs pour une saison ?
-SELECT COUNT(id_games)
-FROM games gs 
-JOIN season s ON gs.game_date BETWEEN s.start_date AND s.end_date 
-WHERE s.id_season = 1 ORDER BY game_date DESC; 
-
-
-
--- Récupération de toutes les inforamtions concernant l'affichage d'un match en particulier
-SELECT fg.id_games AS 'ID', l.league_name, l.league_logo, fg.id_franchise AS 'Club ID', f.franchise_name, f.franchise_logo, g.teamHomeScore, g.teamVisitorScore, g.game_day, g.game_date
-FROM franchise_game fg
-JOIN franchise f ON fg.id_franchise = f.id
-JOIN games g ON g.id_games = fg.id_games
-JOIN league l ON fg.id_league = l.id_league
-WHERE fg.id_games = 1
-ORDER BY g.game_date DESC LIMIT 10;
-
-
-
--- Recupération de tous les matchs
-SELECT
-    fg.id_games AS 'id_games',
-    l.league_name,
-    l.league_logo,
-    GROUP_CONCAT(DISTINCT fg.id_franchise) AS 'id_franchise',
-    GROUP_CONCAT(DISTINCT f.franchise_name) AS 'franchise_names',
-    GROUP_CONCAT(DISTINCT f.franchise_logo) AS 'franchise_logos',
-    GROUP_CONCAT(DISTINCT g.teamHomeScore) AS 'teamHomeScores',
-    GROUP_CONCAT(DISTINCT g.teamVisitorScore) AS 'teamVisitorScores',
-    GROUP_CONCAT(DISTINCT g.game_day) AS 'game_days',
-    GROUP_CONCAT(DISTINCT g.game_date) AS 'game_dates'
-FROM
-    franchise_game fg
-JOIN
-    franchise f ON fg.id_franchise = f.id
-JOIN
-    games g ON g.id_games = fg.id_games
-JOIN
-    league l ON fg.id_league = l.id_league
-
-GROUP BY
-    fg.id_games, l.league_name, l.league_logo
-ORDER BY g.game_date DESC LIMIT 50
-
 
 
 
