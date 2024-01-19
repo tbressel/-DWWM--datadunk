@@ -1,5 +1,5 @@
 -- EFFACER LES TABLES DE RECEPTION DES DONNEES
-DROP TABLE IF EXISTS franchise, franchise_game, games, games_scraper, to_play, game_details, league, player, season, game_stats, temp_table, team_stats, team_gamestats;
+DROP TABLE IF EXISTS _user_, franchise, franchise_game, games, games_scraper, to_play, game_details, league, player, season, game_stats, temp_table, team_stats, team_gamestats;
 DROP PROCEDURE IF EXISTS insert_franchise_game_team_visitor;
 DROP PROCEDURE IF EXISTS insert_franchise_game_team_home;
 
@@ -234,6 +234,18 @@ CREATE TABLE team_gamestats(
    PRIMARY KEY(id_games, id_team_stats),
    FOREIGN KEY(id_games) REFERENCES games(id),
    FOREIGN KEY(id_team_stats) REFERENCES team_stats(id)
+);
+
+
+CREATE TABLE _user_(
+   id INT AUTO_INCREMENT,
+   user_firstname VARCHAR(50),
+   user_lastname VARCHAR(50),
+   user_pseudo VARCHAR(50),
+   user_role TINYINT,
+   user_email VARCHAR(50),
+   user_password VARCHAR(255),
+   PRIMARY KEY(id)
 );
 
 
@@ -542,8 +554,10 @@ GROUP BY
 
 -- Aoute d'une photo par defaut dans toutes les ligne de player_photo
 UPDATE player
-SET player_photo = 'JohnDoe.png'
-WHERE player_photo IS NULL;
+SET player_photo = CONCAT("player-",player_firstname,player_name, '.png');
+
+
+
 
 
 -- Modifier le type de données des colonnes de DOUBLE(10,4) à INT ou DECIMAL (5,2)
@@ -662,6 +676,50 @@ DROP COLUMN gameId;
 
 
 -- DROP TABLE IF EXISTS games_scraper, games_scraper_save, game_details, game_details_save;
+
+
+
+
+DROP TABLE IF EXISTS game_stats2;
+
+
+CREATE TABLE game_stats2 AS
+SELECT * FROM game_stats;
+
+
+DELIMITER //
+CREATE PROCEDURE calcul_gmsc()
+BEGIN
+    DECLARE current_stat INT DEFAULT 1;
+    DECLARE iterations INT DEFAULT 354760;
+
+    WHILE iterations > 0 DO
+UPDATE game_stats2
+SET total = (
+    SELECT
+        pts + 0.4 * (twoR + threeR) - 0.7 * (twoT + threeT) - 0.4 * (lt - lr)
+        + (0.7 * ro) + (0.3 * rd) + `in` + (0.7 * pd) + (0.7 * ct)
+        - 0.4 * fte - bp AS total
+    FROM
+        game_stats gs
+    WHERE
+        gs.id = current_stat
+)
+WHERE
+    id = current_stat;
+
+        SET current_stat = current_stat + 1;
+        SET iterations = iterations - 1;
+    END WHILE;
+END //
+DELIMITER ;
+
+-- Execution de la procédure
+CALL calcul_gmsc();
+
+
+
+
 
 
 ---------------------------------------------------------------------------------------------------------------

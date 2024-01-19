@@ -1,7 +1,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Reset } from 'styled-reset';
-
 import { GlobalStyle } from './globalstyle';
+import styled from 'styled-components';
+
 import Home from './pages/Home';
 import Articles from './pages/Articles';
 import Guides from './pages/Guides';
@@ -12,7 +13,8 @@ import Players from './pages/Players';
 import Error from './pages/Error';
 import Navbar from './components/Navbar';
 import Header from './components/Header';
-import styled from 'styled-components';
+
+
 
 const Space = styled.div`
     height: 100px;
@@ -26,23 +28,24 @@ const App = () => {
       <Reset />
       <GlobalStyle />
       <BrowserRouter>
-      <Navbar />
-            <Space>
- 
-            </Space>
-            <Header />
+         <Navbar />
+          <Space>
 
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path='/home' element={<Home />} />
-          <Route path='/articles' element={<Articles />} />
-          <Route path='/guides' element={<Guides />} />
-          <Route path='/leagues' element={<Leagues />} />
-          <Route path='/matches' element={<Matches />} />
-          <Route path='/teams' element={<Teams />} />
-          <Route path='/players' element={<Players />} />
-          <Route path="*" element={<Error />} />
-        </Routes>
+          </Space>
+          <Header />
+
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path='/home' element={<Home />} />
+            <Route path='/articles' element={<Articles />} />
+            <Route path='/guides' element={<Guides />} />
+            <Route path='/leagues' element={<Leagues />} />
+            <Route path='/matches' element={<Matches />} />
+            <Route path='/teams' element={<Teams />} />
+            <Route path='/players' element={<Players />} />
+            <Route path="*" element={<Error />} />
+          </Routes>
+
       </BrowserRouter>
     </>
   );

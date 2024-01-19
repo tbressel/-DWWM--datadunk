@@ -119,12 +119,12 @@ const TeamImage = styled.div`
 
 
 const PlayerCard: React.FC<{ player: PlayerDataType }> = (props) => {
-    const { player_firstname, player_photo, player_name, player_height, player_weight, franchise_logo } = props.player;
+    const { player_firstname, id_player, player_photo, player_name, player_height, player_weight, franchise_logo } = props.player;
 
 
     return (
         <>
-            <PlayerCardContainer>
+            <PlayerCardContainer id={`${id_player}`}>
                 <div className='player__container--top'>
                     <TeamImage>
                         <BackLogo bglogo={`assets/images/teamsh/${franchise_logo}`}></BackLogo>
@@ -135,8 +135,7 @@ const PlayerCard: React.FC<{ player: PlayerDataType }> = (props) => {
                     </Name>
                 </div>
                 <PlayerImage>
-                <BackPhoto bgphoto={`assets/images/players/${player_photo}`}></BackPhoto>
-                    {/* <img src={`assets/images/leagues/${player_photo}`} alt={`${player_firstname} ${player_name}`} />   */}
+                <BackPhoto bgphoto={`assets/images/players-2023-2024/${player_photo}`}></BackPhoto>
                 </PlayerImage>
             </PlayerCardContainer>
         </>

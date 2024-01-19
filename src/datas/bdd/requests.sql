@@ -164,7 +164,21 @@ SELECT p.id AS 'id_player',
 
 
 
+--
+-- RECUPERATION DE TOUTES LES STATISTIQUE DES JOUEURS AYANT JOUEE LES MATCHS D'UNE SAISON
+--
 
+SELECT * FROM game_stats gs 
+WHERE gs.id IN ( 
+    SELECT id_game_stats 
+    FROM to_play 
+    WHERE id_games IN ( 
+        SELECT DISTINCT g.id 
+        FROM games g 
+        JOIN franchise_game fg ON fg.id_games = g.id 
+        WHERE fg.id_season = 24 
+        ORDER BY g.id DESC ) ) 
+        ORDER BY gs.id ASC;
 
 
 

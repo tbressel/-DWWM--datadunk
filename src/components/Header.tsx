@@ -6,11 +6,11 @@ import React, { useState, useEffect } from 'react';
 
 const HeaderContainer = styled.header`
     display: flex;
-    width: 100%;
     padding: 0px 20px;
-    align-items: flex-start;
-    gap: 522px;
-    border: 1px solid black;
+  justify-content: flex-end;
+  border-radius: 20px;
+background: ${colors.blanc};
+margin-bottom: 30px;
 `;
 
 

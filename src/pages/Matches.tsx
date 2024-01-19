@@ -9,7 +9,7 @@ const Matches = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/games');
+                const response = await fetch('http://localhost:5000/api/stats/games/2023');
                 let data = await response.json();
                 setMatches(data);
                 console.log(data);

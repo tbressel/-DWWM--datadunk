@@ -9,8 +9,7 @@ const Teams = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/franchise/2023');
-                // const response = await fetch('http://localhost:5000/api/franchise/2023');
+                const response = await fetch('http://localhost:5000/api/stats/franchise/2023');
                 const data = await response.json();
                 setTeams(data);
                 console.log(data);

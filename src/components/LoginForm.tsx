@@ -1,19 +1,18 @@
 import styled from 'styled-components';
 import { colors } from '../colors';
 
+
 import React, { useState, useEffect } from 'react';
 
 const Mask = styled.div`
     position: absolute;
     top: 0px;
     left: 0px;
-    
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 10px;
-    
     width: 100vw;
     height: 100vh;
     background: rgba(17, 15, 26, 0.60);
@@ -21,20 +20,19 @@ const Mask = styled.div`
 `;
 
 const LoginFormContainer = styled.div`
-min-width: 40%;
-
-border-radius: 20px;
-background: var(--Blanc, #FFF);
+    min-width: 40%;
+    border-radius: 20px;
+    background: ${colors.blanc};
 `;
 
 const LoginFormSubContainer = styled.div`
-display: flex;
-  flex-direction: column;
-  margin: 40px 70px;
+    display: flex;
+    flex-direction: column;
+    margin: 40px 70px;
 
 
 h2 {
-    color: var(--Violet-5, #110F1A);
+    color:  ${colors.bleu};
     text-align: center;
     font-family: 'Barlow Medium';
     font-size: 16px;
@@ -46,39 +44,27 @@ h2 {
 `;
 
 const LoginField = styled.div`
-
-font-family: 'Barlow Medium';
- width: 100%;
-input {
-    margin-top: 10px;
+    font-family: 'Barlow Medium';
     width: 100%;
-    height: 48px;
-    border-radius: 10px;
-    border: 0;
-    background: var(--Violet-1, #F3F2F8);
-}
+        input {
+            margin-top: 10px;
+            width: 100%;
+            height: 48px;
+            border-radius: 10px;
+            border: 0;
+            background:  ${colors.blanc};
+        }
 `;
-
-
 
 const LoginFormField = styled.form`
 display: flex;
 flex-direction: column;
-
 align-items: center;
 gap: 32px;  
-
-
-
-
 `;
 
-
-
-
-
-const LoginFormButton = styled.div`
-
+const LoginFormButton = styled.button`
+cursor: pointer;
 padding: 10px 24px;
 border-radius: 5px;
   background: var(--Orange, #E1533D);
@@ -115,67 +101,81 @@ interface LoginFormProps {
 
 const LoginForm = (props: LoginFormProps) => {
 
-    const handleCrossClick = () => {
-        // Au lieu de setHideLoginForm(true), utilise onHideLoginForm
+    const [formData, setFormData] = useState({
+
+    });
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        console.log('Form data submitted:', formData);
+    
+        try {
+            const response = await fetch('http://localhost:5000/api/users/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+    
+            if (!response.ok) {
+                throw new Error('Erreur lors de la requête POST');
+            }
+    
+            // Traitez la réponse ici si nécessaire
+    
+            console.log('Formulaire soumis avec succès !');
+        } catch (error) {
+            console.error('Erreur lors de la soumission du formulaire:', error);
+        }
+        // Ajoutez ici la logique pour envoyer vos données (fetch, axios, etc.)
+    };
+    
+
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+        console.log('Form data updated:', formData);
+    };
+    
+
+    const handleCrossClick = () => { 
         props.onHideLoginForm();
     };
 
-
-
     return (
         <>
-        {props.showLoginForm && (
+            {props.showLoginForm && (
+                <Mask>
+                    <LoginFormContainer>
+                        <LoginFormSubContainer>
+                            <Cross onClick={handleCrossClick}>
+                                <img src="assets/images/icons/icon-cross.svg" alt="" />
+                            </Cross>
+                            <h2>Authentification</h2>
+                            <LoginFormField onSubmit={handleSubmit} className="login__form" id="login-form" method="post">
+                                <LoginField>
+                                    <label htmlFor="pseudoField"><p>Pseudo </p>
+                                    <input onChange={handleInputChange} id="pseudoField" name="pseudo" type="text" placeholder="Saisissez votre pseudo ici ..." required autoComplete="username" />
+                                    </label>
+                                </LoginField>
+                                <LoginField className="password-container">
+                                    <label htmlFor="passwordField"><p>Mot de passe </p>
+                                    <input onChange={handleInputChange} id="passwordField" name="password" type="password" placeholder="Saisissez votre mot de passe ici ..." required autoComplete="current-password" />
+                                    </label>
+                                </LoginField>
+                                <LoginFormButton type="submit">Valider</LoginFormButton>
 
-
-            <Mask>
-                <LoginFormContainer>
-
-
-                    <LoginFormSubContainer>
-                    <Cross  onClick={handleCrossClick}>
-                    <img src="assets/images/icons/icon-cross.svg" alt="" />
-                    </Cross>
-
-                        <h2>Authentification</h2>
-
-
-                        <LoginFormField className="login__form" id="login-form" method="post">
-
-
-                            <LoginField>
-                                <label htmlFor="pseudoField"><p>Pseudo </p>
-                                    <input id="pseudoField" name="pseudo" type="text" placeholder="Saisissez votre pseudo ici ..." required autoComplete="username" />
-                                </label>
-                            </LoginField>
-
-
-                            <LoginField className="password-container">
-                                <label htmlFor="passwordField"><p>Mot de passe </p>
-                                    <input id="passwordField" name="password" type="password" placeholder="Saisissez votre mot de passe ici ..." required autoComplete="current-password" />
-                                </label>
-
-                        </LoginField>
-
-
-                    <LoginFormButton>
-                        <button className="btn btn__color-green" type="submit">Valider</button>
-
-                    </LoginFormButton>
-                    </LoginFormField>
-
-
-
-
-                </LoginFormSubContainer>
-
-
-            </LoginFormContainer>
-        </Mask >
-        )}
+                            </LoginFormField>
+                        </LoginFormSubContainer>
+                    </LoginFormContainer>
+                </Mask>
+            )}
         </>
-
-
-    )
+    );
 };
 
 export default LoginForm;

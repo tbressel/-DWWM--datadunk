@@ -51,3 +51,21 @@ export type PlayerDataType = {
     player_weight: number;
     franchise_logo: string;
 };
+export interface FormuleDataType {
+    player: number[];
+    id_player: number;
+    pts: number;
+    twoT: number;
+    twoR: number;
+    threeT: number;
+    threeR: number;
+    lt: number;
+    lr: number;
+    ro: number;
+    rd: number;
+    in: number;
+    pd: number;
+    ct: number;
+    fte: number;
+    bp: number;
+  }

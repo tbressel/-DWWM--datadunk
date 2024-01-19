@@ -8,10 +8,10 @@ const Players = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/players');
-                const data = await response.json();
-                setPlayers(data);
-                console.log(data);
+                const responseStats = await fetch('http://localhost:5000/api/stats/players/2023');
+                const statsData = await responseStats.json();
+                setPlayers(statsData);
+                console.log(statsData);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
