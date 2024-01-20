@@ -82,7 +82,8 @@ userApp.post('/login', (req, res) => {
                                     lastname: queryResult[0].user_lastname,
                                     pseudo: queryResult[0].user_pseudo,
                                     email: queryResult[0].user_email,
-                                    status: queryResult[0].user_role
+                                    status: queryResult[0].user_role,
+                                    avatar: queryResult[0].user_avatar
                                 });
                             } else {
                                 res.status(401).json({

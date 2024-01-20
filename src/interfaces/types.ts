@@ -78,4 +78,5 @@ export interface FormuleDataType {
     lastname: string;
     email: string;
     role: number;
+    avatar: string;
   }

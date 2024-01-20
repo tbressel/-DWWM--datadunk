@@ -117,8 +117,7 @@ interface LoginProps {
             <LoginContainer>
                 <LoginBoxLeft>
                     {user ? (
-                <img src="" alt={`${user.firstname} ${user.lastname}`} />
-                // <img src={`${user.avatar}`} alt={`${user.firstName} ${user.lastName}`} />
+                           <img src={`assets/images/avatars/${user.avatar}`} alt={`${user.firstname} ${user.lastname}`} />
                     ) : null}
                 </LoginBoxLeft>
                 <LoginBoxRight>

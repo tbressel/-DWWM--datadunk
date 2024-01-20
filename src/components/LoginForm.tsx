@@ -128,7 +128,7 @@ const LoginForm = (props: LoginFormProps) => {
             // Traitez la réponse ici si nécessaire
             const jsonResponse = await response.json();
             setUser(jsonResponse);
-            // console.log('Réponse JSON:', jsonResponse); 
+            console.log('Réponse JSON:', jsonResponse); 
             // console.log('le tyle de ma data : ',typeof user);
 
             props.onLogin();
