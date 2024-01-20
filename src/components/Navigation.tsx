@@ -17,7 +17,6 @@ const Img = styled.img`
     display: none;
 }
 `;
-
 const Logo = styled.img`
     height: 5rem;
     padding-right: 5px;
@@ -25,7 +24,6 @@ const Logo = styled.img`
 @media screen and (min-width: 768px) {
     display: none;
 }`;
-
 const H1 = styled.h1`
     font-family: 'Gibson Bold';
     color: ${colors.corail};
@@ -33,7 +31,6 @@ const H1 = styled.h1`
 @media screen and (min-width: 768px) {
     display: none;
 }`;
-
 const Menu = styled.ul`
     display: flex;
     flex-direction: column;
@@ -46,7 +43,6 @@ const Menu = styled.ul`
     gap: 5px;
     height: fit-content;
 }`;
-
 const Li = styled.li`
     display: flex;
     flex-direction: row;

@@ -1,11 +1,12 @@
 import styled from 'styled-components';
 import { colors } from '../colors';
 
-import React, { useState, useEffect } from 'react';
-import LoginForm from './LoginForm'; 
+import { useState} from 'react';
+import LoginForm from './LoginForm';
+import UserNotification from './UserNotification';
 
 
-
+import { User } from '../interfaces/types';
 
 
 const LoginBoxLeft = styled.div`
@@ -28,15 +29,12 @@ const LoginBoxRight = styled.div`
     justify-content: center;
     gap: 8px;
 `;
-
 const LoginContainer = styled.div`
     /* margin-top: 150px; */
     display: flex;
     flex-direction: row;
     gap: 10px;
 `;
-
-
 const LoginName = styled.div`
     display: flex;
     height: 24px;
@@ -51,6 +49,12 @@ const LoginName = styled.div`
     font-weight: 700;
     line-height: normal;
     
+    span:nth-child(1) {
+        text-transform: capitalize;
+    }
+    span:nth-child(2) {
+        text-transform: uppercase;
+    }
 `;
 const LoginAction = styled.div`
 display: flex;
@@ -71,39 +75,64 @@ display: flex;
 }   
 `;
 
+interface LoginProps {
+    user: User | null;
+  }
 
-
-
-
-
-const Login = () => {
-
+  const Login: React.FC<LoginProps> = ({ user }) => {
+   
     const [showLoginForm, setShowLoginForm] = useState(false);
-
-    const handleLoginClick = () => {
-        // Inverser l'état actuel
-        setShowLoginForm(!showLoginForm);
-    };
+    const [isNotification, setNotification] = useState(false);
 
 
     return (
         <>
-{showLoginForm && <LoginForm showLoginForm={showLoginForm} onHideLoginForm={() => setShowLoginForm(false)} />}
+            {showLoginForm ? 
+                <LoginForm 
+                // passage de props  de la valeur de l'état de showLoginForm
+                showLoginForm={showLoginForm}
+              
+                // passage de props de la valeur de létat de setShowLoginForm quand on clique sur la croix
+                onCrossClick={() => setShowLoginForm(false)}
+                
+                // passage de props de la valeur de létat de isLoggedIn quand on clique sur le bouton de validation
+                onLogin={() => {
+                        // On masque le formulaire de login
+                        setShowLoginForm(false);
+
+                        // On passe le statut de connexion à true
+                        setNotification(true);
+
+                        // Masquer UserNotification après 2 secondes
+                        setTimeout(() => {
+                            setNotification(false);
+                        }, 1500);
+                    }}
+    
+                />
+            : null}
+
+            {(!showLoginForm && isNotification) ? <UserNotification /> : null}
 
             <LoginContainer>
                 <LoginBoxLeft>
-                    <img src="assets/images/avatars/avatar-SambaDiaw.png" alt="" />
+                    {user ? (
+                <img src="" alt={`${user.firstname} ${user.lastname}`} />
+                // <img src={`${user.avatar}`} alt={`${user.firstName} ${user.lastName}`} />
+                    ) : null}
                 </LoginBoxLeft>
                 <LoginBoxRight>
                     <LoginName>
-                        <p>
-                            <span>Samba</span>
-                            <span>DIAW</span>
+                        {user ? (
+                            <p>
+                            <span>{user.firstname} </span>
+                            <span>{user.lastname}</span>
                         </p>
+                            ) : null}
                     </LoginName>
-                    <LoginAction onClick={handleLoginClick}>
+                    <LoginAction onClick={ () => setShowLoginForm(!showLoginForm)}>
                         <p>
-                            Déconnexion
+                            Connexion
                         </p>
                     </LoginAction>
                 </LoginBoxRight>

@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 import { colors } from '../colors';
 
+import { UserContext } from '../contexts/UserContext';
 
-import React, { useState, useEffect } from 'react';
+import React, {useState, useContext, useEffect} from 'react';
+
 
 const Mask = styled.div`
     position: absolute;
@@ -96,19 +98,20 @@ img {
 
 interface LoginFormProps {
     showLoginForm: boolean;
-    onHideLoginForm: () => void;
+    onCrossClick: () => void;
+    onLogin: () => void;
 }
 
+
 const LoginForm = (props: LoginFormProps) => {
+    const { user, setUser } = useContext(UserContext);
+    const [formData, setFormData] = useState({});
 
-    const [formData, setFormData] = useState({
-
-    });
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log('Form data submitted:', formData);
-    
+        // console.log('Form data submitted:', formData);
+
         try {
             const response = await fetch('http://localhost:5000/api/users/login', {
                 method: 'POST',
@@ -117,20 +120,25 @@ const LoginForm = (props: LoginFormProps) => {
                 },
                 body: JSON.stringify(formData),
             });
-    
+
             if (!response.ok) {
                 throw new Error('Erreur lors de la requête POST');
             }
-    
+
             // Traitez la réponse ici si nécessaire
-    
-            console.log('Formulaire soumis avec succès !');
+            const jsonResponse = await response.json();
+            setUser(jsonResponse);
+            // console.log('Réponse JSON:', jsonResponse); 
+            // console.log('le tyle de ma data : ',typeof user);
+
+            props.onLogin();
+
         } catch (error) {
             console.error('Erreur lors de la soumission du formulaire:', error);
         }
         // Ajoutez ici la logique pour envoyer vos données (fetch, axios, etc.)
     };
-    
+
 
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -138,17 +146,17 @@ const LoginForm = (props: LoginFormProps) => {
             ...formData,
             [e.target.name]: e.target.value,
         });
-        console.log('Form data updated:', formData);
+        // console.log('Form data updated:', formData);
     };
-    
 
-    const handleCrossClick = () => { 
-        props.onHideLoginForm();
+
+    const handleCrossClick = () => {
+        props.onCrossClick();
     };
 
     return (
         <>
-            {props.showLoginForm && (
+            {props.showLoginForm ?
                 <Mask>
                     <LoginFormContainer>
                         <LoginFormSubContainer>
@@ -159,12 +167,12 @@ const LoginForm = (props: LoginFormProps) => {
                             <LoginFormField onSubmit={handleSubmit} className="login__form" id="login-form" method="post">
                                 <LoginField>
                                     <label htmlFor="pseudoField"><p>Pseudo </p>
-                                    <input onChange={handleInputChange} id="pseudoField" name="pseudo" type="text" placeholder="Saisissez votre pseudo ici ..." required autoComplete="username" />
+                                        <input onChange={handleInputChange} id="pseudoField" name="pseudo" type="text" placeholder="Saisissez votre pseudo ici ..." required autoComplete="username" />
                                     </label>
                                 </LoginField>
                                 <LoginField className="password-container">
                                     <label htmlFor="passwordField"><p>Mot de passe </p>
-                                    <input onChange={handleInputChange} id="passwordField" name="password" type="password" placeholder="Saisissez votre mot de passe ici ..." required autoComplete="current-password" />
+                                        <input onChange={handleInputChange} id="passwordField" name="password" type="password" placeholder="Saisissez votre mot de passe ici ..." required autoComplete="current-password" />
                                     </label>
                                 </LoginField>
                                 <LoginFormButton type="submit">Valider</LoginFormButton>
@@ -173,7 +181,7 @@ const LoginForm = (props: LoginFormProps) => {
                         </LoginFormSubContainer>
                     </LoginFormContainer>
                 </Mask>
-            )}
+                : null}
         </>
     );
 };
