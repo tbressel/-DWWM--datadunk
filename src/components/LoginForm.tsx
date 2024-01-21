@@ -106,8 +106,7 @@ interface LoginFormProps {
 const LoginForm = (props: LoginFormProps) => {
     const { user, setUser } = useContext(UserContext);
     const [formData, setFormData] = useState({});
-
-
+    
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         // console.log('Form data submitted:', formData);
@@ -128,7 +127,7 @@ const LoginForm = (props: LoginFormProps) => {
             // Traitez la réponse ici si nécessaire
             const jsonResponse = await response.json();
             setUser(jsonResponse);
-            console.log('Réponse JSON:', jsonResponse); 
+            // console.log('Réponse JSON:', jsonResponse); 
             // console.log('le tyle de ma data : ',typeof user);
 
             props.onLogin();
@@ -150,9 +149,11 @@ const LoginForm = (props: LoginFormProps) => {
     };
 
 
-    const handleCrossClick = () => {
-        props.onCrossClick();
-    };
+     const handleCrossClick = () => {
+         props.onCrossClick();
+     };
+
+
 
     return (
         <>
@@ -160,6 +161,7 @@ const LoginForm = (props: LoginFormProps) => {
                 <Mask>
                     <LoginFormContainer>
                         <LoginFormSubContainer>
+                          
                             <Cross onClick={handleCrossClick}>
                                 <img src="assets/images/icons/icon-cross.svg" alt="" />
                             </Cross>

@@ -7,7 +7,8 @@ import UserNotification from './UserNotification';
 
 
 import { User } from '../interfaces/types';
-
+import { UserContext } from '../contexts/UserContext';
+import { useContext } from 'react';
 
 const LoginBoxLeft = styled.div`
     display: flex;
@@ -79,11 +80,36 @@ interface LoginProps {
     user: User | null;
   }
 
-  const Login: React.FC<LoginProps> = ({ user }) => {
+  const Login = ({ user }: LoginProps) => {
+
+    // pour utiliser le context je doit le redefinir dans le composant, cette fois ci sans user
+    // juste setUser qui servira à modifier le context
+    const { setUser } = useContext(UserContext);
    
     const [showLoginForm, setShowLoginForm] = useState(false);
     const [isNotification, setNotification] = useState(false);
 
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    const onCrossClick = () => {
+        setShowLoginForm(false);
+    }
+
+    const onLogin = () => {
+        // On masque le formulaire de login
+        setShowLoginForm(false);
+        
+        // On passe le statut de connexion à true
+        setNotification(true);
+
+        // On modifie la variable d'état isLoggedIn pour afficher le bouton de déconnexion
+        setIsLoggedIn(true);
+        
+        // Masquer UserNotification après 2 secondes
+        setTimeout(() => {
+            setNotification(false);
+        }, 1500);
+      }
 
     return (
         <>
@@ -93,22 +119,12 @@ interface LoginProps {
                 showLoginForm={showLoginForm}
               
                 // passage de props de la valeur de létat de setShowLoginForm quand on clique sur la croix
-                onCrossClick={() => setShowLoginForm(false)}
+                 onCrossClick={onCrossClick}
                 
                 // passage de props de la valeur de létat de isLoggedIn quand on clique sur le bouton de validation
-                onLogin={() => {
-                        // On masque le formulaire de login
-                        setShowLoginForm(false);
-
-                        // On passe le statut de connexion à true
-                        setNotification(true);
-
-                        // Masquer UserNotification après 2 secondes
-                        setTimeout(() => {
-                            setNotification(false);
-                        }, 1500);
-                    }}
+                onLogin={onLogin}
     
+               
                 />
             : null}
 
@@ -129,9 +145,21 @@ interface LoginProps {
                         </p>
                             ) : null}
                     </LoginName>
-                    <LoginAction onClick={ () => setShowLoginForm(!showLoginForm)}>
+                    <LoginAction onClick={ () => {setShowLoginForm(!showLoginForm)
+                    if (isLoggedIn) {
+
+                        // On modifie la variable d'état isLoggedIn pour afficher le bouton de déconnexion
+                        setIsLoggedIn(false);
+                        // On modifie le context pour supprimer l'utilisateur
+                        setUser(null);
+                        // On masque le formulaire de login
+                        onCrossClick();
+
+                    }}}>
                         <p>
-                            Connexion
+                            
+                            {isLoggedIn ? 'Déconnexion' : 'Connexion'} 
+                            
                         </p>
                     </LoginAction>
                 </LoginBoxRight>

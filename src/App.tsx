@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Reset } from 'styled-reset';
 import { GlobalStyle } from './globalstyle';
 import styled from 'styled-components';
+
+
 import { UserContext } from './contexts/UserContext';
 import { User } from './interfaces/types';
 
@@ -26,6 +28,7 @@ const Space = styled.div`
 
 
 const App = () => {
+  
   const [user, setUser] = useState<User | null>(null);
 
   
