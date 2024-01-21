@@ -104,4 +104,24 @@ userApp.post('/login', (req, res) => {
     });
 });
 
+
+// Endpoint pour récupérer les données de la table 'franchise'
+userApp.get('/list', (req, res) => {
+    const sql = `SELECT * FROM _user_;
+    ;
+`;    
+    pool.query(sql, (error, results) => {
+        if (error) {
+            console.error(error);
+            res.status(500).json({
+                message: 'Error occurred',
+                status: 'Failure'
+            });
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+
 module.exports = userApp;

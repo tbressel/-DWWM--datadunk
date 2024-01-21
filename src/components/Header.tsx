@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { colors } from '../colors';
 import Login from '../components/Login';
 
-import { UserContext } from '../contexts/UserContext';
+import { LoginContext } from '../contexts/LoginContext';
 import { useContext } from 'react';
 
 
@@ -18,7 +18,7 @@ const HeaderContainer = styled.header`
 
 const Header = () => {
 
-const { user } = useContext(UserContext);
+const { user } = useContext(LoginContext);
 
     return (
         <>

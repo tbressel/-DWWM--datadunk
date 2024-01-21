@@ -9,6 +9,7 @@ export const GlobalStyle = createGlobalStyle`
     overflow-x: hidden;
     min-width: 320px;
     background-color: ${colors.violet1};
+    font-family: 'Barlow Medium';
 
   }
   a {

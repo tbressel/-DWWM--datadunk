@@ -70,13 +70,21 @@ export interface FormuleDataType {
     bp: number;
   }
 
-
-
-  export interface User {
-    id: string;
+  export interface UserDataType {
+    id: number;
     firstname: string;
     lastname: string;
+    pseudo: string;
     email: string;
-    role: number;
+    status: number;
     avatar: string;
+  }
+  export interface UsersListDataType {
+    id: number;
+    user_firstname: string;
+    user_lastname: string;
+    user_pseudo: string;
+    user_email: string;
+    user_role: number;
+    user_avatar: string;
   }

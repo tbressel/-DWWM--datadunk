@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { colors } from '../colors';
 
-import { UserContext } from '../contexts/UserContext';
+import { LoginContext } from '../contexts/LoginContext';
 
 import React, {useState, useContext, useEffect} from 'react';
 
@@ -104,7 +104,7 @@ interface LoginFormProps {
 
 
 const LoginForm = (props: LoginFormProps) => {
-    const { user, setUser } = useContext(UserContext);
+    const { user, setUser } = useContext(LoginContext);
     const [formData, setFormData] = useState({});
     
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

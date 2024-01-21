@@ -6,8 +6,8 @@ import LoginForm from './LoginForm';
 import UserNotification from './UserNotification';
 
 
-import { User } from '../interfaces/types';
-import { UserContext } from '../contexts/UserContext';
+import { UserDataType } from '../interfaces/types';
+import { LoginContext } from '../contexts/LoginContext';
 import { useContext } from 'react';
 
 const LoginBoxLeft = styled.div`
@@ -77,14 +77,14 @@ display: flex;
 `;
 
 interface LoginProps {
-    user: User | null;
+    user: UserDataType | null;
   }
 
   const Login = ({ user }: LoginProps) => {
 
     // pour utiliser le context je doit le redefinir dans le composant, cette fois ci sans user
     // juste setUser qui servira à modifier le context
-    const { setUser } = useContext(UserContext);
+    const { setUser } = useContext(LoginContext);
    
     const [showLoginForm, setShowLoginForm] = useState(false);
     const [isNotification, setNotification] = useState(false);

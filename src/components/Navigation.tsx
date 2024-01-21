@@ -8,6 +8,9 @@ import data from '../datas/lang/fr.json';
 import { NavigationDataType } from '../interfaces/types';
 import { NavbarDataType } from '../interfaces/types';
 
+import { LoginContext } from '../contexts/LoginContext';
+import { useContext } from 'react';
+
 
 
 
@@ -71,12 +74,15 @@ interface NavigationProps {
     burgerClicked: boolean;
 };
 
+
 const Navigation = (props: NavigationProps) => {
+
+
     const navigationData: NavigationDataType = data.navigation;
     const navbarData: NavbarDataType = data.navbar;
 
-   
-   const Nav = styled.nav`
+
+    const Nav = styled.nav`
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -104,6 +110,9 @@ const Navigation = (props: NavigationProps) => {
     // console.log(Object.keys(navigationData).map(key => navigationData[key].name));
     // console.log(Object.keys(navigationData).map(key => navigationData[key].icon));
 
+    const { user } = useContext(LoginContext);
+
+
     return (
         <>
             <Nav>
@@ -118,6 +127,17 @@ const Navigation = (props: NavigationProps) => {
                             </NavLink>
                         </Li>
                     ))}
+
+                    {(user?.status === 2) ? (
+                        <Li>
+                            <Img src={`assets/images/icons/icon-admin.svg`} alt="" />
+                            <NavLink to="admin">
+                                <MenuItem className='menu-item'>ADMIN</MenuItem>
+                            </NavLink>
+                        </Li>
+                    ) : null
+
+                    }
                 </Menu>
             </ Nav>
         </>

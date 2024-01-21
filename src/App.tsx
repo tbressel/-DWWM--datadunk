@@ -5,8 +5,8 @@ import { GlobalStyle } from './globalstyle';
 import styled from 'styled-components';
 
 
-import { UserContext } from './contexts/UserContext';
-import { User } from './interfaces/types';
+import { LoginContext } from './contexts/LoginContext';
+import { UserDataType } from './interfaces/types';
 
 import Home from './pages/Home';
 import Articles from './pages/Articles';
@@ -16,6 +16,7 @@ import Matches from './pages/Matches';
 import Teams from './pages/Teams';
 import Players from './pages/Players';
 import Error from './pages/Error';
+import Admin from './pages/Admin';
 import Navbar from './components/Navbar';
 import Header from './components/Header';
 
@@ -29,15 +30,15 @@ const Space = styled.div`
 
 const App = () => {
   
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserDataType | null>(null);
 
   
   return (
     <>
-<UserContext.Provider value={{ user, setUser }}>
       <Reset />
       <GlobalStyle />
       <BrowserRouter>
+<LoginContext.Provider value={{ user, setUser }}>
          <Navbar />
           <Space>
 
@@ -53,10 +54,11 @@ const App = () => {
             <Route path='/matches' element={<Matches />} />
             <Route path='/teams' element={<Teams />} />
             <Route path='/players' element={<Players />} />
+            <Route path='/admin' element={<Admin />} />
             <Route path="*" element={<Error />} />
           </Routes>
+</LoginContext.Provider>
       </BrowserRouter>
-      </UserContext.Provider>
     </>
   );
 }

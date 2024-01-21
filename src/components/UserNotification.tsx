@@ -32,14 +32,32 @@ font-weight: 500;
 line-height: normal;
 `;
 
+const Mask = styled.div`
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(17, 15, 26, 0.60);
+    z-index: 1000;
+`;
+
 const UserNotification = () => {
     return (
         <>
+         <Mask>
+
             <NotificationContainer>
                 <NotificationTitle>
                     <p>    Connexion à votre compte réussie</p>
                 </NotificationTitle>
             </NotificationContainer>
+         </Mask>
         </>
     )
 }
