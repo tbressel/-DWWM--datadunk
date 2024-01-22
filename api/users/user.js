@@ -45,7 +45,7 @@ const bcrypt = require('bcrypt');
 userApp.post('/login', (req, res) => {
 
     // Récupérer les données de la requête POST
-    const { pseudo, password } = req.body;
+    const { action, pseudo, password } = req.body;
     const sql = 'SELECT * FROM _user_ WHERE user_pseudo = ?';
 
     // Utiliser le pool de connexions pour éviter la gestion manuelle des connexions
@@ -83,6 +83,7 @@ userApp.post('/login', (req, res) => {
                         } else {
                             if (isMatch) {
                                 res.json({
+                                    action: action,
                                     message: notificationMessage.login_success,
                                     status: 'Success',
                                     id: queryResult[0].id,
@@ -91,6 +92,7 @@ userApp.post('/login', (req, res) => {
                                     pseudo: queryResult[0].user_pseudo,
                                     email: queryResult[0].user_email,
                                     status: queryResult[0].user_role,
+                                    status_name: queryResult[0].user_role_name,
                                     avatar: queryResult[0].user_avatar
                                 });
                             } else {
@@ -117,10 +119,36 @@ userApp.post('/login', (req, res) => {
 ///////////////////////////////////       USER LOGOUT      /////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
 userApp.get('/logout', (req, res) => {
-
+    const action = req.query.action;
     res.json({
+        action: action,
         message: notificationMessage.logout_success,
         status: 'Success',
+    });
+});
+////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////       USER DELETE      /////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+userApp.delete('/delete', (req, res) => {
+    const id = req.query.id;
+    const action = req.query.action;
+
+    const sql = `DELETE FROM _user_ WHERE id = ?`;
+
+    pool.query(sql, [id], (error, results) => {
+        if (error) {
+            console.error(error);
+            res.status(500).json({
+                message: 'Error occurred',
+                status: 'Failure'
+            });
+        } else {
+            res.json({
+                action: action,
+                message: notificationMessage.delete_success,
+                status: 'Success',
+            });
+        }
     });
 });
 
@@ -153,6 +181,7 @@ module.exports = userApp;
 
 const notificationMessage = { 
     'login_success': "Connexion à votre compte réussie",
+    'delete_success': "La suppression de l'utilisateur a réussie",
     'login_failed': "Connexion à votre compte à échouée",
     'logout_success': "Vous allez être à présent déconnecté de votre compte"
 }

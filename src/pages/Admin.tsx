@@ -12,7 +12,7 @@ const Admin = () => {
     if (user?.status !== 2 ) {
         return (
             <>
-            <h1>Vous n'avez pas les authorisation nécessaire pour acceder à cette page.  Status = {`${user?.pseudo}`}.</h1>
+            <h1>Vous n'avez pas les authorisation nécessaire pour acceder à cette page.</h1>
             </>
         )
     } 

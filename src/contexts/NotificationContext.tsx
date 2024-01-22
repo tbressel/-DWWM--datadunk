@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { UserDataType } from '../interfaces/types';
+import { NotificationDataType } from '../interfaces/types';
 
-interface LoginContextProps {
-  user: UserDataType | null;
-  setUser: React.Dispatch<React.SetStateAction<UserDataType | null>>;
+interface NotificationContextProps {
+  msg: NotificationDataType | null;
+  setMsg: React.Dispatch<React.SetStateAction<NotificationDataType | null>>;
 }
 
-export const LoginContext = React.createContext<LoginContextProps>({
-  user: null,
-  setUser: () => {},
+export const NotificationContext = React.createContext<NotificationContextProps>({
+  msg: null,
+  setMsg: () => {},
 });

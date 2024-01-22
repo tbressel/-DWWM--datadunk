@@ -25,6 +25,8 @@ box-shadow: #d0d0d0 5px 5px 5px;
 width: 100%;
 height: 75px;
 margin: 10px 0;
+position: fixed;
+  bottom: 0;
 
 img {
     width: 48px;
@@ -61,6 +63,8 @@ const UsersList = () => {
 
     return (
         <>
+
+
      <UsersListContainer>
         {users.map((user, index) => (
             <UserCards key={index} user={user} />
@@ -70,7 +74,6 @@ const UsersList = () => {
 
 <AddButtonContainer>
 <img src="assets/images/icons/icon-add.svg" alt="" />
-
 </AddButtonContainer>
 
             </>

@@ -8,6 +8,12 @@ import styled from 'styled-components';
 import { LoginContext } from './contexts/LoginContext';
 import { UserDataType } from './interfaces/types';
 
+
+import { NotificationContext } from './contexts/NotificationContext';
+import { NotificationDataType } from './interfaces/types';
+
+
+
 import Home from './pages/Home';
 import Articles from './pages/Articles';
 import Guides from './pages/Guides';
@@ -26,18 +32,14 @@ const Space = styled.div`
     width: 100%;
     `;
 
-
-
 const App = () => {
-  
   const [user, setUser] = useState<UserDataType | null>(null);
-
-  
+  const [msg, setMsg] = useState<NotificationDataType | null>(null);
   return (
     <>
- 
-
 <LoginContext.Provider value={{ user, setUser }}>
+<NotificationContext.Provider value={{ msg, setMsg }}>
+
       <Reset />
       <GlobalStyle />
       <BrowserRouter>
@@ -60,6 +62,7 @@ const App = () => {
             <Route path="*" element={<Error />} />
           </Routes>
       </BrowserRouter>
+</NotificationContext.Provider>
 </LoginContext.Provider>
 
     </>

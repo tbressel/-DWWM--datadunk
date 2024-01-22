@@ -2,8 +2,8 @@
 import styled from 'styled-components';
 import { colors } from '../colors';
 
-
 import { LoginContext } from '../contexts/LoginContext';
+import { NotificationContext } from '../contexts/NotificationContext';
 import { useContext } from 'react';
 
 
@@ -52,16 +52,17 @@ const Mask = styled.div`
 `;
 
 
-const UserNotification = () => {
+const UserNotification = ({ action }: { action: string }) => {
+    const { user } = useContext(LoginContext);
+    const { msg } = useContext(NotificationContext);
+    
 
-const { user } = useContext(LoginContext);
-
-    return (
+   return (
         <>
          <Mask>
             <NotificationContainer>
                 <NotificationTitle>
-                    <p>{user?.message}</p>
+                    {(action === 'delete') ? <p>{msg?.message}</p> : <p>{user?.message}</p>}
                 </NotificationTitle>
             </NotificationContainer>
          </Mask>

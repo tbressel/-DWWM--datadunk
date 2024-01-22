@@ -1,8 +1,14 @@
 import styled from "styled-components";
 import { colors } from "../colors";
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import { UsersListDataType } from "../interfaces/types";
+import UserNotification from './UserNotification';
 
+import { UserDataType } from '../interfaces/types';
+import { LoginContext } from '../contexts/LoginContext';
+
+import { NotificationContext } from '../contexts/NotificationContext';
+import { NotificationDataType } from '../interfaces/types';
 
 
 const UserCardContainer = styled.div`
@@ -137,37 +143,74 @@ display: flex;
 flex-direction: column;
 `;
 const UserDrawerLi = styled.li`
-font-family: 'Gibson Light';
-display: flex;
-align-items: center;
-gap: 10px;
-align-self: stretch;
-margin: 10px;
+    font-family: 'Gibson Light';
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    align-self: stretch;
+    margin: 10px;
 
 
 span {
   font-family: 'Gibson Medium';
-    font-weight: 600;
+  font-weight: 600;
 }
 
 `;
 
+interface LoginProps {
+  user: UserDataType | null;
+
+}
+
 
 const UserCards: React.FC<{ user: UsersListDataType }> = (props) => {
-
+    const { id, user_pseudo, user_avatar, user_role_name, user_lastname, user_firstname, user_email } = props.user;
+    const [ShowDrawerOnClick, setShowDrawerOnClick] = useState(false);
+    const [isNotification, setNotification] = useState({state :false, action: ''});
   
-  const { id, user_pseudo, user_avatar, user_role, user_lastname, user_firstname, user_email } = props.user;
+    const { setMsg } = useContext(NotificationContext);
 
-  const [ShowDrawerOnClick, setShowDrawerOnClick] = useState(false);
+
+    const deleteSubmit = async (id: number) => {
+      try {
+          const response = await fetch('http://localhost:5000/api/users/delete?action=delete&id=' + id, {
+              method: 'DELETE',
+          });
+            // Traitez la réponse ici si nécessaire
+            const jsonResponse = await response.json();
+            setMsg(jsonResponse);
+      } catch (error) {
+          console.error('Error fetching data:', error);
+      }
+    };
+
+
+
+    const onDelete = () => {
+      // Appel de la fonction deleteSubmit
+      deleteSubmit(id);
+
+      // On passe le statut de connexion à true
+      setNotification({ state: true, action: 'delete' });
+
+      // Masquer UserNotification après 2 secondes
+       setTimeout(() => {
+           setNotification({ state: false, action: '' });
+       }, 2000);
+    }
+
+
 
   const handlerShowDrawer = () => {
     setShowDrawerOnClick(!ShowDrawerOnClick);
   };
 
 
-  // {`assets/images/leagues/${league_logo}`}
   return (
     <>
+
+{isNotification.state ? <UserNotification action={isNotification.action}/> : null}
       <UserCardContainer>
         <UserCardUl>
 
@@ -175,16 +218,16 @@ const UserCards: React.FC<{ user: UsersListDataType }> = (props) => {
             <UserHeader>
               <UserProfile>
                 <UserAvatar>
-                  <img src={`assets/images/avatars/${user_avatar}`} alt="" />
+                  <img src={`assets/images/avatars/${user_avatar}`} alt={`${user_pseudo}`} />
                 </UserAvatar>
                 <UserInfos>
                   <p>{`${user_pseudo}`}</p>
-                  <p>{`${user_role}`}</p>
+                  <p>{`${user_role_name}`}</p>
                 </UserInfos>
               </UserProfile>
               <UserActions>
                 <div>
-                  <img src="assets/images/icons/icon-delete.svg" alt="" />
+                  <img onClick={onDelete} src="assets/images/icons/icon-delete.svg" alt="" />
                   <img src="assets/images/icons/icon-write.svg" alt="" />
                 </div>
               </UserActions>

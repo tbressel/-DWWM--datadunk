@@ -8,6 +8,8 @@ import UserNotification from './UserNotification';
 
 import { UserDataType } from '../interfaces/types';
 import { LoginContext } from '../contexts/LoginContext';
+
+
 import { useContext } from 'react';
 
 
@@ -79,19 +81,23 @@ display: flex;
 
 interface LoginProps {
     user: UserDataType | null;
+}
 
-  }
-
-  const Login = ({ user }: LoginProps ) => {
+const Login = ({ user }: LoginProps) => {
+    // pour utiliser le context je doit le redefinir dans le composant, cette fois ci sans user
+    // juste setUser qui servira à modifier le context
+    const { setUser } = useContext(LoginContext);
+    const [showLoginForm, setShowLoginForm] = useState(false);
+    const [isNotification, setNotification] = useState({state :false, action: ''});
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const logoutSubmit = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/users/logout', {
+            const response = await fetch('http://localhost:5000/api/users/logout?action=logout', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                },
-            
+                },          
             });
 
             if (!response.ok) {
@@ -101,9 +107,7 @@ interface LoginProps {
             // Traitez la réponse ici si nécessaire
             const jsonResponse = await response.json();
             setUser(jsonResponse);
-      
-            // console.log('Réponse JSON:', jsonResponse); 
-            // console.log('le tyle de ma data : ',typeof user);
+           
 
         } catch (error) {
             console.error('Erreur lors de la soumission du formulaire:', error);
@@ -112,51 +116,45 @@ interface LoginProps {
 
     }
 
-    // pour utiliser le context je doit le redefinir dans le composant, cette fois ci sans user
-    // juste setUser qui servira à modifier le context
-    const { setUser } = useContext(LoginContext);
-   
-    const [showLoginForm, setShowLoginForm] = useState(false);
-    const [isNotification, setNotification] = useState(false);
+    const onLogout = () => {
 
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+      
+      // on envoie une requete au serveur pour supprimer la session
+      logoutSubmit();
+         
+     // On passe le statut de connexion à true
+     setNotification({ state: true, action: 'logout' });
+
+     // Masquer UserNotification après 2 secondes
+      setTimeout(() => {
+          setNotification({ state: false, action: '' });
+      }, 2000);
+            // on modifie le context pour supprimer l'utilisateur
+            setUser(null);
+  }
 
     const onCrossClick = () => {
         setShowLoginForm(false);
     }
 
-    const onLogout = () => {
 
-        // on modifie le context pour supprimer l'utilisateur
-        setUser(null);
-        
-        // on envoie une requete au serveur pour supprimer la session
-        logoutSubmit();
-           
-        // on affiche la notification
-        setNotification(true);
-                            
-        setTimeout(() => {
-            setNotification(false);
-        }, 2000)
-        
-    }
 
     const onLogin = () => {
         // On masque le formulaire de login
         setShowLoginForm(false);
         
         // On passe le statut de connexion à true
-        setNotification(true);
+        setNotification({ state: true, action: 'login' });
 
         // On modifie la variable d'état isLoggedIn pour afficher le bouton de déconnexion
         setIsLoggedIn(true);
         
         // Masquer UserNotification après 2 secondes
         setTimeout(() => {
-            setNotification(false);
+            setNotification({ state: false, action: '' });
         }, 2000);
       }
+
 
     return (
         <>
@@ -174,7 +172,7 @@ interface LoginProps {
                 />
             : null}
 
-            {(!showLoginForm && isNotification) ? <UserNotification /> : null}
+            {(!showLoginForm && isNotification.state) ? <UserNotification action={isNotification.action} /> : null}
 
             <LoginContainer>
                 <LoginBoxLeft>

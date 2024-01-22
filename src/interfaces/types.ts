@@ -71,6 +71,7 @@ export interface FormuleDataType {
   }
 
   export interface UserDataType {
+    action:string;
     message: string;
     id: number;
     firstname: string;
@@ -78,6 +79,7 @@ export interface FormuleDataType {
     pseudo: string;
     email: string;
     status: number;
+    status_name: string;
     avatar: string;
   }
   export interface UsersListDataType {
@@ -87,5 +89,11 @@ export interface FormuleDataType {
     user_pseudo: string;
     user_email: string;
     user_role: number;
+    user_role_name: string;
     user_avatar: string;
+  }
+  export interface NotificationDataType {
+    action:string
+    message: string;
+
   }
