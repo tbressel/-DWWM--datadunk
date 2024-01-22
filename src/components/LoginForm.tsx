@@ -6,6 +6,7 @@ import { LoginContext } from '../contexts/LoginContext';
 import React, {useState, useContext, useEffect} from 'react';
 
 
+
 const Mask = styled.div`
     position: absolute;
     top: 0px;
@@ -104,6 +105,8 @@ interface LoginFormProps {
 
 
 const LoginForm = (props: LoginFormProps) => {
+
+
     const { user, setUser } = useContext(LoginContext);
     const [formData, setFormData] = useState({});
     
@@ -127,6 +130,7 @@ const LoginForm = (props: LoginFormProps) => {
             // Traitez la réponse ici si nécessaire
             const jsonResponse = await response.json();
             setUser(jsonResponse);
+      
             // console.log('Réponse JSON:', jsonResponse); 
             // console.log('le tyle de ma data : ',typeof user);
 

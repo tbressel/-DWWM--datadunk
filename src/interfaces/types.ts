@@ -5,6 +5,7 @@ export type NavigationDataType = {
         path: string;
     };
 }
+
 export type NavbarDataType = {
     [key: string]: {
         icon: string;
@@ -20,8 +21,8 @@ export type TeamDataType = {
         franchise_name: string;
         franchise_logo: string;
         league_logo: string;
-  
 }
+
 export type MatchDataType = {
         id_games: number;
         game_date: string;
@@ -35,7 +36,6 @@ export type MatchDataType = {
         visitor_franchise_name: string;
         visitor_franchise_logo: string;
         visitor_score: number;
-   
 };
 
 export type PlayerDataType = {
@@ -71,6 +71,7 @@ export interface FormuleDataType {
   }
 
   export interface UserDataType {
+    message: string;
     id: number;
     firstname: string;
     lastname: string;

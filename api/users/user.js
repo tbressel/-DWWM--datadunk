@@ -34,6 +34,14 @@ const bcrypt = require('bcrypt');
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
 
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////       USER LOGIN      /////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+
 userApp.post('/login', (req, res) => {
 
     // Récupérer les données de la requête POST
@@ -75,7 +83,7 @@ userApp.post('/login', (req, res) => {
                         } else {
                             if (isMatch) {
                                 res.json({
-                                    message: 'Le mot de passe et pseudonyme correspondent',
+                                    message: notificationMessage.login_success,
                                     status: 'Success',
                                     id: queryResult[0].id,
                                     firstname: queryResult[0].user_firstname,
@@ -105,6 +113,21 @@ userApp.post('/login', (req, res) => {
 });
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////       USER LOGOUT      /////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+userApp.get('/logout', (req, res) => {
+
+    res.json({
+        message: notificationMessage.logout_success,
+        status: 'Success',
+    });
+});
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////       USERS LIST      /////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
 // Endpoint pour récupérer les données de la table 'franchise'
 userApp.get('/list', (req, res) => {
     const sql = `SELECT * FROM _user_;
@@ -125,3 +148,14 @@ userApp.get('/list', (req, res) => {
 
 
 module.exports = userApp;
+
+
+
+const notificationMessage = { 
+    'login_success': "Connexion à votre compte réussie",
+    'login_failed': "Connexion à votre compte à échouée",
+    'logout_success': "Vous allez être à présent déconnecté de votre compte"
+}
+
+
+

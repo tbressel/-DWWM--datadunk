@@ -24,7 +24,7 @@ import Header from './components/Header';
 const Space = styled.div`
     height: 100px;
     width: 100%;
-`;
+    `;
 
 
 
@@ -35,10 +35,12 @@ const App = () => {
   
   return (
     <>
+ 
+
+<LoginContext.Provider value={{ user, setUser }}>
       <Reset />
       <GlobalStyle />
       <BrowserRouter>
-<LoginContext.Provider value={{ user, setUser }}>
          <Navbar />
           <Space>
 
@@ -57,8 +59,9 @@ const App = () => {
             <Route path='/admin' element={<Admin />} />
             <Route path="*" element={<Error />} />
           </Routes>
-</LoginContext.Provider>
       </BrowserRouter>
+</LoginContext.Provider>
+
     </>
   );
 }

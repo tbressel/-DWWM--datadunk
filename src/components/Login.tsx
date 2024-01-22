@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { colors } from '../colors';
 
-import { useState} from 'react';
+import { useState } from 'react';
 import LoginForm from './LoginForm';
 import UserNotification from './UserNotification';
 
@@ -9,6 +9,7 @@ import UserNotification from './UserNotification';
 import { UserDataType } from '../interfaces/types';
 import { LoginContext } from '../contexts/LoginContext';
 import { useContext } from 'react';
+
 
 const LoginBoxLeft = styled.div`
     display: flex;
@@ -78,9 +79,38 @@ display: flex;
 
 interface LoginProps {
     user: UserDataType | null;
+
   }
 
-  const Login = ({ user }: LoginProps) => {
+  const Login = ({ user }: LoginProps ) => {
+
+    const logoutSubmit = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/users/logout', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            
+            });
+
+            if (!response.ok) {
+                throw new Error('Erreur lors de la requête POST');
+            }
+
+            // Traitez la réponse ici si nécessaire
+            const jsonResponse = await response.json();
+            setUser(jsonResponse);
+      
+            // console.log('Réponse JSON:', jsonResponse); 
+            // console.log('le tyle de ma data : ',typeof user);
+
+        } catch (error) {
+            console.error('Erreur lors de la soumission du formulaire:', error);
+        }
+        // Ajoutez ici la logique pour envoyer vos données (fetch, axios, etc.)
+
+    }
 
     // pour utiliser le context je doit le redefinir dans le composant, cette fois ci sans user
     // juste setUser qui servira à modifier le context
@@ -93,6 +123,23 @@ interface LoginProps {
 
     const onCrossClick = () => {
         setShowLoginForm(false);
+    }
+
+    const onLogout = () => {
+
+        // on modifie le context pour supprimer l'utilisateur
+        setUser(null);
+        
+        // on envoie une requete au serveur pour supprimer la session
+        logoutSubmit();
+           
+        // on affiche la notification
+        setNotification(true);
+                            
+        setTimeout(() => {
+            setNotification(false);
+        }, 2000)
+        
     }
 
     const onLogin = () => {
@@ -108,7 +155,7 @@ interface LoginProps {
         // Masquer UserNotification après 2 secondes
         setTimeout(() => {
             setNotification(false);
-        }, 1500);
+        }, 2000);
       }
 
     return (
@@ -123,8 +170,7 @@ interface LoginProps {
                 
                 // passage de props de la valeur de létat de isLoggedIn quand on clique sur le bouton de validation
                 onLogin={onLogin}
-    
-               
+     
                 />
             : null}
 
@@ -132,7 +178,7 @@ interface LoginProps {
 
             <LoginContainer>
                 <LoginBoxLeft>
-                    {user ? (
+                    {(user && isLoggedIn) ? (
                            <img src={`assets/images/avatars/${user.avatar}`} alt={`${user.firstname} ${user.lastname}`} />
                     ) : null}
                 </LoginBoxLeft>
@@ -154,13 +200,14 @@ interface LoginProps {
                         setUser(null);
                         // On masque le formulaire de login
                         onCrossClick();
-
                     }}}>
-                        <p>
-                            
-                            {isLoggedIn ? 'Déconnexion' : 'Connexion'} 
-                            
-                        </p>
+                                                
+                            {isLoggedIn ? (
+                                <p onClick={() => onLogout()}>Déconnexion</p>
+                            ) : (
+                                <p>Connexion</p>
+                            )}
+                                                  
                     </LoginAction>
                 </LoginBoxRight>
             </LoginContainer>

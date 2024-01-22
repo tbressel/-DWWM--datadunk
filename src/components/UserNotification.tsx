@@ -3,6 +3,10 @@ import styled from 'styled-components';
 import { colors } from '../colors';
 
 
+import { LoginContext } from '../contexts/LoginContext';
+import { useContext } from 'react';
+
+
 const NotificationContainer = styled.div`
 position: absolute;
 top: calc(100vh / 2 - (189px / 2));
@@ -47,14 +51,17 @@ const Mask = styled.div`
     z-index: 1000;
 `;
 
+
 const UserNotification = () => {
+
+const { user } = useContext(LoginContext);
+
     return (
         <>
          <Mask>
-
             <NotificationContainer>
                 <NotificationTitle>
-                    <p>    Connexion à votre compte réussie</p>
+                    <p>{user?.message}</p>
                 </NotificationTitle>
             </NotificationContainer>
          </Mask>
