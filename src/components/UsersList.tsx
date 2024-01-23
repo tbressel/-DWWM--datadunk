@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { colors } from '../colors';
 import { useEffect, useState } from 'react';
 import UserCards from "./UserCards";
-
+import UserAddForm from './UserAddForm';
 
 const UsersListContainer = styled.div`
     display: flex;
@@ -45,6 +45,7 @@ img {
 
 const UsersList = () => {
     const [users, setUsers] = useState([]);
+    const [showAddUserForm, setShowAddUserForm] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -61,22 +62,39 @@ const UsersList = () => {
         fetchData();
     }, []);
 
+
+
+
+    const onAddButtonClick = () => {
+        setShowAddUserForm(true);
+    }
+
+
+
+
     return (
         <>
 
 
-     <UsersListContainer>
-        {users.map((user, index) => (
-            <UserCards key={index} user={user} />
-            ))}
-  
-     </UsersListContainer>
+            {showAddUserForm ?
+                <UserAddForm />
+                : null
+            }
 
-<AddButtonContainer>
-<img src="assets/images/icons/icon-add.svg" alt="" />
-</AddButtonContainer>
 
-            </>
+
+            <UsersListContainer>
+                {users.map((user, index) => (
+                    <UserCards key={index} user={user} />
+                ))}
+
+            </UsersListContainer>
+
+            <AddButtonContainer onClick={onAddButtonClick}>
+                <img src="assets/images/icons/icon-add.svg" alt="" />
+            </AddButtonContainer>
+
+        </>
 
     );
 };

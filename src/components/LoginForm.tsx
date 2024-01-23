@@ -53,9 +53,9 @@ const LoginField = styled.div`
             margin-top: 10px;
             width: 100%;
             height: 48px;
-            border-radius: 10px;
             border: 0;
-            background:  ${colors.blanc};
+            border-radius: 10px;
+            background: ${colors.violet1};
         }
 `;
 
