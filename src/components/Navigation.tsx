@@ -1,18 +1,28 @@
+////////////////////////////////////////////////////////
+//////////////////   IMPORTATIONS   ////////////////////
+////////////////////////////////////////////////////////
+
+// Style importations
 import styled from 'styled-components';
 import { colors } from '../colors';
 
+// React importations
 import { NavLink } from 'react-router-dom';
+import { useContext } from 'react';
 
-import data from '../datas/lang/fr.json';
+// Context importation
+import { LoginContext } from '../contexts/LoginContext';
 
+// Types importation
 import { NavigationDataType } from '../interfaces/types';
 import { NavbarDataType } from '../interfaces/types';
 
-import { LoginContext } from '../contexts/LoginContext';
-import { useContext } from 'react';
+// Datas importation
+import data from '../datas/lang/fr.json';
 
-
-
+////////////////////////////////////////////////////////////
+//////////////////   STYLE COMPONENTS   ////////////////////
+////////////////////////////////////////////////////////////
 
 const Img = styled.img`
     height: 1.3rem;
@@ -67,21 +77,27 @@ const MenuItem = styled.span`
     font-family: 'Gibson Medium';
     color: ${colors.blanc};
 `;
-
-
+ 
+/////////////////////////////////////////////////////////////
+//////////////////   INTERFACE TYPES   //////////////////////
+/////////////////////////////////////////////////////////////
 
 interface NavigationProps {
     burgerClicked: boolean;
 };
 
-
+////////////////////////////////////////////////////////////
+//////////////////   MAIN COMPONENT   //////////////////////
+////////////////////////////////////////////////////////////
 const Navigation = (props: NavigationProps) => {
 
 
+    // declaration of the state variables
     const navigationData: NavigationDataType = data.navigation;
     const navbarData: NavbarDataType = data.navbar;
 
 
+    // Props passage into this syled component 
     const Nav = styled.nav`
         display: flex;
         flex-direction: column;
@@ -105,14 +121,10 @@ const Navigation = (props: NavigationProps) => {
     `;
 
 
-    // console.log(Object.keys(navigationData));
-    // console.log(Object.keys(navigationData).map(key => navigationData[key].path));
-    // console.log(Object.keys(navigationData).map(key => navigationData[key].name));
-    // console.log(Object.keys(navigationData).map(key => navigationData[key].icon));
-
+    // declaration of the global context variables
     const { user } = useContext(LoginContext);
 
-
+ 
     return (
         <>
             <Nav>
@@ -128,7 +140,9 @@ const Navigation = (props: NavigationProps) => {
                         </Li>
                     ))}
 
-                    {(user?.status === 2) ? (
+                    {
+                    (user?.status === 2) ? 
+                    (
                         <Li>
                             <Img src={`assets/images/icons/icon-admin.svg`} alt="" />
                             <NavLink to="admin">

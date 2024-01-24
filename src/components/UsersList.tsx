@@ -1,8 +1,22 @@
+////////////////////////////////////////////////////////
+//////////////////   IMPORTATIONS   ////////////////////
+////////////////////////////////////////////////////////
+
+// Style importations
 import styled from 'styled-components';
 import { colors } from '../colors';
+
+// React importations
 import { useEffect, useState } from 'react';
+
+// Components importations
 import UserCards from "./UserCards";
 import UserAddForm from './UserAddForm';
+
+
+////////////////////////////////////////////////////////////
+//////////////////   STYLE COMPONENTS   ////////////////////
+////////////////////////////////////////////////////////////
 
 const UsersListContainer = styled.div`
     display: flex;
@@ -11,7 +25,6 @@ const UsersListContainer = styled.div`
     background-color: ${colors.blanc};
     border-radius: 10px;
 `;
-
 const AddButtonContainer = styled.div`
 cursor: pointer;
 display: flex;
@@ -42,60 +55,93 @@ img {
 
 `;
 
+////////////////////////////////////////////////////////////
+//////////////////   MAIN COMPONENT   //////////////////////
+////////////////////////////////////////////////////////////
 
 const UsersList = () => {
+
+
+    // declaration of the state variables
     const [users, setUsers] = useState([]);
     const [showAddUserForm, setShowAddUserForm] = useState(false);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch('http://localhost:5000/api/users/list');
-                const data = await response.json();
-                setUsers(data);
-                console.log(data);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
 
-        fetchData();
-    }, []);
+    /**
+     * Function to handle the click on the cancel button
+     */
+    const onCancelButtonClicked = () => {
+        setShowAddUserForm(false);
+    }
 
 
-
-
+    /**
+     * Function to handle the click on the add button
+     */
     const onAddButtonClick = () => {
         setShowAddUserForm(true);
     }
 
 
+    /**
+     * Function to fetch the data from the API on list route endpoint to obtain the list of users
+     */
+    const getUsersList = async () => {
+        try {
+
+            // Fetching data from the API
+            const response = await fetch('http://localhost:5000/api/users/list');
+
+            // Parsing the JSON data
+            const jsonResponse = await response.json();
+
+            // Updating the state variable with the fetched data
+            setUsers(jsonResponse);
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+
+    /**
+     * Using the useEffect hook to fetch the data from the API when the component is mounted
+     * useEffect is called to run once. Without useEffect it would be an endless call.    
+     */
+    useEffect(() => {
+        getUsersList();
+        // Fetching data from the API
+    }, []);
 
 
     return (
         <>
-
-
-            {showAddUserForm ?
-                <UserAddForm />
-                : null
+            {
+                // If showAddUserForm is true, display the UserAddForm component
+                showAddUserForm ? <UserAddForm
+                    showAddUserForm={showAddUserForm}
+                    onCancelButtonClicked={onCancelButtonClicked}
+                /> : null
             }
 
-
-
+            {
+                // Loop on the users state variable to display the UserCards component
+            }
             <UsersListContainer>
                 {users.map((user, index) => (
                     <UserCards key={index} user={user} />
                 ))}
-
             </UsersListContainer>
 
+
+            {
+                // Listen to the click on the add button
+            }
             <AddButtonContainer onClick={onAddButtonClick}>
                 <img src="assets/images/icons/icon-add.svg" alt="" />
             </AddButtonContainer>
-
         </>
-
     );
 };
+
 export default UsersList;

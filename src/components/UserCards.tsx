@@ -1,15 +1,27 @@
+////////////////////////////////////////////////////////
+//////////////////   IMPORTATIONS   ////////////////////
+////////////////////////////////////////////////////////
+
+// Style importations
 import styled from "styled-components";
 import { colors } from "../colors";
-import { useState, useEffect, useContext } from "react";
-import { UsersListDataType } from "../interfaces/types";
+
+// React importations
+import { useState, useContext } from "react";
+
+// Components importations
 import UserNotification from './UserNotification';
 
-import { UserDataType } from '../interfaces/types';
-import { LoginContext } from '../contexts/LoginContext';
+// Type importations
+import { UsersListDataType } from "../interfaces/types";
 
+// Context importations
 import { NotificationContext } from '../contexts/NotificationContext';
-import { NotificationDataType } from '../interfaces/types';
 
+
+////////////////////////////////////////////////////////////
+//////////////////   STYLE COMPONENTS   ////////////////////
+////////////////////////////////////////////////////////////
 
 const UserCardContainer = styled.div`
     background-color: ${colors.blanc};
@@ -158,50 +170,72 @@ span {
 
 `;
 
-interface LoginProps {
-  user: UserDataType | null;
 
-}
-
+////////////////////////////////////////////////////////////
+//////////////////   MAIN COMPONENT   //////////////////////
+////////////////////////////////////////////////////////////
 
 const UserCards: React.FC<{ user: UsersListDataType }> = (props) => {
-    const { id, user_pseudo, user_avatar, user_role_name, user_lastname, user_firstname, user_email } = props.user;
-    const [ShowDrawerOnClick, setShowDrawerOnClick] = useState(false);
-    const [isNotification, setNotification] = useState({state :false, action: ''});
-  
-    const { setMsg } = useContext(NotificationContext);
 
 
-    const deleteSubmit = async (id: number) => {
-      try {
-          const response = await fetch('http://localhost:5000/api/users/delete?action=delete&id=' + id, {
-              method: 'DELETE',
-          });
-            // Traitez la réponse ici si nécessaire
-            const jsonResponse = await response.json();
-            setMsg(jsonResponse);
-      } catch (error) {
-          console.error('Error fetching data:', error);
-      }
-    };
+  // declaration of the state variables
+  const [ShowDrawerOnClick, setShowDrawerOnClick] = useState(false);
+  const [isNotification, setNotification] = useState({ state: false, action: '' });
 
 
+  // declaration of user props
+  const { id, user_pseudo, user_avatar, user_role_name, user_lastname, user_firstname, user_email } = props.user;
 
-    const onDelete = () => {
-      // Appel de la fonction deleteSubmit
-      deleteSubmit(id);
 
-      // On passe le statut de connexion à true
-      setNotification({ state: true, action: 'delete' });
+  // declaration of the context variables
+  const { setMsg } = useContext(NotificationContext);
 
-      // Masquer UserNotification après 2 secondes
-       setTimeout(() => {
-           setNotification({ state: false, action: '' });
-       }, 2000);
+
+  /**
+   * function to delete the user with the id passed in parameter
+   * 
+   * @param id 
+   */
+  const deleteSubmit = async (id: number) => {
+    try {
+
+      // Fetching data with the id of the user to delete
+      const response = await fetch('http://localhost:5000/api/users/delete?action=delete&id=' + id, {
+        method: 'DELETE',
+      });
+
+      // Parsing the JSON data
+      const jsonResponse = await response.json();
+
+      // Updating the state variable with the fetched data
+      setMsg(jsonResponse);
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
     }
+  };
 
 
+  /**
+   * Function to handle the click on the delete button and manage the notification display
+   */
+  const onDelete = () => {
+    // calling of the deleteSubmit function
+    deleteSubmit(id);
 
+    // Display Notification with the 'delete' action
+    setNotification({ state: true, action: 'delete' });
+
+    // Hide Notification window after delay
+    setTimeout(() => {
+      setNotification({ state: false, action: '' });
+    }, 2000);
+  }
+
+
+  /**
+   * Function called onClick and toggle drawer 
+   */
   const handlerShowDrawer = () => {
     setShowDrawerOnClick(!ShowDrawerOnClick);
   };
@@ -210,7 +244,14 @@ const UserCards: React.FC<{ user: UsersListDataType }> = (props) => {
   return (
     <>
 
-{isNotification.state ? <UserNotification action={isNotification.action}/> : null}
+      {
+          // If isNotification is true, then display UserNotification component
+          isNotification.state ? <UserNotification
+            action={isNotification.action}
+          /> : null
+      }
+
+
       <UserCardContainer>
         <UserCardUl>
 
@@ -253,12 +294,11 @@ const UserCards: React.FC<{ user: UsersListDataType }> = (props) => {
             ) : null}
           </Li>
 
-
-
-
         </UserCardUl>
       </UserCardContainer>
+      
     </>
   );
 };
+
 export default UserCards;

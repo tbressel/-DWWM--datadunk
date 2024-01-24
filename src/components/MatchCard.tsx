@@ -1,15 +1,21 @@
+////////////////////////////////////////////////////////
+//////////////////   IMPORTATIONS   ////////////////////
+////////////////////////////////////////////////////////
+
+// Style importations
 import styled from 'styled-components';
 import { colors } from '../colors';
 
-import { MatchDataType } from '../interfaces/types';
-
+// React importations
 import React, { useState, useEffect } from 'react';
 
+// Types importation
+import { MatchDataType } from '../interfaces/types';
 
 
-
-
-///////////////////////  Styled Components ///////////////////////
+////////////////////////////////////////////////////////////
+//////////////////   STYLE COMPONENTS   ////////////////////
+////////////////////////////////////////////////////////////
 
 const MainCOntainer = styled.div`
 
@@ -30,32 +36,26 @@ cursor: pointer;
                 transition: 200ms ease-in-out;
                 opacity: 1;
             }
-    ;`
-
-
-    const MatchCardContainer = styled.div`
-        cursor: pointer;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        min-width: 450px;
-        max-width: 450px;
-        border-radius: 10px;
-        background-color: ${colors.violet1};
-        padding: 5px 20px 5px 20px;
-        box-shadow: #d0d0d0 5px 5px 5px;
-        transition: 200ms ease-in-out;
-        opacity: 0.7;
-            
-            &:hover {
-                transition: 200ms ease-in-out;
-                opacity: 1;
-            }
-    ;`
-
-
-
-
+;`
+const MatchCardContainer = styled.div`
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 450px;
+    max-width: 450px;
+    border-radius: 10px;
+    background-color: ${colors.violet1};
+    padding: 5px 20px 5px 20px;
+    box-shadow: #d0d0d0 5px 5px 5px;
+    transition: 200ms ease-in-out;
+    opacity: 0.7;
+        
+        &:hover {
+            transition: 200ms ease-in-out;
+            opacity: 1;
+        }
+;`
 const MatchTeam = styled.div`
 display: flex;
 width: 120px;
@@ -86,22 +86,16 @@ flex-direction: column;
         filter: none;
     }
 ;`
-
-
 const MatchBoxUp = styled.div`
-display: flex;
-flex-direction: row;
-justify-content: space-between;
-width: 100%;
-`
-
-
-
-    const MatchBoxDown = styled.div`
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+;`
+const MatchBoxDown = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
         .match__gameday--text {
             color: ${colors.gris1};           
             text-align: center;
@@ -117,34 +111,39 @@ width: 100%;
                 font-size: 18px;
                 letter-spacing: 0.1rem;
             }
-
-
         }
-    `
-
-   
+;`  
 const MatchScore = styled.div` 
-text-align: center;
-    .match__score--text {
-        font-family: Barlow Bold;
-        font-size: 40px;
-        font-style: normal;
-        font-weight: 700;
-        line-height: normal; 
-    }
-    .match__league img{
-        width: 100px;
-        padding: 20px;
-    }
-`
+    text-align: center;
+        .match__score--text {
+            font-family: Barlow Bold;
+            font-size: 40px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal; 
+        }
+        .match__league img{
+            width: 100px;
+            padding: 20px;
+        }
+;`
 
+////////////////////////////////////////////////////////////
+//////////////////   MAIN COMPONENT   //////////////////////
+////////////////////////////////////////////////////////////
 
 const MatchCard: React.FC< {match: MatchDataType} > = (props) => {
+
+
+    // declaration of the props variables
     const  { id_games, league_logo, home_franchise_id, home_franchise_name, home_franchise_logo, home_score, visitor_franchise_id, visitor_franchise_name, visitor_franchise_logo, visitor_score, game_day, game_date } = props.match;
     
+
+    // declaration of the state variables
     const [teamHomeClass, setTeamHomeClass] = useState('');
     const [teamVisitorClass, setTeamVisitorClass] = useState('');
     
+
     useEffect(() => {
         if (home_score > visitor_score) {
             setTeamHomeClass('win');

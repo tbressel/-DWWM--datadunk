@@ -4,6 +4,9 @@ const app = express();
 const cors = require('cors');
 app.use(cors());
 
+
+
+
 const statRoutes = require('./stats/stat'); 
 const userRoutes = require('./users/user');
 

@@ -1,7 +1,24 @@
-import styled from "styled-components";
-import { colors } from "../colors";
-import { on } from "events";
+////////////////////////////////////////////////////////
+//////////////////   IMPORTATIONS   ////////////////////
+////////////////////////////////////////////////////////
 
+// Style importations
+import styled from 'styled-components';
+import { colors } from '../colors';
+
+// React importations
+import React, { useState, useContext } from 'react';
+
+// Components importations
+import UserNotification from './UserNotification';
+
+// Context importation
+import { NotificationContext } from "../contexts/NotificationContext";
+
+
+////////////////////////////////////////////////////////////
+//////////////////   STYLE COMPONENTS   ////////////////////
+////////////////////////////////////////////////////////////
 
 const Mask = styled.div`
     position: absolute;
@@ -17,7 +34,7 @@ const Mask = styled.div`
     background: rgba(17, 15, 26, 0.60);
     z-index: 1000;
 `;
-const UserAddFormContainer = styled.div`
+const UserAddFormContainer = styled.form`
 
 display: flex;
 padding: 25px 0px;
@@ -68,6 +85,9 @@ const InputField = styled.div`
                 font-weight: 600;             
                 color: ${colors.violet3};
             }
+            label {
+  width: 226px;
+}
     `;
 const UserAddFormCheckboxContainer = styled.div`   
     display: flex;
@@ -171,96 +191,187 @@ const UserAddEmptyButton = styled.button`
 
 `;
 
+/////////////////////////////////////////////////////////////
+//////////////////   INTERFACE TYPES   //////////////////////
+/////////////////////////////////////////////////////////////
 
-const UserAddForm = () => {
+interface UserAddFormProps {
+    onCancelButtonClicked: () => void;
+    showAddUserForm: boolean;
+}
+
+////////////////////////////////////////////////////////////
+//////////////////   MAIN COMPONENT   //////////////////////
+////////////////////////////////////////////////////////////
+
+const UserAddForm = (props: UserAddFormProps) => {
 
 
-    const onCancelButtonClicked = () => {
-  
-    }
+    // declaration of the state variables
+    const [formData, setFormData] = useState({});
+    const [isNotification, setNotification] = useState({state :false, action: ''});
+    const [showAddUserForm, setShowAddUserForm] = useState(props.showAddUserForm); // Utilisez l'état local
+
+    
+    // declaration of the global context variables
+    const { setMsg } = useContext(NotificationContext);
+
+
+    /**
+     * 
+     * Function to fetch API route to send data
+     * @param event 
+     */
+    const formSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        // Disable default comportment
+        event.preventDefault();
+
+        try {
+
+           // Fetching data from the API route
+            const response = await fetch('http://localhost:5000/api/users/add', {
+
+            // sending a POST json document
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (!response.ok) {
+                throw new Error('Erreur lors de la requête POST');
+            } else {
+        
+            // doing some actions if response is ok
+
+            // Parsing the JSON data
+            const jsonResponse = await response.json();
+            
+            // Execute function which automatically hide the add form and send a user Notification
+                onAddUser();
+
+            // Update the global context 
+                setMsg(jsonResponse);
+            }
+                
+                
+        } catch (error) {
+            console.error('Erreur lors de la soumission du formulaire:', error);
+        }
+
+    };
+
+
+
+    /**
+     * Function to get values from each input form
+     * 
+     * @param event 
+     */
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData({
+            ...formData,
+            [event.target.name]: event.target.value,
+        });
+    };
+
+
+    /**
+     * Function to show/hide notification and the window add form
+     */
+    const onAddUser = () => {
+      // Hide the add form
+      setShowAddUserForm(false);
+        
+      // Display Notification with the 'add' action
+      setNotification({ state: true, action: 'add' });
+
+      //  Hide Notification window after delay
+      setTimeout(() => {
+           setNotification({ state: false, action: '' });
+       }, 2000);
+
+      }
+
 
     return (
         <>
 
+{isNotification.state ? <UserNotification action={isNotification.action}/> : null}
+        {showAddUserForm ?
             <Mask>
-
-                <UserAddFormContainer>
+                <UserAddFormContainer onSubmit={formSubmit} className="login__form" id="login-form" method="post">
                     <UserAddFormTitle>
                         <p>Ajouter un utilisateur</p>
                     </UserAddFormTitle>
-
-                    <UserAddFormInputContainer>
+                    <UserAddFormInputContainer >
                         <InputField>
                             <label htmlFor="lastnameField"><p>Nom </p>
-                                <input id="lastnameField" name="lastname" type="text" placeholder="Saisissez votre nom ici ..." required autoComplete="userlastname" />
+                                <input onChange={handleInputChange} id="lastnameField" name="lastname" type="text" placeholder="Saisissez votre nom ici ..." required autoComplete="lastname" />
                             </label>
                         </InputField>
                         <InputField>
                             <label htmlFor="firstnameField"><p>Prénom </p>
-                                <input id="firstnameField" name="firstname" type="text" placeholder="Saisissez votre prénom ici ..." required autoComplete="userfirstname" />
+                                <input onChange={handleInputChange} id="firstnameField" name="firstname" type="text" placeholder="Saisissez votre prénom ici ..." required autoComplete="firstname" />
                             </label>
                         </InputField>
                         <InputField>
                             <label htmlFor="nicknameField"><p>Pseudo </p>
-                                <input id="nicknameField" name="nickname" type="text" placeholder="Saisissez votre pseudo ici ..." required autoComplete="usernickname" />
+                                <input onChange={handleInputChange} id="nicknameField" name="nickname" type="text" placeholder="Saisissez votre pseudo ici ..." required autoComplete="nickname" />
                             </label>
                         </InputField>
                         <InputField>
                             <label htmlFor="emailField"><p>Email </p>
-                                <input id="emailField" name="email" type="text" placeholder="Saisissez votre email ici ..." required autoComplete="useremail" />
+                                <input onChange={handleInputChange} id="emailField" name="email" type="text" placeholder="Saisissez votre email ici ..." required autoComplete="email" />
                             </label>
                         </InputField>
                     </UserAddFormInputContainer>
                     <UserAddFormCheckboxContainer>
                         <div className="checkbox__container" >
                             <label htmlFor="checkbox1">Coatch</label>
-                            <input type="checkbox" id="checkbox1" name="coatch" />
+                            <input  onChange={handleInputChange} type="radio" id="checkbox1" name="role" value="1"/>
                         </div>
                         <div className="checkbox__container" >
                             <label htmlFor="checkbox2">Utilisateur</label>
-                            <input type="checkbox" id="checkbox2" name="user" />
+                            <input  onChange={handleInputChange} type="radio" id="checkbox2" name="role" value="2"/>
                         </div>
                         <div className="checkbox__container" >
                             <label htmlFor="checkbox3">Invité</label>
-                            <input type="checkbox" id="checkbox3" name="guest" />
+                            <input  onChange={handleInputChange} type="radio" id="checkbox3" name="role" value="3"/>
                         </div>
                         <div className="checkbox__container" >
                             <label htmlFor="checkbox4">Autre</label>
-                            <input type="checkbox" id="checkbox4" name="other" />
+                            <input  onChange={handleInputChange} type="radio" id="checkbox4" name="role" value="4"/>
                         </div>
                     </UserAddFormCheckboxContainer>
-
                     <UserAddFormPasswordContainer>
                         <InputField>
                             <label htmlFor="passwordField"><p>Mot de passe </p>
-                                <input id="passwordField" name="password" type="text" placeholder="Saisissez votre mot de passe ici ..." required autoComplete="password" />
+                                <input onChange={handleInputChange} id="passwordField" name="password" type="text" placeholder="Saisissez votre mot de passe ici ..." required autoComplete="password" />
                             </label>
                         </InputField>
                         <div className="button__eye">
                             <img src="./assets/images/icons/icon-eye-close.svg" alt="" />
                         </div>
-                        {/* <UserAddPlainButton type="submit">Générer</UserAddPlainButton> */}
                     </UserAddFormPasswordContainer>
                     <UserAddFormPasswordContainer>
                         <InputField>
                             <label htmlFor="passwordCheckField"><p>Resaisissez votre mot de passe </p>
-                                <input id="passwordCheckField" name="passwordcheck" type="text" placeholder="Resaisissez votre mot de passe ici ..." required autoComplete="passwordcheck" />
+                                <input onChange={handleInputChange} id="passwordCheckField" name="passwordcheck" type="text" placeholder="Resaisissez votre mot de passe ici ..." required autoComplete="passwordcheck" />
                             </label>
                         </InputField>
                         <div className="button__eye">
                             <img src="./assets/images/icons/icon-eye-close.svg" alt="" />
                         </div>
-                        {/* <UserAddPlainButton type="submit">Générer</UserAddPlainButton> */}
                     </UserAddFormPasswordContainer>
-
                     <UserAddFormButtonContainer>
-                        <UserAddEmptyButton onClick={onCancelButtonClicked}>Annuler</UserAddEmptyButton>
+                        <UserAddEmptyButton onClick={() => props.onCancelButtonClicked()}>Annuler</UserAddEmptyButton>
                         <UserAddPlainButton type="submit">Valider</UserAddPlainButton>
                     </UserAddFormButtonContainer>
                 </UserAddFormContainer>
-
             </Mask>
-
+ : null}
 
 
         </>

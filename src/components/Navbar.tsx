@@ -1,16 +1,26 @@
+////////////////////////////////////////////////////////
+//////////////////   IMPORTATIONS   ////////////////////
+////////////////////////////////////////////////////////
+
+// Style importations
 import styled from 'styled-components';
 import { colors } from '../colors';
 
-import data from '../datas/lang/fr.json';
-
-import { NavbarDataType } from '../interfaces/types';
-import Navigation from './Navigation';
+// React importations
 import { useState } from 'react';
 
+// Components importations
+import Navigation from './Navigation';
 
-///////////////////////  Styled Components ///////////////////////
+// Types importation
+import { NavbarDataType } from '../interfaces/types';
 
+// Datas importation
+import data from '../datas/lang/fr.json';
 
+////////////////////////////////////////////////////////////
+//////////////////   STYLE COMPONENTS   ////////////////////
+////////////////////////////////////////////////////////////
 
 const BurgerLine = styled.div`
     width: 100%;
@@ -24,7 +34,6 @@ const Img = styled.img`
     width: 35px;
     height: 37px;
 `;
-
 const NavbarWrapper = styled.div`
         display: flex;
         flex-direction: row;
@@ -44,7 +53,6 @@ const NavbarWrapper = styled.div`
 
         }
 `;
-
 const BurgerContainer = styled.div`
     cursor: pointer;
     width: 30px;
@@ -55,14 +63,18 @@ const BurgerContainer = styled.div`
     }
 `;
 
-///////////////////////  RCC  ///////////////////////
-
-
+////////////////////////////////////////////////////////////
+//////////////////   MAIN COMPONENT   //////////////////////
+////////////////////////////////////////////////////////////
 
 const Navbar = () => {
+
+    // declaration of the state variables
     const [burgerClicked, setBurgerClicked] = useState(false);
+
+    // declaration of data for languages
     const navbarData: NavbarDataType = data.navbar;
-    // console.log(navbarData.logo.icon);
+ 
     return (
         <>
             <NavbarWrapper>

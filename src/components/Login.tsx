@@ -1,17 +1,27 @@
+////////////////////////////////////////////////////////
+//////////////////   IMPORTATIONS   ////////////////////
+////////////////////////////////////////////////////////
+
+// Style importations
 import styled from 'styled-components';
 import { colors } from '../colors';
 
-import { useState } from 'react';
+// React importations
+import { useContext, useState } from 'react';
+
+// Components importations
 import LoginForm from './LoginForm';
 import UserNotification from './UserNotification';
 
-
-import { UserDataType } from '../interfaces/types';
+// Context importation
 import { LoginContext } from '../contexts/LoginContext';
 
+// Types importation
+import { UserDataType } from '../interfaces/types';
 
-import { useContext } from 'react';
-
+////////////////////////////////////////////////////////////
+//////////////////   STYLE COMPONENTS   ////////////////////
+////////////////////////////////////////////////////////////
 
 const LoginBoxLeft = styled.div`
     display: flex;
@@ -79,17 +89,29 @@ display: flex;
 }   
 `;
 
+/////////////////////////////////////////////////////////////
+//////////////////   INTERFACE TYPES   //////////////////////
+/////////////////////////////////////////////////////////////
 interface LoginProps {
     user: UserDataType | null;
 }
 
+////////////////////////////////////////////////////////////
+//////////////////   MAIN COMPONENT   //////////////////////
+////////////////////////////////////////////////////////////
+
 const Login = ({ user }: LoginProps) => {
-    // pour utiliser le context je doit le redefinir dans le composant, cette fois ci sans user
-    // juste setUser qui servira à modifier le context
-    const { setUser } = useContext(LoginContext);
+    
+    
+    // declaration of the state variables
     const [showLoginForm, setShowLoginForm] = useState(false);
     const [isNotification, setNotification] = useState({state :false, action: ''});
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    
+    
+    // declaration of the context variables
+    const { setUser } = useContext(LoginContext);
+
 
     const logoutSubmit = async () => {
         try {

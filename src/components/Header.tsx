@@ -1,11 +1,23 @@
+////////////////////////////////////////////////////////
+//////////////////   IMPORTATIONS   ////////////////////
+////////////////////////////////////////////////////////
+
+// Style importations
 import styled from 'styled-components';
 import { colors } from '../colors';
-import Login from '../components/Login';
 
-import { LoginContext } from '../contexts/LoginContext';
+// React importations
 import { useContext } from 'react';
 
+// Components importations
+import Login from '../components/Login';
 
+// Context importation
+import { LoginContext } from '../contexts/LoginContext';
+
+////////////////////////////////////////////////////////////
+//////////////////   STYLE COMPONENTS   ////////////////////
+////////////////////////////////////////////////////////////
 
 const HeaderContainer = styled.header`
     display: flex;
@@ -16,6 +28,9 @@ const HeaderContainer = styled.header`
     margin-bottom: 30px;
 `;
 
+////////////////////////////////////////////////////////////
+//////////////////   MAIN COMPONENT   //////////////////////
+////////////////////////////////////////////////////////////
 const Header = () => {
 
 const { user } = useContext(LoginContext);

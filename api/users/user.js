@@ -2,6 +2,9 @@
 const express = require('express');
 const userApp = express();
 
+// Module pour la validation des données
+const validator = require('validator'); 
+
 // Cors library used for cross-origin resource sharing
 const cors = require('cors');
 userApp.use(cors());
@@ -153,6 +156,63 @@ userApp.delete('/delete', (req, res) => {
 });
 
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////       USER ADD      /////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+userApp.post('/add', (req, res) => {
+    let {lastname, firstname, nickname, email, password, role } = req.body;
+
+    // Validation des données
+    firstname = validator.escape(firstname);
+    lastname = validator.escape(lastname);
+    nickname = validator.escape(nickname);
+    email = validator.escape(email);
+    password = validator.escape(password);
+    role = validator.escape(role);
+
+    if (!validator.isEmail(email)) {
+        return res.status(400).json({
+            message: 'Invalid email',
+            status: 'Failure'
+        });
+    }
+
+    // Hashage du mot de passe
+    const bcrypt = require('bcrypt');
+    const saltRounds = 10;
+    bcrypt.hash(password, saltRounds, function(err, hash) {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({
+                message: 'Error occurred',
+                status: 'Failure'
+            });
+        }
+
+        password = hash;
+
+        const avatar = ('avatar-' + firstname + lastname + nickname + '.png').toLowerCase();
+        
+        const sql = `INSERT INTO _user_ (user_lastname, user_firstname,  user_pseudo, user_role, user_email, user_password, user_avatar) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+        
+        pool.query(sql, [lastname, firstname, nickname, role, email, password, avatar], (error) => {
+            if (error) {
+                console.error(error);
+                res.status(500).json({
+                    message: 'Error occurred',
+                    status: 'Failure'
+                });
+            } else {
+                res.json({
+                    message: notificationMessage.add_success,
+                    status: 'Success',
+                });
+            }
+        });
+    });
+});
+
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////       USERS LIST      /////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -183,7 +243,8 @@ const notificationMessage = {
     'login_success': "Connexion à votre compte réussie",
     'delete_success': "La suppression de l'utilisateur a réussie",
     'login_failed': "Connexion à votre compte à échouée",
-    'logout_success': "Vous allez être à présent déconnecté de votre compte"
+    'logout_success': "Vous allez être à présent déconnecté de votre compte",
+    'add_success': 'L\'utilisateur a bien été ajouté',
 }
 
 

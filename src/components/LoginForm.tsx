@@ -1,11 +1,21 @@
+////////////////////////////////////////////////////////
+//////////////////   IMPORTATIONS   ////////////////////
+////////////////////////////////////////////////////////
+
+// Style importations
 import styled from 'styled-components';
 import { colors } from '../colors';
 
+// React importations
+import React, {useState, useContext} from 'react';
+
+// Context importation
 import { LoginContext } from '../contexts/LoginContext';
 
-import React, {useState, useContext, useEffect} from 'react';
 
-
+////////////////////////////////////////////////////////////
+//////////////////   STYLE COMPONENTS   ////////////////////
+////////////////////////////////////////////////////////////
 
 const Mask = styled.div`
     position: absolute;
@@ -21,13 +31,11 @@ const Mask = styled.div`
     background: rgba(17, 15, 26, 0.60);
     z-index: 1000;
 `;
-
 const LoginFormContainer = styled.div`
     min-width: 40%;
     border-radius: 20px;
     background: ${colors.blanc};
 `;
-
 const LoginFormSubContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -45,7 +53,6 @@ h2 {
     letter-spacing: -0.16px;
 }
 `;
-
 const LoginField = styled.div`
     font-family: 'Barlow Medium';
     width: 100%;
@@ -58,57 +65,59 @@ const LoginField = styled.div`
             background: ${colors.violet1};
         }
 `;
-
 const LoginFormField = styled.form`
-display: flex;
-flex-direction: column;
-align-items: center;
-gap: 32px;  
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;  
 `;
-
 const LoginFormButton = styled.button`
-cursor: pointer;
-padding: 10px 24px;
-border-radius: 5px;
-  background: var(--Orange, #E1533D);
-  width: fit-content;
+    cursor: pointer;
+    padding: 10px 24px;
+    border-radius: 5px;
+    background: var(--Orange, #E1533D);
+    width: fit-content;
 
-
-.btn__color-green {
-    color: white;
-    background-color: transparent;
-  border: 0;
-}
+        .btn__color-green {
+            color: white;
+            background-color: transparent;
+          border: 0;
+        }
 
 
 `;
-
 const Cross = styled.div`
 
-img {
-    width: 20px;
-    height: 20px;
-  cursor: pointer;
-  float: right;
+    img {
+        width: 20px;
+        height: 20px;
+      cursor: pointer;
+      float: right;
 
-}
+    }
 
 
 `;
 
-
+/////////////////////////////////////////////////////////////
+//////////////////   INTERFACE TYPES   //////////////////////
+/////////////////////////////////////////////////////////////
 interface LoginFormProps {
     showLoginForm: boolean;
     onCrossClick: () => void;
     onLogin: () => void;
 }
 
-
+////////////////////////////////////////////////////////////
+//////////////////   MAIN COMPONENT   //////////////////////
+////////////////////////////////////////////////////////////
 const LoginForm = (props: LoginFormProps) => {
 
-
+    // declaration of the state variables
     const { user, setUser } = useContext(LoginContext);
     const [formData, setFormData] = useState({});
+    
+
     
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
