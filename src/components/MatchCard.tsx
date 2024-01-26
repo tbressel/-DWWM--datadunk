@@ -17,44 +17,44 @@ import { MatchDataType } from '../interfaces/types';
 //////////////////   STYLE COMPONENTS   ////////////////////
 ////////////////////////////////////////////////////////////
 
-const MainCOntainer = styled.div`
-
-cursor: pointer;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        min-width: 450px;
-        max-width: 450px;
-        border-radius: 10px;
-        background-color: ${colors.violet1};
-        padding: 5px 20px 5px 20px;
-        box-shadow: #d0d0d0 5px 5px 5px;
-        transition: 200ms ease-in-out;
-        opacity: 0.7;
-            
-            &:hover {
-                transition: 200ms ease-in-out;
-                opacity: 1;
-            }
-;`
+ const MainContainer = styled.div`
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         min-width: 450px;
+         max-width: 450px;
+         border-radius: 10px;
+         background-color: ${colors.violet1};
+         padding: 5px 20px 5px 20px;
+         box-shadow: #d0d0d0 5px 5px 5px;
+         transition: 200ms ease-in-out;
+         opacity: 0.7;
+         @media screen and (min-width: 768px) {       
+             cursor: pointer;
+             &:hover {
+                 transition: 200ms ease-in-out;
+                 opacity: 1;
+             }}
+ ;`
 const MatchCardContainer = styled.div`
-    cursor: pointer;
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-width: 450px;
+    /* min-width: 450px; */
     max-width: 450px;
     border-radius: 10px;
     background-color: ${colors.violet1};
     padding: 5px 20px 5px 20px;
     box-shadow: #d0d0d0 5px 5px 5px;
     transition: 200ms ease-in-out;
-    opacity: 0.7;
-        
+    opacity: 1;
+    @media screen and (min-width: 768px) {
+        cursor: pointer;
+        opacity: 0.7;
         &:hover {
             transition: 200ms ease-in-out;
             opacity: 1;
-        }
+        }}
 ;`
 const MatchTeam = styled.div`
 display: flex;
@@ -132,7 +132,8 @@ const MatchScore = styled.div`
 //////////////////   MAIN COMPONENT   //////////////////////
 ////////////////////////////////////////////////////////////
 
-const MatchCard: React.FC< {match: MatchDataType} > = (props) => {
+
+const MatchCard: React.FC<{ match: MatchDataType; onSelectMatch: (id: number) => void }> = (props) => {
 
 
     // declaration of the props variables
@@ -153,11 +154,25 @@ const MatchCard: React.FC< {match: MatchDataType} > = (props) => {
             setTeamVisitorClass('win');
         }
     }, [home_score, visitor_score]);
+
+
+
+
+    const onSelectMatch = () => {
+        props.onSelectMatch(id_games);
+      };
+    
+
+
+
+
+
+
+
     return (
         <>
-        <MainCOntainer>
-
-            <MatchCardContainer id={`${id_games}`}>
+        <MainContainer>
+            <MatchCardContainer onClick={onSelectMatch} id={`${id_games}`}>
                 <MatchBoxUp>
                     <MatchTeam>
                         <div className="match__team--name">
@@ -200,7 +215,7 @@ const MatchCard: React.FC< {match: MatchDataType} > = (props) => {
                     </div>
                 </MatchBoxDown>
             </MatchCardContainer>
-        </MainCOntainer>
+        </MainContainer>
 
 
 

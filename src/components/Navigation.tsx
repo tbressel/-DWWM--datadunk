@@ -15,7 +15,7 @@ import { LoginContext } from '../contexts/LoginContext';
 
 // Types importation
 import { NavigationDataType } from '../interfaces/types';
-import { NavbarDataType } from '../interfaces/types';
+// import { NavbarDataType } from '../interfaces/types';
 
 // Datas importation
 import data from '../datas/lang/fr.json';
@@ -26,36 +26,44 @@ import data from '../datas/lang/fr.json';
 
 const Img = styled.img`
     height: 1.3rem;
+
 @media screen and (min-width: 768px) {
     display: none;
 }
 `;
+
+
 const Logo = styled.img`
-    height: 5rem;
-    padding-right: 5px;
+    height: 3rem;
 
 @media screen and (min-width: 768px) {
     display: none;
 }`;
+
+
 const H1 = styled.h1`
     font-family: 'Gibson Bold';
     color: ${colors.corail};
-    font-size: 1.3rem;
+ 
 @media screen and (min-width: 768px) {
     display: none;
 }`;
+
+
 const Menu = styled.ul`
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     width: 100%;
     height: 450px;
-    padding: 10px;
+    
 @media screen and (min-width: 768px) {
     flex-direction: row;
     gap: 5px;
     height: fit-content;
 }`;
+
+
 const Li = styled.li`
     display: flex;
     flex-direction: row;
@@ -64,28 +72,39 @@ const Li = styled.li`
     transition: 200ms ease-in-out;
     border-radius: 20px;
 
-    &:hover {
-        background-color: ${colors.corail};
-        transition: 200ms ease-in-out;
 
-}
 @media screen and (min-width: 768px) {
     padding: 20px;
+    &:hover {
+            background-color: ${colors.corail};
+            transition: 200ms ease-in-out;
+    }
 }
 `;
+
+
 const MenuItem = styled.span`
     font-family: 'Gibson Medium';
     color: ${colors.blanc};
 `;
- 
+
 /////////////////////////////////////////////////////////////
 //////////////////   INTERFACE TYPES   //////////////////////
 /////////////////////////////////////////////////////////////
 
 interface NavigationProps {
     burgerClicked: boolean;
+    onCloseMenu: () => void;
 };
 
+
+interface  NavbarDataType {
+    [key: string]: {
+        icon: string;
+        name: string;
+        path: string;
+    };
+}
 ////////////////////////////////////////////////////////////
 //////////////////   MAIN COMPONENT   //////////////////////
 ////////////////////////////////////////////////////////////
@@ -108,9 +127,9 @@ const Navigation = (props: NavigationProps) => {
         position: absolute;
         z-index: 2;
         top: 60px;
-        right: ${props.burgerClicked ? '0px' : '-350px'};
-        width: 276px;
-        padding: 30px 20px 8px 20px;
+        right: ${props.burgerClicked ? '0px' : '-750px'};
+        width: 90vw;
+        padding: 0 20px 8px 20px;
         background-color: ${colors.bleu};
 
         @media screen and (min-width: 768px) {
@@ -124,7 +143,7 @@ const Navigation = (props: NavigationProps) => {
     // declaration of the global context variables
     const { user } = useContext(LoginContext);
 
- 
+
     return (
         <>
             <Nav>
@@ -132,7 +151,7 @@ const Navigation = (props: NavigationProps) => {
                 <H1>DATADUNK</H1>
                 <Menu>
                     {Object.keys(navigationData).map(key => (
-                        <Li key={key}>
+                        <Li key={key} onClick={props.onCloseMenu}>
                             <Img className={key} src={`assets/images/icons/${navigationData[key].icon}`} alt="" />
                             <NavLink to={navigationData[key].path}>
                                 <MenuItem className='menu-item'>{navigationData[key].name}</MenuItem>
@@ -141,15 +160,15 @@ const Navigation = (props: NavigationProps) => {
                     ))}
 
                     {
-                    (user?.status === 2) ? 
-                    (
-                        <Li>
-                            <Img src={`assets/images/icons/icon-admin.svg`} alt="" />
-                            <NavLink to="admin">
-                                <MenuItem className='menu-item'>ADMIN</MenuItem>
-                            </NavLink>
-                        </Li>
-                    ) : null
+                        (user?.status === 2) ?
+                            (
+                                <Li onClick={props.onCloseMenu}>
+                                    <Img src={`assets/images/icons/icon-admin.svg`} alt="" />
+                                    <NavLink to="admin">
+                                        <MenuItem className='menu-item'>ADMIN</MenuItem>
+                                    </NavLink>
+                                </Li>
+                            ) : null
 
                     }
                 </Menu>

@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react';
 import UserCards from "./UserCards";
 import UserAddForm from './UserAddForm';
 
+import { API_BASE_URL } from '../config';
 
 ////////////////////////////////////////////////////////////
 //////////////////   STYLE COMPONENTS   ////////////////////
@@ -90,7 +91,7 @@ const UsersList = () => {
         try {
 
             // Fetching data from the API
-            const response = await fetch('http://localhost:5000/api/users/list');
+            const response = await fetch(`${API_BASE_URL}/api/users/list`);
 
             // Parsing the JSON data
             const jsonResponse = await response.json();

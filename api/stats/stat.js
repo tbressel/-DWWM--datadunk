@@ -63,7 +63,7 @@ statApp.get('/franchise/2023', (req, res) => {
 // Endpoint pour récupérer les 10 premières lignes de la table 'games'
 statApp.get('/games/2023', (req, res) => {
     const sql = `SELECT DISTINCT
-    g.id AS 'ig_games',
+    g.id AS 'id_games',
     g.game_date AS 'game_date',
     g.game_day AS 'game_day',
     l.league_logo AS 'league_logo',
@@ -109,6 +109,7 @@ ORDER BY
         }
     });
 });
+
 // Endpoint pour récupérer les données de la table 'franchise'
 statApp.get('/players/2023', (req, res) => {
     const sql = `SELECT p.id AS 'id_player',
@@ -148,7 +149,6 @@ statApp.get('/players/2023', (req, res) => {
     });
 });
 
-
 // Endpoint pour récupérer les données de la table 'franchise'
 statApp.get('/formule', (req, res) => {
     const sql = `SELECT * FROM game_stats gs 
@@ -161,7 +161,8 @@ statApp.get('/formule', (req, res) => {
             JOIN franchise_game fg ON fg.id_games = g.id 
             WHERE fg.id_season = 24 
             ORDER BY g.id DESC ) ) 
-            ORDER BY gs.id ASC;
+            ORDER BY gs.id ASC
+            LIMIT 20;
 `;    
     pool.query(sql, (error, results) => {
         if (error) {

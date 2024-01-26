@@ -12,6 +12,7 @@ import React, {useState, useContext} from 'react';
 // Context importation
 import { LoginContext } from '../contexts/LoginContext';
 
+import { API_BASE_URL } from '../config';
 
 ////////////////////////////////////////////////////////////
 //////////////////   STYLE COMPONENTS   ////////////////////
@@ -32,7 +33,7 @@ const Mask = styled.div`
     z-index: 1000;
 `;
 const LoginFormContainer = styled.div`
-    min-width: 40%;
+    min-width: 90%;
     border-radius: 20px;
     background: ${colors.blanc};
 `;
@@ -124,7 +125,7 @@ const LoginForm = (props: LoginFormProps) => {
         // console.log('Form data submitted:', formData);
 
         try {
-            const response = await fetch('http://localhost:5000/api/users/login', {
+            const response = await fetch(`${API_BASE_URL}/api/users/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

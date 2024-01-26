@@ -1,19 +1,26 @@
-import React, { useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+////////////////////////////////////////////////////////
+//////////////////   IMPORTATIONS   ////////////////////
+////////////////////////////////////////////////////////
+
+
+// Style importations
 import { Reset } from 'styled-reset';
 import { GlobalStyle } from './globalstyle';
 import styled from 'styled-components';
 
+// React importations
+import { useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
+// Context importation
 import { LoginContext } from './contexts/LoginContext';
-import { UserDataType } from './interfaces/types';
-
-
 import { NotificationContext } from './contexts/NotificationContext';
+
+// Types importation
+import { UserDataType } from './interfaces/types';
 import { NotificationDataType } from './interfaces/types';
 
-
-
+// Components importation
 import Home from './pages/Home';
 import Articles from './pages/Articles';
 import Guides from './pages/Guides';
@@ -27,14 +34,28 @@ import Navbar from './components/Navbar';
 import Header from './components/Header';
 
 
+////////////////////////////////////////////////////////////
+//////////////////   STYLE COMPONENTS   ////////////////////
+////////////////////////////////////////////////////////////
 const Space = styled.div`
     height: 100px;
     width: 100%;
     `;
 
+
+////////////////////////////////////////////////////////////
+//////////////////   MAIN COMPONENT   //////////////////////
+////////////////////////////////////////////////////////////
+
 const App = () => {
-  const [user, setUser] = useState<UserDataType | null>(null);
-  const [msg, setMsg] = useState<NotificationDataType | null>(null);
+
+
+      // declaration of the state variables
+      const [user, setUser] = useState<UserDataType | null>(null);
+      const [msg, setMsg] = useState<NotificationDataType | null>(null);
+
+
+
   return (
     <>
 <LoginContext.Provider value={{ user, setUser }}>
@@ -44,11 +65,8 @@ const App = () => {
       <GlobalStyle />
       <BrowserRouter>
          <Navbar />
-          <Space>
-
-          </Space>
+          <Space></Space>
           <Header />
-
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path='/home' element={<Home />} />

@@ -11,7 +11,7 @@ import { useContext } from 'react';
 
 // COntext importations
 import { LoginContext } from '../contexts/LoginContext';
-import { NotificationContext } from '../contexts/NotificationContext';
+
 
 
 ////////////////////////////////////////////////////////////
@@ -68,7 +68,7 @@ const Mask = styled.div`
     background: rgba(17, 15, 26, 0.60);
     z-index: 1000;
 `;
-const UserDeleteButtonContainer = styled.div`
+const UserAddFormButtonContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
@@ -121,50 +121,46 @@ const UserAddEmptyButton = styled.button`
     letter-spacing: -0.13px;
 
 `;
+ 
+
+/////////////////////////////////////////////////////////////
+//////////////////   INTERFACE TYPES   //////////////////////
+/////////////////////////////////////////////////////////////
+
+interface UserPrevNotificationProps {
+    onCancel: () => void;
+    onConfirm: () => void;
+    message: string;
+  }
+
 
 ////////////////////////////////////////////////////////////
 //////////////////   MAIN COMPONENT   //////////////////////
 ////////////////////////////////////////////////////////////
 
-const UserNotification = ({ action }: { action: string }) => {
+const UserPrevNotification = ({ onCancel, onConfirm, message }: UserPrevNotificationProps) => {
+
+    
 
     // declaration of the global context variables
     const { user } = useContext(LoginContext);
-    const { msg } = useContext(NotificationContext);
+ 
     
-if (action ==="isdelete") {
-
-    return (
-        <>
-         <Mask>
-            <NotificationContainer>
-                <NotificationTitle>
-                    <p>
-                        Etes-vous certain de vouloir supprimer ce compte ?
-                    </p>
-                    <UserDeleteButtonContainer>
-                        <UserAddEmptyButton>Annuler</UserAddEmptyButton>
-                        <UserAddPlainButton>Confirmer</UserAddPlainButton>
-                    </UserDeleteButtonContainer>
-                </NotificationTitle>
-            </NotificationContainer>
-         </Mask>
-        </>
-    )
-
-} else 
-
    return (
         <>
-         <Mask>
-            <NotificationContainer>
-                <NotificationTitle>
-                    {(action === 'delete' || action === 'add' ) ? <p>{msg?.message}</p> : <p>{user?.message}</p>}
-                </NotificationTitle>
-            </NotificationContainer>
-         </Mask>
+            <Mask>
+                <NotificationContainer>
+                    <NotificationTitle>
+                        <p>{message}</p>
+                    </NotificationTitle>
+                    <UserAddFormButtonContainer>
+                        <UserAddEmptyButton onClick={onCancel}>Annuler</UserAddEmptyButton>
+                        <UserAddPlainButton onClick={onConfirm} type="submit">Valider</UserAddPlainButton>
+                    </UserAddFormButtonContainer>
+                </NotificationContainer>
+            </Mask>
         </>
     )
 }
 
-export default UserNotification;
+export default UserPrevNotification;

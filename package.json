@@ -26,7 +26,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "prout": "nodemon api/app.js",
+    "server": "nodemon api/app.js",
     "start": "react-scripts start",
     "start:no-srcmap": "GENERATE_SOURCEMAP=false react-scripts start",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",

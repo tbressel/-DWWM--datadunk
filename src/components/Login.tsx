@@ -11,7 +11,8 @@ import { useContext, useState } from 'react';
 
 // Components importations
 import LoginForm from './LoginForm';
-import UserNotification from './UserNotification';
+import UserPostNotification from './UserPostNotification';
+import { API_BASE_URL } from '../config';
 
 // Context importation
 import { LoginContext } from '../contexts/LoginContext';
@@ -115,7 +116,7 @@ const Login = ({ user }: LoginProps) => {
 
     const logoutSubmit = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/users/logout?action=logout', {
+            const response = await fetch(`${ API_BASE_URL }/api/users/logout?action=logout`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -147,7 +148,7 @@ const Login = ({ user }: LoginProps) => {
      // On passe le statut de connexion à true
      setNotification({ state: true, action: 'logout' });
 
-     // Masquer UserNotification après 2 secondes
+     // Masquer UserPostNotification après 2 secondes
       setTimeout(() => {
           setNotification({ state: false, action: '' });
       }, 2000);
@@ -171,7 +172,7 @@ const Login = ({ user }: LoginProps) => {
         // On modifie la variable d'état isLoggedIn pour afficher le bouton de déconnexion
         setIsLoggedIn(true);
         
-        // Masquer UserNotification après 2 secondes
+        // Masquer UserPostNotification après 2 secondes
         setTimeout(() => {
             setNotification({ state: false, action: '' });
         }, 2000);
@@ -194,7 +195,7 @@ const Login = ({ user }: LoginProps) => {
                 />
             : null}
 
-            {(!showLoginForm && isNotification.state) ? <UserNotification action={isNotification.action} /> : null}
+            {(!showLoginForm && isNotification.state) ? <UserPostNotification action={isNotification.action} /> : null}
 
             <LoginContainer>
                 <LoginBoxLeft>

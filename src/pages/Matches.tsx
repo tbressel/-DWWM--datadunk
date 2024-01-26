@@ -1,15 +1,18 @@
 import MatchesList from "../components/MatchesList";
 import { useEffect, useState } from 'react';
+import { API_BASE_URL } from '../config';
+import MatchSummary from "../components/MatchSummary";
 
-
+import { MatchDataType } from '../interfaces/types';
 
 const Matches = () => {
-    const [matches, setMatches] = useState([]);
+    const [matches, setMatches] = useState<MatchDataType[]>([]);
+    const [selectedMatchId, setSelectedMatchId] = useState<string | null>(null);
     
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/stats/games/2023');
+                const response = await fetch(`${ API_BASE_URL }/api/stats/games/2023`);
                 let data = await response.json();
                 setMatches(data);
                 console.log(data);
@@ -20,15 +23,23 @@ const Matches = () => {
         
         fetchData();
     }, []);
-
+    
+    const onSelectMatch = (id: number) => {
+        // Mettez à jour l'état pour afficher MatchSummary avec l'ID sélectionné
+        const idString = id.toString();
+        setSelectedMatchId(idString);
+      };
 
     return (
         <>
-       
-    
-              
-            <MatchesList matches = {matches}/>
-        </>
+        {selectedMatchId ? (
+          // Afficher MatchSummary avec l'ID sélectionné
+          <MatchSummary matchId={selectedMatchId} />
+        ) : (
+          // Afficher MatchesList avec la fonction onSelectMatch
+          <MatchesList matches={matches} onSelectMatch={onSelectMatch} />
+        )}
+      </>
     );
 };
 export default Matches;

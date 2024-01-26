@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
+
 import { FormuleDataType } from '../interfaces/types';
+import { API_BASE_URL } from '../config';
+
+
+
+
+
+
 
 const Home = () => {
 
@@ -11,7 +19,7 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/stats/formule');
+        const response = await fetch(`${API_BASE_URL}/api/stats/formule`);
         const data = await response.json();
         setFormule(data);
         console.log(data);

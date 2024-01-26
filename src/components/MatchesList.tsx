@@ -30,13 +30,15 @@ const MatchListContainer = styled.div`
 ////////////////////////////////////////////////////////////
 //////////////////   MAIN COMPONENT   //////////////////////
 ////////////////////////////////////////////////////////////
-const MatchesList: React.FC < {matches : MatchDataType[]}> = (props) => {
+const MatchesList: React.FC<{ matches: MatchDataType[]; onSelectMatch: (id: number) => void }> = (props) => {
+
     return (
         <MatchListContainer>
             {props.matches.map((match, index) => (
-        <MatchCard key={index} match={match}/>
-            ))}
+        <MatchCard key={index} match={match} onSelectMatch={props.onSelectMatch} />
+         ))}
         </MatchListContainer>   
     );
 };
 export default MatchesList;
+

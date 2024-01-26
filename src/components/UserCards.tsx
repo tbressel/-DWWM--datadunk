@@ -10,7 +10,9 @@ import { colors } from "../colors";
 import { useState, useContext } from "react";
 
 // Components importations
-import UserNotification from './UserNotification';
+import UserPostNotification from './UserPostNotification';
+import UserPrevNotification from './UserPrevNotification';
+import UserUpdateForm from './UserUpdateForm';
 
 // Type importations
 import { UsersListDataType } from "../interfaces/types";
@@ -18,6 +20,7 @@ import { UsersListDataType } from "../interfaces/types";
 // Context importations
 import { NotificationContext } from '../contexts/NotificationContext';
 
+import { API_BASE_URL } from '../config';
 
 ////////////////////////////////////////////////////////////
 //////////////////   STYLE COMPONENTS   ////////////////////
@@ -180,7 +183,10 @@ const UserCards: React.FC<{ user: UsersListDataType }> = (props) => {
 
   // declaration of the state variables
   const [ShowDrawerOnClick, setShowDrawerOnClick] = useState(false);
+  const [showUpdateUserForm, setShowUpdateUserForm] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<UsersListDataType | null>(null);
   const [isNotification, setNotification] = useState({ state: false, action: '' });
+  const [isConfirmation, setConfirmation] = useState({ state: false, message: '' });
 
 
   // declaration of user props
@@ -225,11 +231,37 @@ const UserCards: React.FC<{ user: UsersListDataType }> = (props) => {
 
     // Display Notification with the 'delete' action
     setNotification({ state: true, action: 'delete' });
+    setConfirmation({ state: false, message: '' });
 
     // Hide Notification window after delay
     setTimeout(() => {
       setNotification({ state: false, action: '' });
     }, 2000);
+  }
+
+
+  /**
+   * Function to prevent the click on the delete button and manage the notification display
+   */ 
+  const isDelete = () => {
+    setConfirmation({ state: true, message: 'Etes vous sur de vouloir supprimer ce compte ?' });
+  };
+
+
+  /**
+   * Function to when click on the cancel button and hide the confirmation window
+   */
+  const handleCancel = () => {
+    setConfirmation({ state: false, message: '' });
+  }
+
+
+  /**
+   * Function to when click on the confirm button and hide the confirmation window
+   */
+  const handleConfirm = () => {
+    onDelete(); // Appeler votre fonction onDelete ici
+    setConfirmation({ state: false, message: '' });
   }
 
 
@@ -241,17 +273,50 @@ const UserCards: React.FC<{ user: UsersListDataType }> = (props) => {
   };
 
 
+
+  /**
+  * Function to handle the click on the add button
+  */
+  const onUpdateButtonClick = () => {
+    // Get the user to update
+    setSelectedUser(props.user);
+    // Display the update form
+    setShowUpdateUserForm(true);
+  }
+
   return (
     <>
 
       {
-          // If isNotification is true, then display UserNotification component
-          isNotification.state ? <UserNotification
+          // If isNotification is true, then display UserPostNotification component
+          isNotification.state ? <UserPostNotification
             action={isNotification.action}
           /> : null
       }
-
-
+      {
+          // If isNotification is true, then display UserPostNotification component
+          isConfirmation.state ? <UserPrevNotification
+            message={isConfirmation.message}
+            onCancel={handleCancel}
+            onConfirm={handleConfirm}
+          /> : null
+      }
+      
+        {
+          // If showUpdateUserForm is true, display the UserAddForm component
+          showUpdateUserForm ? (
+            <UserUpdateForm
+              showUpdateUserForm={showUpdateUserForm}
+              onCancelButtonClicked={() => {
+                // Réinitialiser l'utilisateur sélectionné lors de l'annulation
+                setSelectedUser(null);
+                setShowUpdateUserForm(false);
+              }}
+              selectedUser={selectedUser} // Passer l'utilisateur sélectionné au formulaire d'édition
+            />
+          ) : null
+        }
+          
       <UserCardContainer>
         <UserCardUl>
 
@@ -268,8 +333,8 @@ const UserCards: React.FC<{ user: UsersListDataType }> = (props) => {
               </UserProfile>
               <UserActions>
                 <div>
-                  <img onClick={onDelete} src="assets/images/icons/icon-delete.svg" alt="" />
-                  <img src="assets/images/icons/icon-write.svg" alt="" />
+                  <img onClick={isDelete} src="assets/images/icons/icon-delete.svg" alt="" />
+                  <img onClick={onUpdateButtonClick} src="assets/images/icons/icon-write.svg" alt="" />
                 </div>
               </UserActions>
               <UserExtend onClick={handlerShowDrawer}>

@@ -7,13 +7,16 @@ import styled from 'styled-components';
 import { colors } from '../colors';
 
 // React importations
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 // Components importations
 import UserPostNotification from './UserPostNotification';
 
 // Context importation
 import { NotificationContext } from "../contexts/NotificationContext";
+
+// Types importation
+import { UsersListDataType } from '../interfaces/types';
 
 import { API_BASE_URL } from '../config';
 
@@ -35,7 +38,7 @@ const Mask = styled.div`
     background: rgba(17, 15, 26, 0.60);
     z-index: 1000;
 `;
-const UserAddFormContainer = styled.form`
+const UserUpdateFormContainer = styled.form`
 
 display: flex;
 padding: 25px 0px;
@@ -47,7 +50,7 @@ top: 172px;
 width: 90%;
 
 `;
-const UserAddFormTitle = styled.div`
+const UserUpdateFormTitle = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -64,7 +67,7 @@ const UserAddFormTitle = styled.div`
             letter-spacing: -0.13px;
         }
         `;
-const UserAddFormInputContainer = styled.div`   
+const UserUpdateFormInputContainer = styled.div`   
     display: flex;
     padding: 15px 38px;
     flex-direction: column;  
@@ -82,15 +85,15 @@ const InputField = styled.div`
                 border-radius: 10px;           
                 background: ${colors.violet1};
                 font-family: 'Barlow Medium';
-                font-size: 13px;             
+                font-size: 22px;             
                 font-weight: 600;             
-                color: ${colors.violet3};
+                
             }
             label {
   width: 226px;
 }
     `;
-const UserAddFormCheckboxContainer = styled.div`   
+const UserUpdateFormCheckboxContainer = styled.div`   
     display: flex;
     padding: 15px 38px;
     flex-direction: row;
@@ -117,7 +120,7 @@ const UserAddFormCheckboxContainer = styled.div`
                 }
         }
 `;
-const UserAddFormPasswordContainer = styled.div`
+const UserUpdateFormPasswordContainer = styled.div`
     display: flex;
     align-items: flex-end;
     gap: 15px;
@@ -138,7 +141,7 @@ const UserAddFormPasswordContainer = styled.div`
             }
         }
 `;
-const UserAddFormButtonContainer = styled.div`
+const UserUpdateFormButtonContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
@@ -196,28 +199,47 @@ const UserAddEmptyButton = styled.button`
 //////////////////   INTERFACE TYPES   //////////////////////
 /////////////////////////////////////////////////////////////
 
-interface UserAddFormProps {
+interface UserUpdateFormProps {
     onCancelButtonClicked: () => void;
-    showAddUserForm: boolean;
+    showUpdateUserForm: boolean;
+    selectedUser: UsersListDataType | null;
 }
 
 ////////////////////////////////////////////////////////////
 //////////////////   MAIN COMPONENT   //////////////////////
 ////////////////////////////////////////////////////////////
 
-const UserAddForm = (props: UserAddFormProps) => {
+const UserUpdateForm = (props: UserUpdateFormProps) => {
 
 
     // declaration of the state variables
-        const [formData, setFormData] = useState({});
+        const [formData, setFormData] = useState<Partial<UsersListDataType>>({});
         const [isNotification, setNotification] = useState({state :false, action: ''});
-        const [showAddUserForm, setShowAddUserForm] = useState(props.showAddUserForm);
+        const [showUpdateUserForm, setShowUpdateUserForm] = useState(props.showUpdateUserForm);
         const [eye1, setEye1] = useState(false)
         const [eye2, setEye2] = useState(false)
 
-    
+
     // declaration of the global context variables
     const { setMsg } = useContext(NotificationContext);
+
+
+    
+      // Effet pour mettre à jour l'état local formData lorsque l'utilisateur sélectionné change
+  useEffect(() => {
+    if (props.selectedUser) {
+      setFormData({
+        // Initialiser les champs du formulaire avec les données de l'utilisateur sélectionné
+        id: props.selectedUser.id,
+        user_lastname: props.selectedUser.user_lastname || '',
+        user_firstname: props.selectedUser.user_firstname || '',
+        user_pseudo: props.selectedUser.user_pseudo || '',
+        user_email: props.selectedUser.user_email || '',
+        user_role: props.selectedUser.user_role || undefined,
+      });
+    }
+  }, [props.selectedUser]);
+
 
 
     /**
@@ -232,7 +254,7 @@ const UserAddForm = (props: UserAddFormProps) => {
         try {
 
            // Fetching data from the API route
-            const response = await fetch('http://localhost:5000/api/users/add', {
+            const response = await fetch(`${ API_BASE_URL }api/users/update`, {
 
             // sending a POST json document
                 method: 'POST',
@@ -251,11 +273,11 @@ const UserAddForm = (props: UserAddFormProps) => {
             // Parsing the JSON data
             const jsonResponse = await response.json();
             
-                        // Update the global context 
-                            setMsg(jsonResponse);
-            
             // Execute function which automatically hide the add form and send a user Notification
-                onAddUser();
+            onUpdateUser();
+
+            // Update the global context 
+                setMsg(jsonResponse);
             }
                 
                 
@@ -273,22 +295,28 @@ const UserAddForm = (props: UserAddFormProps) => {
      * @param event 
      */
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData({
+
+        const { name, value } = event.target;
+        const newValue = value === '' ? event.target.placeholder : value;
+
+          setFormData({
             ...formData,
-            [event.target.name]: event.target.value,
+            [name]: newValue,
         });
     };
 
 
+
+    
     /**
      * Function to show/hide notification and the window add form
      */
-    const onAddUser = () => {
+    const onUpdateUser = () => {
       // Hide the add form
-      setShowAddUserForm(false);
+      setShowUpdateUserForm(false);
         
       // Display Notification with the 'add' action
-      setNotification({ state: true, action: 'add' });
+      setNotification({ state: true, action: 'update' });
 
       //  Hide Notification window after delay
       setTimeout(() => {
@@ -296,7 +324,6 @@ const UserAddForm = (props: UserAddFormProps) => {
        }, 2000);
 
       }
-
 
 
 
@@ -318,86 +345,88 @@ const UserAddForm = (props: UserAddFormProps) => {
         setEye2(!eye2);
     }
 
-
     return (
         <>
 
 {isNotification.state ? <UserPostNotification action={isNotification.action}/> : null}
-        {showAddUserForm ?
+        {props.showUpdateUserForm ?
             <Mask>
-                <UserAddFormContainer onSubmit={formSubmit} className="login__form" id="login-form" method="post">
-                    <UserAddFormTitle>
-                        <p>Ajouter un utilisateur</p>
-                    </UserAddFormTitle>
-                    <UserAddFormInputContainer >
+                <UserUpdateFormContainer onSubmit={formSubmit} className="login__form" id="login-form" method="post">                    
+                    <UserUpdateFormTitle>
+                        <p>Modifier un utilisateur</p>
+                    </UserUpdateFormTitle>
+                    <UserUpdateFormInputContainer >
                         <InputField>
                             <label htmlFor="lastnameField"><p>Nom </p>
-                                <input onChange={handleInputChange} id="lastnameField" name="lastname" type="text" placeholder="Saisissez votre nom ici ..." required autoComplete="lastname" />
+                                <input onChange={handleInputChange} id="lastnameField" name="new_lastname" type="text"   placeholder={formData.user_lastname} autoComplete="lastname" />
                             </label>
                         </InputField>
                         <InputField>
                             <label htmlFor="firstnameField"><p>Prénom </p>
-                                <input onChange={handleInputChange} id="firstnameField" name="firstname" type="text" placeholder="Saisissez votre prénom ici ..." required autoComplete="firstname" />
+                                <input onChange={handleInputChange} id="firstnameField" name="new_firstname" type="text"  placeholder={formData.user_firstname}  autoComplete="firstname" />
                             </label>
                         </InputField>
                         <InputField>
                             <label htmlFor="nicknameField"><p>Pseudo </p>
-                                <input onChange={handleInputChange} id="nicknameField" name="nickname" type="text" placeholder="Saisissez votre pseudo ici ..." required autoComplete="nickname" />
+                                <input onChange={handleInputChange} id="nicknameField" name="new_nickname" type="text"  placeholder={formData.user_pseudo} autoComplete="nickname" />
                             </label>
                         </InputField>
                         <InputField>
                             <label htmlFor="emailField"><p>Email </p>
-                                <input onChange={handleInputChange} id="emailField" name="email" type="text" placeholder="Saisissez votre email ici ..." required autoComplete="email" />
+                                <input onChange={handleInputChange} id="emailField" name="new_email" type="text"  placeholder={formData.user_email} autoComplete="email" />
                             </label>
                         </InputField>
-                    </UserAddFormInputContainer>
-                    <UserAddFormCheckboxContainer>
+                    </UserUpdateFormInputContainer>
+                    <UserUpdateFormCheckboxContainer>
                         <div className="checkbox__container" >
-                            <label htmlFor="checkbox1">Coatch</label>
-                            <input  onChange={handleInputChange} type="radio" id="checkbox1" name="role" value="1"/>
+                            <label htmlFor="radio1">Coatch</label>
+                            <input  onChange={handleInputChange} type="radio" id="radio1" name="new_role" value="1" required/>
                         </div>
                         <div className="checkbox__container" >
-                            <label htmlFor="checkbox2">Utilisateur</label>
-                            <input  onChange={handleInputChange} type="radio" id="checkbox2" name="role" value="2"/>
+                            <label htmlFor="radio2">Utilisateur</label>
+                            <input  onChange={handleInputChange} type="radio" id="radio2" name="new_role" value="2" required/>
                         </div>
                         <div className="checkbox__container" >
-                            <label htmlFor="checkbox3">Invité</label>
-                            <input  onChange={handleInputChange} type="radio" id="checkbox3" name="role" value="3"/>
+                            <label htmlFor="radio3">Invité</label>
+                            <input  onChange={handleInputChange} type="radio" id="radio3" name="new_role" value="3" required/>
                         </div>
                         <div className="checkbox__container" >
-                            <label htmlFor="checkbox4">Autre</label>
-                            <input  onChange={handleInputChange} type="radio" id="checkbox4" name="role" value="4"/>
+                            <label htmlFor="radio4">Autre</label>
+                            <input  onChange={handleInputChange} type="radio" id="radio4" name="new_role" value="4" required/>
                         </div>
-                    </UserAddFormCheckboxContainer>
-                    <UserAddFormPasswordContainer>
+                    </UserUpdateFormCheckboxContainer>
+                    <UserUpdateFormPasswordContainer>
                         <InputField>
                             <label htmlFor="passwordField"><p>Mot de passe </p>
-                                <input onChange={handleInputChange} id="passwordField" name="password" type={eye1 ? "text" : "password"} placeholder="Saisissez votre mot de passe ici ..." required autoComplete="password" />
+                                <input onChange={handleInputChange} id="passwordField" name="new_password" type={eye1 ? "text" : "password"} placeholder="Saisissez votre mot de passe ici ..."  autoComplete="password"  required/>
                             </label>
                         </InputField>
-                        <div className="button__eye"  onClick={handleEye1Change}>
-                          {eye2 ? <img src="./assets/images/icons/icon-eye-open.png" alt="" /> : <img src="./assets/images/icons/icon-eye-close.svg" alt="" />}
+                        <div className="button__eye" onClick={handleEye1Change}>
+                            
+                            {eye1 ? <img src="./assets/images/icons/icon-eye-open.png" alt="" /> : <img src="./assets/images/icons/icon-eye-close.svg" alt="" />}
+                           
                         </div>
-                    </UserAddFormPasswordContainer>
+                    </UserUpdateFormPasswordContainer>
 
-            
+           
 
 
-                    <UserAddFormPasswordContainer>
+
+                    <UserUpdateFormPasswordContainer>
                         <InputField>
                             <label htmlFor="passwordCheckField"><p>Resaisissez votre mot de passe </p>
-                                <input onChange={handleInputChange} id="passwordCheckField" name="passwordcheck" type={eye2 ? "text" : "password"} placeholder="Resaisissez votre mot de passe ici ..." required autoComplete="passwordcheck" />
+                                <input onChange={handleInputChange} id="passwordCheckField" name="new_passwordcheck" type={eye2 ? "text" : "password"} placeholder="Resaisissez votre mot de passe ici ..."  autoComplete="passwordcheck"  required/>
                             </label>
                         </InputField>
-                        <div className="button__eye"  onClick={handleEye2Change}>
-                          {eye2 ? <img src="./assets/images/icons/icon-eye-open.png" alt="" /> : <img src="./assets/images/icons/icon-eye-close.svg" alt="" />}
+                        <div className="button__eye" onClick={handleEye2Change}>
+                        {eye2 ? <img src="./assets/images/icons/icon-eye-open.png" alt="" /> : <img src="./assets/images/icons/icon-eye-close.svg" alt="" />}
                         </div>
-                    </UserAddFormPasswordContainer>
-                    <UserAddFormButtonContainer>
+                    </UserUpdateFormPasswordContainer>
+                    <UserUpdateFormButtonContainer>
                         <UserAddEmptyButton onClick={() => props.onCancelButtonClicked()}>Annuler</UserAddEmptyButton>
                         <UserAddPlainButton type="submit">Valider</UserAddPlainButton>
-                    </UserAddFormButtonContainer>
-                </UserAddFormContainer>
+                    </UserUpdateFormButtonContainer>
+                </UserUpdateFormContainer>
             </Mask>
  : null}
 
@@ -406,4 +435,4 @@ const UserAddForm = (props: UserAddFormProps) => {
     );
 }
 
-export default UserAddForm;
+export default UserUpdateForm;

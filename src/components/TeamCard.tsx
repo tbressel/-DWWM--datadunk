@@ -36,7 +36,6 @@ import { TeamDataType } from '../interfaces/types';
         transition: 200ms ease-in-out;
     `;
     const TeamCardContainer = styled.div`
-    cursor: pointer;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -48,27 +47,32 @@ import { TeamDataType } from '../interfaces/types';
         max-height: 162px;
         min-height: 162px;
         box-shadow: #d0d0d0 5px 5px 5px;
-        opacity: 0.7;
+        opacity: 1;
         transition: 200ms ease-in-out;
         overflow-y: hidden;
-       
-
         
+        @media screen and (min-width: 768px) {
+            opacity: 0.7;
+            cursor: pointer;
 
-        &:hover {
-            opacity: 1;
-            transition: 200ms ease-in-out;
-            
-            ${ClubName} {            
-                font-size: 1.05rem;
+            &:hover {
+                opacity: 1;
                 transition: 200ms ease-in-out;
-            }
-            ${BackImg} {
-                background-size: 60%;
-                transition: 200ms ease-in-out;
+                
+                ${ClubName} {            
+                    font-size: 1.05rem;
+                    transition: 200ms ease-in-out;
+                }
+                ${BackImg} {
+                    background-size: 60%;
+                    transition: 200ms ease-in-out;
+                }
             }
         }
     `;
+        
+
+
     const TeamImage = styled.div`
         display: flex;
         width: 150px;

@@ -28,81 +28,114 @@ const Name = styled.div`
 
 p:nth-child(1) {
     margin-left: 20px;
-  
     font-size: 16px;
-font-style: normal;
-font-weight: 400;}
+    font-style: normal;
+    font-weight: 400;}
 
 p:nth-child(2) {
     margin-left: 20px;
-  
     font-size: 18px;
-font-style: normal;
-font-weight: 600;}
-
-
-
-
-
-
+    font-style: normal;
+    font-weight: 600;}
 `;
+
 const BackLogo = styled.div<{ bglogo: string }>`
     width: 70px;
     height: 70px;
-
     background-image: url(${props => props.bglogo});
     background-repeat: no-repeat;
     background-position: center;
     background-size: 100%;
     transition: 200ms ease-in-out;
 `;
-const BackPhoto = styled.div<{ bgphoto: string }>`
-    width: 254px;
-    height: 287px;
 
+const BackPhoto = styled.div<{ bgphoto: string }>`
+    width: 100px;
+    height: 100px;
     background-image: url(${props => props.bgphoto});
     background-repeat: no-repeat;
-    background-position: center;
+    background-position: top;
+    background-size: cover;
     transition: 200ms ease-in-out;
+    border-radius: 50%;
+    border: 4px solid ${colors.corail};
+    
+    @media screen and (min-width: 768px) {
+        width: 254px;
+        height: 287px;
+        border-radius: 0;
+        border: 0; 
+        background-position: center;
+        background-size: none;
+
+}
 `;
+
 const PlayerCardContainer = styled.div`
-    cursor: pointer;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    align-items: flex-end;
     border-radius: 15px;
     background-color: ${colors.violet1};
-    padding: 0px 0px 16px 0px; 
-    max-width: 287px;
+    padding: 20px; 
+    width: 100%;
     min-width: 287px;
     max-height: 350px;
-    min-height: 350px;
+
     box-shadow: #d0d0d0 5px 5px 5px;
-    opacity: 0.7;
     transition: 200ms ease-in-out;
     overflow-y: hidden;
-
-        &:hover {
-            opacity: 1;
-            transition: 200ms ease-in-out;
-
-            ${Name} {            
-                font-size: 1.05rem;
-                transition: 200ms ease-in-out;
-            }
-            ${BackLogo} {
-                background-size: 90%;
-                transition: 200ms ease-in-out;
-            }
-        }
+    opacity: 1;
     
 .player__container--top {
-display: flex;
-flex-direction: row;
-justify-content: space-between;
-align-items: center;
-width: 100%
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    top: -50px;
+
+
+ @media screen and (min-width: 768px) {
+    position: static;
+
+ }
+
+
+
 }
+    @media screen and (min-width: 768px) {
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border-radius: 15px;
+        background-color: ${colors.violet1};
+        padding: 0px 0px 16px 0px; 
+        max-width: 287px;
+        min-width: 287px;
+        max-height: 350px;
+        min-height: 350px;
+        box-shadow: #d0d0d0 5px 5px 5px;
+        transition: 200ms ease-in-out;
+        overflow-y: hidden;
+        opacity: 0.7;
+
+            &:hover {
+                opacity: 1;
+                transition: 200ms ease-in-out;
+
+                ${Name} {            
+                    font-size: 1.05rem;
+                    transition: 200ms ease-in-out;
+                }
+                ${BackLogo} {
+                    background-size: 90%;
+                    transition: 200ms ease-in-out;
+                }
+            }
+    }
 `;
 const TeamImage = styled.div`
     display: flex;
@@ -142,7 +175,7 @@ const PlayerCard: React.FC<{ player: PlayerDataType }> = (props) => {
                     </Name>
                 </div>
                 <PlayerImage>
-                <BackPhoto bgphoto={`assets/images/players-2023-2024/${player_photo}`}></BackPhoto>
+                    <BackPhoto bgphoto={`assets/images/players-2023-2024/${player_photo}`}></BackPhoto>
                 </PlayerImage>
             </PlayerCardContainer>
         </>

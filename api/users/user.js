@@ -193,10 +193,11 @@ userApp.post('/add', (req, res) => {
         password = hash;
 
         const avatar = ('avatar-' + firstname + lastname + nickname + '.png').toLowerCase();
+        console.log ('avatar:', avatar);
+        const sql = `INSERT INTO _user_ (user_firstname, user_lastname,  user_pseudo, user_role, user_email, user_password, user_avatar) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)`;
         
-        const sql = `INSERT INTO _user_ (user_lastname, user_firstname,  user_pseudo, user_role, user_email, user_password, user_avatar) VALUES (?, ?, ?, ?, ?, ?, ?)`;
-        
-        pool.query(sql, [lastname, firstname, nickname, role, email, password, avatar], (error) => {
+        pool.query(sql, [firstname, lastname, nickname, role, email, password, avatar], (error) => {
             if (error) {
                 console.error(error);
                 res.status(500).json({
@@ -207,6 +208,82 @@ userApp.post('/add', (req, res) => {
                 res.json({
                     message: notificationMessage.add_success,
                     status: 'Success',
+                });
+            }
+        });
+    });
+});
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////       USER UPDATE      /////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+
+userApp.post('/update', (req, res) => {
+
+    // Get the data from the POST request and send them into variables
+    let { id, new_lastname, new_firstname, new_nickname, new_email, new_password, new_role } = req.body;
+
+    console.log('Received update request with data:', req.body);
+
+    // Use Validator to escape the data like a striptags or htmlspecialchars in PHP (only on strings type)
+    // new_role is a number so we don't need to escape it
+
+    new_firstname = validator.escape(new_firstname);
+    new_lastname = validator.escape(new_lastname);
+    new_nickname = validator.escape(new_nickname);
+    new_email = validator.escape(new_email);
+    new_password = validator.escape(new_password);
+
+    // input field contained string value, we must convert into number
+    new_role = parseInt(new_role); 
+    
+    
+    // Validator chack if the email is valid or not
+    if (!validator.isEmail(new_email)) {
+        return res.status(400).json({
+            message: 'Invalid email',
+            status: 'Failure'
+        });
+    }
+    
+    console.log('Data after validation:', { id, new_lastname, new_firstname, new_nickname, new_role, new_email, new_password });
+
+    bcrypt.hash(new_password, 10, function (err, hash) {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({
+                message: 'Error occurred',
+                status: 'Failure'
+            });
+        }
+        // saving the hash
+        new_password = hash;
+
+        console.log('Data after hashing:', { id, new_lastname, new_firstname, new_nickname, new_role, new_email, new_password });
+
+        const sql = `UPDATE _user_ 
+        SET user_lastname=?, user_firstname=?, user_pseudo=?, user_role=?, user_email=?, user_password=? 
+        WHERE id=?`;
+
+        pool.query(sql, [new_lastname, new_firstname, new_nickname, new_role, new_email, new_password, id], (error) => {
+            if (error) {
+                console.error(error);
+                res.status(500).json({
+                    message: 'Error occurred',
+                    status: 'Failure'
+                });
+            } else {
+                res.json({
+                    message: notificationMessage.update_success,
+                    status: 'Success',
+                    id: id,
+                    new_lastname: new_lastname,
+                    new_firstname: new_firstname,
+                    new_pseudo: new_nickname,
+                    new_email: new_email,
+                    new_password: new_password,
+                    new_role: new_role,
                 });
             }
         });

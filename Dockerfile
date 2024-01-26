@@ -18,3 +18,8 @@ EXPOSE 3000
 
 # Démarrez l'application
 CMD [ "npm", "start" ]
+
+
+
+
+

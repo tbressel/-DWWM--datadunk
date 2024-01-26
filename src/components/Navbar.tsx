@@ -8,12 +8,13 @@ import { colors } from '../colors';
 
 // React importations
 import { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 
 // Components importations
 import Navigation from './Navigation';
 
 // Types importation
-import { NavbarDataType } from '../interfaces/types';
+// import { NavbarDataType } from '../interfaces/types';
 
 // Datas importation
 import data from '../datas/lang/fr.json';
@@ -63,6 +64,14 @@ const BurgerContainer = styled.div`
     }
 `;
 
+
+interface  NavbarDataType {
+    [key: string]: {
+        icon: string;
+        name: string;
+        path: string;
+    };
+}
 ////////////////////////////////////////////////////////////
 //////////////////   MAIN COMPONENT   //////////////////////
 ////////////////////////////////////////////////////////////
@@ -75,16 +84,24 @@ const Navbar = () => {
     // declaration of data for languages
     const navbarData: NavbarDataType = data.navbar;
  
+    // declaration of the function to close the menu
+    const handleCloseMenu = () => {
+        setBurgerClicked(false);
+      };
+
+
     return (
         <>
             <NavbarWrapper>
-                <Img src={`assets/images/icons/${navbarData.logo.icon}`} alt="" />
+            <NavLink to="home">
+                <Img onClick ={handleCloseMenu} src={`assets/images/icons/${navbarData.logo.icon}`} alt="" />
+            </NavLink>
                 <BurgerContainer onClick={() => setBurgerClicked(!burgerClicked)}>
                     <BurgerLine></BurgerLine>
                     <BurgerLine></BurgerLine>
                     <BurgerLine></BurgerLine>
                 </BurgerContainer>
-                <Navigation burgerClicked={burgerClicked} />
+                <Navigation burgerClicked={burgerClicked} onCloseMenu={handleCloseMenu}/>
             </NavbarWrapper>
         </>
     );
