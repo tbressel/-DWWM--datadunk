@@ -8,6 +8,7 @@ import { colors } from '../colors';
 import React, { useState, useEffect } from 'react';
 import { API_BASE_URL } from '../config';
 
+
 interface SeasonsListDataType {
     id: number;
     season_field: string;
@@ -35,21 +36,32 @@ const FilterContainer = styled.div`
     flex-direction: column;
     align-items: center;
     margin: 20px;
+    @media screen and (min-width: 768px) {
+           
+
+        }
 `;
 const FilterForm = styled.form`
     display: flex;
     flex-direction: column;
     width: 100%;
+    @media screen and (min-width: 768px) {
+           display: flex;
+           flex-direction: row;
+        flex-wrap: wrap;
+           justify-content: space-between;
+
+        }
 `;
-const FilterInput = styled.input`
-    padding: 15px;
-    margin: 15px;
-    border-radius: 15px;
-`;
+
 const FilterSelect = styled.select`
     padding: 15px;
     margin: 15px;
     border-radius: 15px;
+    @media screen and (min-width: 768px) {
+            min-width: 25%;
+
+        }
 `;
 const SwitchContainer = styled.div`
     display: flex;
@@ -75,6 +87,8 @@ const ButtonContainer = styled.div`
     border-radius: 9px;
     background: var(--Violet-2, #CFCBE1);
 `;
+
+
 
 const ButtonLeft = styled.div`
     display: flex;
@@ -132,7 +146,22 @@ p {
 }
 `;
 
+const FilterButton = styled.button` 
+text-align: center;
+  border-radius: 50%;
+  width: 83px;
+  height: 83px;
+  margin-left: auto;
+  margin-right: auto;
 
+
+@media screen and (min-width: 768px) {
+
+
+        }
+
+
+`
 
 ////////////////////////////////////////////////////////////
 //////////////////   MAIN COMPONENT   //////////////////////
@@ -184,10 +213,6 @@ const MatchFilter = () => {
         setSelectedTeam(event.target.value);
     };
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setInputValue(event.target.value);
-    };
-
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
@@ -223,7 +248,7 @@ const MatchFilter = () => {
                     <p>Filtres :</p>
                 </SwitchText>
                 <ButtonContainer>
-                    <ButtonLeft className='active'>
+                    <ButtonLeft>
                         <p>
                             On
                         </p>
@@ -238,7 +263,7 @@ const MatchFilter = () => {
 
             {showForm && (
                 <FilterForm onSubmit={handleSubmit}>
-                <FilterInput type="text" value={inputValue} onChange={handleInputChange} />
+                {/* <FilterInput type="text" value={inputValue} onChange={handleInputChange} /> */}
 
                 <FilterSelect value={selectedTeam} onChange={handleOptionTeam}>
                     {teamsList.map((team) => (
@@ -264,7 +289,7 @@ const MatchFilter = () => {
                     ))}
                 </FilterSelect>
 
-                <button type="submit">Submit</button>
+                <FilterButton type="submit">Valider</FilterButton>
             </FilterForm>
             )}
         </FilterContainer>

@@ -8,13 +8,16 @@ import { Reset } from 'styled-reset';
 import { GlobalStyle } from './globalstyle';
 import styled from 'styled-components';
 
+
 // React importations
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // Context importation
 import { LoginContext } from './contexts/LoginContext';
 import { NotificationContext } from './contexts/NotificationContext';
+
+
 
 
 // Types importation
@@ -52,41 +55,43 @@ const Space = styled.div`
 const App = () => {
 
 
-      // declaration of the state variables
-      const [user, setUser] = useState<UserDataType | null>(null);
-      const [msg, setMsg] = useState<NotificationDataType | null>(null);
+  // declaration of the state variables
+  const [user, setUser] = useState<UserDataType | null>(null);
+  const [msg, setMsg] = useState<NotificationDataType | null>(null);
 
-
+  const [seasonsList, setSeasonsList] = useState<any[]>([]); // Remplacez "any" par le type approprié
+  const [teamsList, setTeamsList] = useState<any[]>([]); // Remplacez "any" par le type approprié
+  const [leaguesList, setLeaguesList] = useState<any[]>([]); // Remplacez "any" par le type approprié
+  
 
 
   return (
     <>
-<LoginContext.Provider value={{ user, setUser }}>
-<NotificationContext.Provider value={{ msg, setMsg }}>
-
-
-      <Reset />
-      <GlobalStyle />
-      <BrowserRouter>
-         <Navbar />
-          <Space></Space>
-          <Header />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path='/home' element={<Home />} />
-            <Route path='/articles' element={<Articles />} />
-            <Route path='/guides' element={<Guides />} />
-            <Route path='/leagues' element={<Leagues />} />
-            <Route path='/matches' element={<Matches />} />
-            <Route path='/teams' element={<Teams />} />
-            <Route path='/players' element={<Players />} />
-            <Route path='/admin' element={<Admin />} />
-            <Route path="*" element={<Error />} />
-          </Routes>
-      </BrowserRouter>
-
-</NotificationContext.Provider>
-</LoginContext.Provider>
+      
+      <LoginContext.Provider value={{ user, setUser }}>
+        <NotificationContext.Provider value={{ msg, setMsg }}>
+            <Reset />
+            <GlobalStyle />
+            <BrowserRouter>
+              <Navbar />
+              <Space></Space>
+              <Header />
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path='/home' element={<Home />} />
+                <Route path='/articles' element={<Articles />} />
+                <Route path='/guides' element={<Guides />} />
+                <Route path='/leagues' element={<Leagues />} />
+                <Route path='/matches' element={<Matches />} />
+                <Route path='/teams' element={<Teams />} />
+                <Route path='/players' element={<Players />} />
+                <Route path='/admin' element={<Admin />} />
+                <Route path="*" element={<Error />} />
+              </Routes>
+            </BrowserRouter>
+        </NotificationContext.Provider>
+      </LoginContext.Provider>
+        
 
     </>
   );
