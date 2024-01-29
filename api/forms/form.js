@@ -34,8 +34,8 @@ pool.getConnection((err, connection) => {
 formApp.get('/seasons_list', (req, res) => {
 
     console.log('connected to season_list route');
-    const sql = "SELECT id, CONCAT( 'Saison ', YEAR(start_date), ' / ', YEAR(end_date)) AS season_field FROM season ORDER BY id DESC";
-
+     const sql = "SELECT id, CONCAT( 'Saison ', YEAR(start_date), ' / ', YEAR(end_date)) AS season_field FROM season ORDER BY id DESC";
+    // const sql = "SELECT s.id, CONCAT('Saison ', YEAR(s.start_date), ' / ', YEAR(s.end_date)) AS season_field, GROUP_CONCAT(DISTINCT CONCAT(f.id, ':', franchise_name) ORDER BY f.id ASC SEPARATOR ', ') AS `franchises` FROM     season s JOIN franchise_game fg ON s.id = fg.id_season JOIN     franchise f ON f.id = fg.id_franchise GROUP BY     s.id, `season_field` ORDER BY     `season_field` DESC;";
     pool.query(sql, (error, results) => {
         if (error) {
             console.error(error);
@@ -49,10 +49,27 @@ formApp.get('/seasons_list', (req, res) => {
     });
 });
 
-formApp.get('/teams_seasons_list', (req, res) => {
+formApp.get('/teams_list', (req, res) => {
 
     console.log('connected to season_list route');
-    const sql = "SELECT id, franchise_name FROM franchise; ";
+    const sql = "SELECT id, franchise_name as 'team_field' FROM franchise; ";
+
+    pool.query(sql, (error, results) => {
+        if (error) {
+            console.error(error);
+            res.status(500).json({
+                message: 'Error occurred',
+                status: 'Failure'
+            });
+        } else {
+            res.json(results);
+        }
+    });
+});
+formApp.get('/leagues_list', (req, res) => {
+
+    console.log('connected to season_list route');
+    const sql = "SELECT id, league_name as 'league_field' FROM league; ";
 
     pool.query(sql, (error, results) => {
         if (error) {

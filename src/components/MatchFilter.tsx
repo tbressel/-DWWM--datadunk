@@ -11,6 +11,15 @@ import { API_BASE_URL } from '../config';
 interface SeasonsListDataType {
     id: number;
     season_field: string;
+   
+}
+interface TeamsListDataType {
+    id: number;
+    team_field: string;
+}
+interface LeaguesListDataType {
+    id: number;
+    league_field: string;
 }
 
 
@@ -131,6 +140,8 @@ p {
 
 const MatchFilter = () => {
     const [seasonsList, setSeasonsList] = useState<SeasonsListDataType[]>([]);
+    const [teamsList, setTeamsList] = useState<TeamsListDataType[]>([]); // Ajout de la liste des équipes
+    const [leaguesList, setLeaguesList] = useState<LeaguesListDataType[]>([]); // Ajout de la liste des équipes
 
     const [selectedSeason, setSelectedSeason] = useState('');
     const [selectedLeague, setSelectedLeague] = useState('');
@@ -143,10 +154,18 @@ const MatchFilter = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`${API_BASE_URL}/api/forms/seasons_list`);
-                let data = await response.json();
-                setSeasonsList(data);
-                console.log(data);
+                const responseSeasons = await fetch(`${API_BASE_URL}/api/forms/seasons_list`);
+                const responseTeams = await fetch(`${API_BASE_URL}/api/forms/teams_list`);
+                const responseLeagues = await fetch(`${API_BASE_URL}/api/forms/leagues_list`);
+                let dataSeasons = await responseSeasons.json();
+                let dataTeams = await responseTeams.json(); 
+                let dataLeagues = await responseLeagues.json(); 
+                setSeasonsList(dataSeasons);
+                setTeamsList(dataTeams); 
+                setLeaguesList(dataLeagues); 
+                console.log('Liste des saisons : ',dataSeasons);
+                console.log('Liste des équipes : ',dataTeams);
+                console.log('Liste des ligues : ',dataLeagues); 
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -199,12 +218,10 @@ const MatchFilter = () => {
 
     return (
         <FilterContainer>
-
             <SwitchContainer onClick={handleToggleForm}>
                 <SwitchText>
                     <p>Filtres :</p>
                 </SwitchText>
-
                 <ButtonContainer>
                     <ButtonLeft className='active'>
                         <p>
@@ -212,51 +229,43 @@ const MatchFilter = () => {
                         </p>
                     </ButtonLeft>
                     <ButtonRight>
-
                         <p>
                             Off
                         </p>
                     </ButtonRight>
                 </ButtonContainer>
-
-
-
             </SwitchContainer>
-
-
-
-
-
-
 
             {showForm && (
                 <FilterForm onSubmit={handleSubmit}>
-                    <FilterInput type="text" value={inputValue} onChange={handleInputChange} />
+                <FilterInput type="text" value={inputValue} onChange={handleInputChange} />
 
-                    <FilterSelect value={selectedTeam} onChange={handleOptionTeam}>
-                        {/* {teamsList.map((team) => (
-                            <option key={team.id} value={team.id}>
-                                {team.team_field}
-                            </option>
-                        ))} */}
-                    </FilterSelect>
-                    <FilterSelect value={selectedLeague} onChange={handleOptionLeague}>
-                        {/* {leaguesList.map((league) => (
-                            <option key={league.id} value={league.id}>
-                                {league.league_field}
-                            </option>
-                        ))} */}
-                    </FilterSelect>
-                    <FilterSelect value={selectedSeason} onChange={handleOptionSeason}>
-                        {seasonsList.map((season) => (
-                            <option key={season.id} value={season.id}>
-                                {season.season_field}
-                            </option>
-                        ))}
-                    </FilterSelect>
+                <FilterSelect value={selectedTeam} onChange={handleOptionTeam}>
+                    {teamsList.map((team) => (
+                        <option key={team.id} value={team.id}>
+                            {team.team_field}
+                        </option>
+                    ))}
+                </FilterSelect>
 
-                    <button type="submit">Submit</button>
-                </FilterForm>
+                <FilterSelect value={selectedLeague} onChange={handleOptionLeague}>
+                {leaguesList.map((league) => (
+                        <option key={league.id} value={league.id}>
+                            {league.league_field}
+                        </option>
+                    ))}
+                </FilterSelect>
+
+                <FilterSelect value={selectedSeason} onChange={handleOptionSeason}>
+                    {seasonsList.map((season) => (
+                        <option key={season.id} value={season.id}>
+                            {season.season_field}
+                        </option>
+                    ))}
+                </FilterSelect>
+
+                <button type="submit">Submit</button>
+            </FilterForm>
             )}
         </FilterContainer>
     );
