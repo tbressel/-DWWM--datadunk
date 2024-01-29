@@ -90,3 +90,8 @@ export interface NotificationDataType {
   message: string;
 
 }
+
+export interface SeasonsListDataType {
+  id: number;
+  season_field: string;
+}

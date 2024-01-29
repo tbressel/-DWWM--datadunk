@@ -21,11 +21,11 @@ import { MatchDataType } from '../interfaces/types';
          display: flex;
          flex-direction: column;
          align-items: center;
-         min-width: 450px;
-         max-width: 450px;
+         /* min-width: 450px;
+         max-width: 450px; */
          border-radius: 10px;
          background-color: ${colors.violet1};
-         padding: 5px 20px 5px 20px;
+         /* padding: 5px 20px 5px 20px; */
          box-shadow: #d0d0d0 5px 5px 5px;
          transition: 200ms ease-in-out;
          opacity: 0.7;

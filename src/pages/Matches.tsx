@@ -4,6 +4,7 @@ import { API_BASE_URL } from '../config';
 import MatchSummary from "../components/MatchSummary";
 
 import { MatchDataType } from '../interfaces/types';
+import MatchFilter from "../components/MatchFilter";
 
 const Matches = () => {
     const [matches, setMatches] = useState<MatchDataType[]>([]);
@@ -12,7 +13,7 @@ const Matches = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`${ API_BASE_URL }/api/stats/games/2023`);
+                const response = await fetch(`${ API_BASE_URL }/api/stats/games/24`);
                 let data = await response.json();
                 setMatches(data);
                 console.log(data);
@@ -32,6 +33,12 @@ const Matches = () => {
 
     return (
         <>
+
+        <MatchFilter />
+
+
+
+
         {selectedMatchId ? (
           // Afficher MatchSummary avec l'ID sélectionné
           <MatchSummary matchId={selectedMatchId} />

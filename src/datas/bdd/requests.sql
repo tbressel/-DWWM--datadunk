@@ -181,7 +181,24 @@ WHERE gs.id IN (
         ORDER BY gs.id ASC;
 
 
+--
+-- LISTE TOUTES LES SAISON EXISTANTES ET LA LISTE TOTALE DES EQUIPES QUI ONT JOUEE DANS CHAQUE SAISON
+--
 
+SELECT
+    s.id,
+    CONCAT('Saison ', YEAR(s.start_date), ' / ', YEAR(s.end_date)) AS `season`,
+    GROUP_CONCAT(DISTINCT CONCAT(f.id, ':', franchise_name) ORDER BY f.id ASC SEPARATOR ', ') AS `franchises`
+FROM
+    season s
+JOIN
+    franchise_game fg ON s.id = fg.id_season
+JOIN
+    franchise f ON f.id = fg.id_franchise
+GROUP BY
+    s.id, `season`
+ORDER BY
+    `season` ASC;
 
 
 

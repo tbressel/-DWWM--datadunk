@@ -206,7 +206,7 @@ const UserCards: React.FC<{ user: UsersListDataType }> = (props) => {
     try {
 
       // Fetching data with the id of the user to delete
-      const response = await fetch('http://localhost:5000/api/users/delete?action=delete&id=' + id, {
+      const response = await fetch(`${API_BASE_URL}/api/users/delete?action=delete&id=` + id, {
         method: 'DELETE',
       });
 

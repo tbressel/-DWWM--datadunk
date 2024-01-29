@@ -232,7 +232,7 @@ const UserAddForm = (props: UserAddFormProps) => {
         try {
 
            // Fetching data from the API route
-            const response = await fetch('http://localhost:5000/api/users/add', {
+            const response = await fetch(`${API_BASE_URL}/api/users/add`, {
 
             // sending a POST json document
                 method: 'POST',

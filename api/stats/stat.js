@@ -61,7 +61,10 @@ statApp.get('/franchise/2023', (req, res) => {
 });
 
 // Endpoint pour récupérer les 10 premières lignes de la table 'games'
-statApp.get('/games/2023', (req, res) => {
+statApp.get('/games/:id', (req, res) => {
+
+    const seasonId = req.params.id;
+
     const sql = `SELECT DISTINCT
     g.id AS 'id_games',
     g.game_date AS 'game_date',
@@ -86,28 +89,22 @@ JOIN
 JOIN
     league l ON fg.id_league = l.id
 WHERE
-    fg.id_season = 24
+    fg.id_season = ?
 ORDER BY
     game_date DESC;
 `;
 
-
-
-
-
-
-
-    pool.query(sql, (error, results) => {
-        if (error) {
-            console.error(error);
-            res.status(500).json({
-                message: 'Error occurred',
-                status: 'Failure'
-            });
-        } else {
-            res.json(results);
-        }
-    });
+pool.query(sql, [seasonId], (error, results) => {
+    if (error) {
+        console.error(error);
+        res.status(500).json({
+            message: 'Error occurred',
+            status: 'Failure'
+        });
+    } else {
+        res.json(results);
+    }
+});
 });
 
 // Endpoint pour récupérer les données de la table 'franchise'

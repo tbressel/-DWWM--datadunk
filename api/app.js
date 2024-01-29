@@ -5,14 +5,15 @@ const cors = require('cors');
 app.use(cors());
 
 
-
-
 const statRoutes = require('./stats/stat'); 
 const userRoutes = require('./users/user');
+const formRoutes = require('./forms/form');
 
-app.use('/api/stats', statRoutes); // Mettez "/stats" ici
-app.use('/api/users', userRoutes); // Mettez "/users" ici
+app.use('/api/stats', statRoutes); 
+app.use('/api/users', userRoutes); 
+app.use('/api/forms', formRoutes); 
 
+// const port = process.env.PORT || 4000;
 const port = process.env.PORT || 5000;
 
 app.listen(port, () => {

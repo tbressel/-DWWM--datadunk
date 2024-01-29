@@ -16,9 +16,11 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { LoginContext } from './contexts/LoginContext';
 import { NotificationContext } from './contexts/NotificationContext';
 
+
 // Types importation
 import { UserDataType } from './interfaces/types';
 import { NotificationDataType } from './interfaces/types';
+
 
 // Components importation
 import Home from './pages/Home';
@@ -56,10 +58,12 @@ const App = () => {
 
 
 
+
   return (
     <>
 <LoginContext.Provider value={{ user, setUser }}>
 <NotificationContext.Provider value={{ msg, setMsg }}>
+
 
       <Reset />
       <GlobalStyle />
@@ -80,6 +84,7 @@ const App = () => {
             <Route path="*" element={<Error />} />
           </Routes>
       </BrowserRouter>
+
 </NotificationContext.Provider>
 </LoginContext.Provider>
 
