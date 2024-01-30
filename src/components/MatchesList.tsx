@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////
 //////////////////   IMPORTATIONS   ////////////////////
 ////////////////////////////////////////////////////////
-
+import React, { useState, useEffect } from 'react';
 // Style importations
 import styled from 'styled-components';
 import { colors } from '../colors';
@@ -31,14 +31,26 @@ const MatchListContainer = styled.div`
 //////////////////   MAIN COMPONENT   //////////////////////
 ////////////////////////////////////////////////////////////
 const MatchesList: React.FC<{ matches: MatchDataType[]; onSelectMatch: (id: number) => void }> = (props) => {
-
+    const [filteredMatches, setFilteredMatches] = useState<MatchDataType[]>(props.matches);
+  
+    useEffect(() => {
+      // Mettez à jour les matches filtrés à chaque changement dans props.matches
+      setFilteredMatches(props.matches);
+    }, [props.matches]);
+  
+    const handleFilterChange = (filteredMatches: MatchDataType[]) => {
+      // Mettez à jour les matches filtrés lorsqu'ils changent
+      setFilteredMatches(filteredMatches);
+    };
+  
     return (
-        <MatchListContainer>
-            {props.matches.map((match, index) => (
-        <MatchCard key={index} match={match} onSelectMatch={props.onSelectMatch} />
-         ))}
-        </MatchListContainer>   
+      <MatchListContainer>
+        {filteredMatches.map((match, index) => (
+          <MatchCard key={index} match={match} onSelectMatch={props.onSelectMatch} />
+        ))}
+      </MatchListContainer>
     );
-};
-export default MatchesList;
+  };
+  
+  export default MatchesList;
 

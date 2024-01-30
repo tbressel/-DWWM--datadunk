@@ -3,11 +3,16 @@
 ////////////////////////////////////////////////////////
 
 
-import styled from 'styled-components';
-import { colors } from '../colors';
 import React, { useState, useEffect } from 'react';
 import { API_BASE_URL } from '../config';
+import { MatchDataType } from '../interfaces/types';
+import styled from 'styled-components';
+import { colors } from '../colors';
 
+interface MatchFilterProps {
+    onFilterChange: (filteredMatches: MatchDataType[]) => void;
+  }
+  
 
 interface SeasonsListDataType {
     id: number;
@@ -155,7 +160,7 @@ text-align: center;
 //////////////////   MAIN COMPONENT   //////////////////////
 ////////////////////////////////////////////////////////////
 
-const MatchFilter = () => {
+const MatchFilter: React.FC<MatchFilterProps> = ({ onFilterChange }) => {
 
     const [formData, setFormData] = useState({
         selectedSeason: '24',
@@ -207,8 +212,8 @@ const MatchFilter = () => {
         setFormData({ ...formData, selectedTeam: event.target.value });
     };
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
         try {
             const response = await fetch(`${API_BASE_URL}/api/stats/matchsubmit/${formData.selectedSeason}/${formData.selectedTeam}/${formData.selectedLeague}`, {
@@ -228,7 +233,7 @@ const MatchFilter = () => {
                 let data = await response.json();
                 console.log(data);
                 console.log('Formulaire soumis avec succès');
-                window.location.reload();
+                onFilterChange(data);
             } else {
                 console.error('Erreur lors de la soumission du formulaire');
             }
