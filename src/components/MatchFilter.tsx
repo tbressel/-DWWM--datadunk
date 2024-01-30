@@ -228,6 +228,7 @@ const MatchFilter = () => {
                 let data = await response.json();
                 console.log(data);
                 console.log('Formulaire soumis avec succès');
+                window.location.reload();
             } else {
                 console.error('Erreur lors de la soumission du formulaire');
             }

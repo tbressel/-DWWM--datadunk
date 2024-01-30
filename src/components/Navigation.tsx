@@ -98,7 +98,7 @@ interface NavigationProps {
 };
 
 
-interface  NavbarDataType {
+interface NavbarDataType {
     [key: string]: {
         icon: string;
         name: string;
@@ -151,12 +151,12 @@ const Navigation = (props: NavigationProps) => {
                 <H1>DATADUNK</H1>
                 <Menu>
                     {Object.keys(navigationData).map(key => (
-                            <NavLink to={navigationData[key].path}>
-                        <Li key={key} onClick={props.onCloseMenu}>
-                            <Img className={key} src={`assets/images/icons/${navigationData[key].icon}`} alt="" />
+                        <NavLink key={key} to={navigationData[key].path} onClick={props.onCloseMenu}>
+                            <Li>
+                                <Img className={key} src={`assets/images/icons/${navigationData[key].icon}`} alt="" />
                                 <MenuItem className='menu-item'>{navigationData[key].name}</MenuItem>
-                        </Li>
-                            </NavLink>
+                            </Li>
+                        </NavLink>
                     ))}
 
                     {

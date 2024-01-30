@@ -210,7 +210,7 @@ statApp.post('/matchsubmit/:season/:team/:league', async (req, res) => {
                     fg.id_season = ? AND (g.teamIdHome = ? OR g.teamIdVisitor = ?) AND l.id = ?
                 ORDER BY
                     game_date DESC
-                LIMIT 10;`;
+                `;
 
                 pool.query(sql, [season, team, team, league], (error, results) => {
                     if (error) {
