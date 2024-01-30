@@ -151,12 +151,12 @@ const Navigation = (props: NavigationProps) => {
                 <H1>DATADUNK</H1>
                 <Menu>
                     {Object.keys(navigationData).map(key => (
+                            <NavLink to={navigationData[key].path}>
                         <Li key={key} onClick={props.onCloseMenu}>
                             <Img className={key} src={`assets/images/icons/${navigationData[key].icon}`} alt="" />
-                            <NavLink to={navigationData[key].path}>
                                 <MenuItem className='menu-item'>{navigationData[key].name}</MenuItem>
-                            </NavLink>
                         </Li>
+                            </NavLink>
                     ))}
 
                     {

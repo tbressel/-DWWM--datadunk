@@ -12,7 +12,7 @@ import { API_BASE_URL } from '../config';
 interface SeasonsListDataType {
     id: number;
     season_field: string;
-   
+
 }
 interface TeamsListDataType {
     id: number;
@@ -161,13 +161,13 @@ const MatchFilter = () => {
         selectedSeason: '24',
         selectedLeague: '1',
         selectedTeam: '1',
-      });
-      
-      const [seasonsList, setSeasonsList] = useState<SeasonsListDataType[]>([]);
-      const [teamsList, setTeamsList] = useState<TeamsListDataType[]>([]);
-      const [leaguesList, setLeaguesList] = useState<LeaguesListDataType[]>([]);
-      const [showForm, setShowForm] = useState(false);
-      const [toggleButton, setToggleButton] = useState(false);
+    });
+
+    const [seasonsList, setSeasonsList] = useState<SeasonsListDataType[]>([]);
+    const [teamsList, setTeamsList] = useState<TeamsListDataType[]>([]);
+    const [leaguesList, setLeaguesList] = useState<LeaguesListDataType[]>([]);
+    const [showForm, setShowForm] = useState(false);
+    const [toggleButton, setToggleButton] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -175,18 +175,18 @@ const MatchFilter = () => {
                 const responseSeasons = await fetch(`${API_BASE_URL}/api/forms/seasons_list`);
                 const responseTeams = await fetch(`${API_BASE_URL}/api/forms/teams_list`);
                 const responseLeagues = await fetch(`${API_BASE_URL}/api/forms/leagues_list`);
-                
+
                 let dataSeasons = await responseSeasons.json();
-                let dataTeams = await responseTeams.json(); 
-                let dataLeagues = await responseLeagues.json(); 
-               
+                let dataTeams = await responseTeams.json();
+                let dataLeagues = await responseLeagues.json();
+
                 setSeasonsList(dataSeasons);
-                setTeamsList(dataTeams); 
-                setLeaguesList(dataLeagues); 
-               
-                console.log('Liste des saisons : ',dataSeasons);
-                console.log('Liste des équipes : ',dataTeams);
-                console.log('Liste des ligues : ',dataLeagues); 
+                setTeamsList(dataTeams);
+                setLeaguesList(dataLeagues);
+
+                console.log('Liste des saisons : ', dataSeasons);
+                console.log('Liste des équipes : ', dataTeams);
+                console.log('Liste des ligues : ', dataLeagues);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -197,45 +197,45 @@ const MatchFilter = () => {
 
     const handleOptionSeason = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setFormData({ ...formData, selectedSeason: event.target.value });
-      };
-    
-      const handleOptionLeague = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    };
+
+    const handleOptionLeague = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setFormData({ ...formData, selectedLeague: event.target.value });
-      };
-    
-      const handleOptionTeam = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    };
+
+    const handleOptionTeam = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setFormData({ ...formData, selectedTeam: event.target.value });
-      };
+    };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-      
+
         try {
-          const response = await fetch(`${API_BASE_URL}/api/stats/matchsubmit`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              selectedSeason: formData.selectedSeason,
-              selectedLeague: formData.selectedLeague,
-              selectedTeam: formData.selectedTeam,
-              
-            }),
-          });
-      
-          if (response.ok) {
-            let data = await response.json();
-            console.log(data);
-            console.log('Formulaire soumis avec succès');
-          } else {
-            console.error('Erreur lors de la soumission du formulaire');
-          }
+            const response = await fetch(`${API_BASE_URL}/api/stats/matchsubmit/${formData.selectedSeason}/${formData.selectedTeam}/${formData.selectedLeague}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    selectedSeason: formData.selectedSeason,
+                    selectedLeague: formData.selectedLeague,
+                    selectedTeam: formData.selectedTeam,
+
+                }),
+            });
+
+            if (response.ok) {
+                let data = await response.json();
+                console.log(data);
+                console.log('Formulaire soumis avec succès');
+            } else {
+                console.error('Erreur lors de la soumission du formulaire');
+            }
         } catch (error) {
-          console.error('Erreur lors de la soumission du formulaire:', error);
+            console.error('Erreur lors de la soumission du formulaire:', error);
         }
-      };
-      
+    };
+
 
     const handleToggleForm = () => {
         setShowForm(!showForm);
@@ -266,34 +266,34 @@ const MatchFilter = () => {
 
             {showForm && (
                 <FilterForm onSubmit={handleSubmit}>
-                {/* <FilterInput type="text" value={inputValue} onChange={handleInputChange} /> */}
+                    {/* <FilterInput type="text" value={inputValue} onChange={handleInputChange} /> */}
 
-                <FilterSelect value={formData.selectedTeam} onChange={handleOptionTeam}>
-                    {teamsList.map((team) => (
-                        <option key={team.id} value={team.id}>
-                            {team.team_field}
-                        </option>
-                    ))}
-                </FilterSelect>
+                    <FilterSelect value={formData.selectedTeam} onChange={handleOptionTeam}>
+                        {teamsList.map((team) => (
+                            <option key={team.id} value={team.id}>
+                                {team.team_field}
+                            </option>
+                        ))}
+                    </FilterSelect>
 
-                <FilterSelect value={formData.selectedLeague} onChange={handleOptionLeague}>
-                {leaguesList.map((league) => (
-                        <option key={league.id} value={league.id}>
-                            {league.league_field}
-                        </option>
-                    ))}
-                </FilterSelect>
+                    <FilterSelect value={formData.selectedLeague} onChange={handleOptionLeague}>
+                        {leaguesList.map((league) => (
+                            <option key={league.id} value={league.id}>
+                                {league.league_field}
+                            </option>
+                        ))}
+                    </FilterSelect>
 
-                <FilterSelect value={formData.selectedSeason} onChange={handleOptionSeason}>
-                    {seasonsList.map((season) => (
-                        <option key={season.id} value={season.id}>
-                            {season.season_field}
-                        </option>
-                    ))}
-                </FilterSelect>
+                    <FilterSelect value={formData.selectedSeason} onChange={handleOptionSeason}>
+                        {seasonsList.map((season) => (
+                            <option key={season.id} value={season.id}>
+                                {season.season_field}
+                            </option>
+                        ))}
+                    </FilterSelect>
 
-                <FilterButton type="submit">Valider</FilterButton>
-            </FilterForm>
+                    <FilterButton type="submit">Valider</FilterButton>
+                </FilterForm>
             )}
         </FilterContainer>
     );

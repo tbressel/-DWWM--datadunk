@@ -46,13 +46,13 @@ const NavbarWrapper = styled.div`
         position: fixed;
         width: 100%;
         z-index: 1;
-        
-        @media screen and (min-width: 768px) {
+                @media screen and (min-width: 768px) {
             align-items: center;
             padding-top: 0px;
             padding-bottom: 0px;
 
         }
+
 `;
 const BurgerContainer = styled.div`
     cursor: pointer;
