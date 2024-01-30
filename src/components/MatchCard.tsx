@@ -23,6 +23,7 @@ import { MatchDataType } from '../interfaces/types';
          align-items: center;
          /* min-width: 450px;
          max-width: 450px; */
+         height: fit-content;
          border-radius: 10px;
          background-color: ${colors.violet1};
          /* padding: 5px 20px 5px 20px; */

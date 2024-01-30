@@ -1,12 +1,14 @@
 const express = require('express');
 const statApp = express();
+statApp.use(express.json());
 
+
+const cors = require('cors');
+statApp.use(cors());
 
 const mysql = require('mysql');
-const cors = require('cors');
 
 require('dotenv').config();
-statApp.use(cors());
 
 const pool = mysql.createPool({
     connectionLimit: 10,
@@ -26,10 +28,6 @@ pool.getConnection((err, connection) => {
     console.log('Connected to MySQL');
     connection.release(); // Libère la connexion du pool après utilisation
 });
-
-
-
-
 
 // Endpoint pour récupérer les données de la table 'franchise'
 statApp.get('/franchise/2023', (req, res) => {
@@ -175,4 +173,24 @@ statApp.get('/formule', (req, res) => {
 });
 
 
+
+
+// Endpoint pour récupérer les 10 premières lignes de la table 'games'
+statApp.post('/matchsubmit', (req, res) => {
+    if (req.body &&
+         req.body.selectedSeason &&
+          req.body.selectedLeague &&
+           req.body.selectedTeam) {
+      const { selectedSeason, selectedLeague, selectedTeam } = req.body;
+            console.log(res)
+
+    
+
+
+
+    } else {
+      res.status(400).json({ error: 'Données de requête manquantes ou incorrectes.' });
+    }
+  });
+  
 module.exports = statApp;

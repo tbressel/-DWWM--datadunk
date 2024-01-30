@@ -53,7 +53,6 @@ const FilterForm = styled.form`
 
         }
 `;
-
 const FilterSelect = styled.select`
     padding: 15px;
     margin: 15px;
@@ -76,76 +75,65 @@ const SwitchText = styled.div`
     align-items: center;
     padding: 0px 5px;
 `;
-
 const ButtonContainer = styled.div`
-    display: inline-flex;
+    display: flex;
     height: 28px;
     padding: 2px;
-    justify-content: center;
-    align-items: center;
-    flex-shrink: 0;
     border-radius: 9px;
-    background: var(--Violet-2, #CFCBE1);
+    background: ${colors.violet2};
 `;
-
-
-
 const ButtonLeft = styled.div`
     display: flex;
-    padding: 3px 11px;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    align-self: stretch;
+    padding: 3px 10px;
     border-radius: 7px;
-    border: 0.5px solid rgba(0, 0, 0, 0.04);
-    background: var(--Violet-1, #F3F2F8);
-    box-shadow: 0px 3px 1px 0px rgba(0, 0, 0, 0.04), 0px 3px 8px 0px rgba(0, 0, 0, 0.12);
+    transition: 300ms ease-in-out;
+
+
+    &.active {
+        border: 0.5px solid rgba(0, 0, 0, 0.04);
+        background: ${colors.violet1};
+        box-shadow: 0px 3px 1px 0px rgba(0, 0, 0, 0.04), 0px 3px 8px 0px rgba(0, 0, 0, 0.12);
+        font-family: 'Barlow Bold';
+        transition: 300ms ease-in-out;
+    }
 
 p {
     display: flex;
     width: 40px;
     flex-direction: column;
     justify-content: center;
-    align-self: stretch;
-    overflow: hidden;
-    color: var(--Violet-4, #4B4375);
     text-align: center;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-family: 'Barlow Bold';
     font-size: 13px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 18px;
 }
 `;
-
 const ButtonRight = styled.div`
     display: flex;
     padding: 3px 10px;
-    align-items: center;
-    align-self: stretch;
+    border-radius: 7px;
+    font-family: 'Barlow Regular';
+    transition: 300ms ease-in-out;
+
+
+    &.active {
+        border: 0.5px solid rgba(0, 0, 0, 0.04);
+        background: ${colors.violet1};
+        box-shadow: 0px 3px 1px 0px rgba(0, 0, 0, 0.04), 0px 3px 8px 0px rgba(0, 0, 0, 0.12);
+        font-family: 'Barlow Bold';
+        transition: 300ms ease-in-out;
+
+    }
 
 p {
     display: flex;
     width: 47px;
     flex-direction: column;
     justify-content: center;
-    align-self: stretch;
-    overflow: hidden;
-    color: var(--Violet-5, #110F1A);
     text-align: center;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-family: 'Barlow Regular';
     font-size: 13px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 18px;
+
+
 }
 `;
-
 const FilterButton = styled.button` 
 text-align: center;
   border-radius: 50%;
@@ -168,17 +156,18 @@ text-align: center;
 ////////////////////////////////////////////////////////////
 
 const MatchFilter = () => {
-    const [seasonsList, setSeasonsList] = useState<SeasonsListDataType[]>([]);
-    const [teamsList, setTeamsList] = useState<TeamsListDataType[]>([]); // Ajout de la liste des équipes
-    const [leaguesList, setLeaguesList] = useState<LeaguesListDataType[]>([]); // Ajout de la liste des équipes
 
-    const [selectedSeason, setSelectedSeason] = useState('');
-    const [selectedLeague, setSelectedLeague] = useState('');
-    const [selectedTeam, setSelectedTeam] = useState('');
-
-    const [inputValue, setInputValue] = useState('');
-
-    const [showForm, setShowForm] = useState(false);
+    const [formData, setFormData] = useState({
+        selectedSeason: '24',
+        selectedLeague: '1',
+        selectedTeam: '1',
+      });
+      
+      const [seasonsList, setSeasonsList] = useState<SeasonsListDataType[]>([]);
+      const [teamsList, setTeamsList] = useState<TeamsListDataType[]>([]);
+      const [leaguesList, setLeaguesList] = useState<LeaguesListDataType[]>([]);
+      const [showForm, setShowForm] = useState(false);
+      const [toggleButton, setToggleButton] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -186,12 +175,15 @@ const MatchFilter = () => {
                 const responseSeasons = await fetch(`${API_BASE_URL}/api/forms/seasons_list`);
                 const responseTeams = await fetch(`${API_BASE_URL}/api/forms/teams_list`);
                 const responseLeagues = await fetch(`${API_BASE_URL}/api/forms/leagues_list`);
+                
                 let dataSeasons = await responseSeasons.json();
                 let dataTeams = await responseTeams.json(); 
                 let dataLeagues = await responseLeagues.json(); 
+               
                 setSeasonsList(dataSeasons);
                 setTeamsList(dataTeams); 
                 setLeaguesList(dataLeagues); 
+               
                 console.log('Liste des saisons : ',dataSeasons);
                 console.log('Liste des équipes : ',dataTeams);
                 console.log('Liste des ligues : ',dataLeagues); 
@@ -204,42 +196,53 @@ const MatchFilter = () => {
     }, []);
 
     const handleOptionSeason = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedSeason(event.target.value);
-    };
-    const handleOptionLeague = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedLeague(event.target.value);
-    };
-    const handleOptionTeam = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedTeam(event.target.value);
-    };
+        setFormData({ ...formData, selectedSeason: event.target.value });
+      };
+    
+      const handleOptionLeague = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setFormData({ ...formData, selectedLeague: event.target.value });
+      };
+    
+      const handleOptionTeam = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setFormData({ ...formData, selectedTeam: event.target.value });
+      };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-
+      
         try {
-            const response = await fetch(`${API_BASE_URL}/api/stats/games/${selectedSeason}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (response.ok) {
-                let data = await response.json();
-                setSelectedSeason(data);
-                console.log(data);
-                console.log('Formulaire soumis avec succès');
-            } else {
-                console.error('Erreur lors de la soumission du formulaire');
-            }
+          const response = await fetch(`${API_BASE_URL}/api/stats/matchsubmit`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              selectedSeason: formData.selectedSeason,
+              selectedLeague: formData.selectedLeague,
+              selectedTeam: formData.selectedTeam,
+              
+            }),
+          });
+      
+          if (response.ok) {
+            let data = await response.json();
+            console.log(data);
+            console.log('Formulaire soumis avec succès');
+          } else {
+            console.error('Erreur lors de la soumission du formulaire');
+          }
         } catch (error) {
-            console.error('Erreur lors de la soumission du formulaire:', error);
+          console.error('Erreur lors de la soumission du formulaire:', error);
         }
-    };
+      };
+      
 
     const handleToggleForm = () => {
         setShowForm(!showForm);
+        setToggleButton(!toggleButton);
     };
+
+
 
     return (
         <FilterContainer>
@@ -248,12 +251,12 @@ const MatchFilter = () => {
                     <p>Filtres :</p>
                 </SwitchText>
                 <ButtonContainer>
-                    <ButtonLeft>
+                    <ButtonLeft className={toggleButton ? 'active' : ''}>
                         <p>
                             On
                         </p>
                     </ButtonLeft>
-                    <ButtonRight>
+                    <ButtonRight className={toggleButton ? '' : 'active'}>
                         <p>
                             Off
                         </p>
@@ -265,7 +268,7 @@ const MatchFilter = () => {
                 <FilterForm onSubmit={handleSubmit}>
                 {/* <FilterInput type="text" value={inputValue} onChange={handleInputChange} /> */}
 
-                <FilterSelect value={selectedTeam} onChange={handleOptionTeam}>
+                <FilterSelect value={formData.selectedTeam} onChange={handleOptionTeam}>
                     {teamsList.map((team) => (
                         <option key={team.id} value={team.id}>
                             {team.team_field}
@@ -273,7 +276,7 @@ const MatchFilter = () => {
                     ))}
                 </FilterSelect>
 
-                <FilterSelect value={selectedLeague} onChange={handleOptionLeague}>
+                <FilterSelect value={formData.selectedLeague} onChange={handleOptionLeague}>
                 {leaguesList.map((league) => (
                         <option key={league.id} value={league.id}>
                             {league.league_field}
@@ -281,7 +284,7 @@ const MatchFilter = () => {
                     ))}
                 </FilterSelect>
 
-                <FilterSelect value={selectedSeason} onChange={handleOptionSeason}>
+                <FilterSelect value={formData.selectedSeason} onChange={handleOptionSeason}>
                     {seasonsList.map((season) => (
                         <option key={season.id} value={season.id}>
                             {season.season_field}
