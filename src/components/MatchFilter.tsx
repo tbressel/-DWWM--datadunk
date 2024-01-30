@@ -164,8 +164,8 @@ const MatchFilter: React.FC<MatchFilterProps> = ({ onFilterChange }) => {
 
     const [formData, setFormData] = useState({
         selectedSeason: '24',
-        selectedLeague: '1',
-        selectedTeam: '1',
+        selectedLeague: '0',
+        selectedTeam: '0',
     });
 
     const [seasonsList, setSeasonsList] = useState<SeasonsListDataType[]>([]);
@@ -275,6 +275,7 @@ const MatchFilter: React.FC<MatchFilterProps> = ({ onFilterChange }) => {
                     {/* <FilterInput type="text" value={inputValue} onChange={handleInputChange} /> */}
 
                     <FilterSelect value={formData.selectedTeam} onChange={handleOptionTeam}>
+                    <option value="0">Sélection d'une équipe</option>
                         {teamsList.map((team) => (
                             <option key={team.id} value={team.id}>
                                 {team.team_field}
@@ -283,6 +284,7 @@ const MatchFilter: React.FC<MatchFilterProps> = ({ onFilterChange }) => {
                     </FilterSelect>
 
                     <FilterSelect value={formData.selectedLeague} onChange={handleOptionLeague}>
+                    <option value="0">Sélection d'une ligue</option>
                         {leaguesList.map((league) => (
                             <option key={league.id} value={league.id}>
                                 {league.league_field}
