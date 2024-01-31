@@ -133,7 +133,6 @@ const MatchScore = styled.div`
 //////////////////   MAIN COMPONENT   //////////////////////
 ////////////////////////////////////////////////////////////
 
-
 const MatchCard: React.FC<{ match: MatchDataType; onSelectMatch: (id: number) => void }> = (props) => {
 
 
@@ -163,12 +162,6 @@ const MatchCard: React.FC<{ match: MatchDataType; onSelectMatch: (id: number) =>
         props.onSelectMatch(id_games);
       };
     
-
-
-
-
-
-
 
     return (
         <>

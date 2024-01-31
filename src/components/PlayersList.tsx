@@ -31,9 +31,7 @@ const PlayersListContainer = styled.div`
 //////////////////   MAIN COMPONENT   //////////////////////
 ////////////////////////////////////////////////////////////
 
-const PlayersList: React.FC< {players: PlayerDataType[]} > = (props) => {
-
-    
+const PlayersList: React.FC< {players: PlayerDataType[]} > = (props) => {    
     return (
         <PlayersListContainer>
             {props.players.map((player, index) => (

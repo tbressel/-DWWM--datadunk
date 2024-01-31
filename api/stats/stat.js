@@ -4,6 +4,7 @@ statApp.use(express.json());
 
 
 const cors = require('cors');
+
 statApp.use(cors());
 
 const mysql = require('mysql');
@@ -173,53 +174,16 @@ statApp.get('/formule', (req, res) => {
 });
 
 
-
 statApp.post('/matchsubmit/:season/:team/:league', async (req, res) => {
     const { season, team, league } = req.params;
 
-    if (season !== '0' && team === '0' && league === '0') {
-        const sql = `
-        SELECT DISTINCT
-            g.id AS 'id_games',
-            g.game_date AS 'game_date',
-            g.game_day AS 'game_day',
-            l.league_logo AS 'league_logo',
-            l.id AS 'league_id',
-            g.teamIdHome AS 'home_franchise_id',
-            f_home.franchise_name AS 'home_franchise_name',
-            f_home.franchise_logo AS 'home_franchise_logo',
-            g.teamHomeScore AS 'home_score',
-            g.teamIdVisitor AS 'visitor_franchise_id',
-            f_visitor.franchise_name AS 'visitor_franchise_name',
-            f_visitor.franchise_logo AS 'visitor_franchise_logo',
-            g.teamVisitorScore AS 'visitor_score'
-        FROM
-            games g
-        JOIN
-            franchise f_home ON g.teamIdHome = f_home.id
-        JOIN
-            franchise f_visitor ON g.teamIdVisitor = f_visitor.id
-        JOIN
-            franchise_game fg ON fg.id_games = g.id 
-        JOIN
-            league l ON fg.id_league = l.id
-        WHERE
-            fg.id_season = ?
-        ORDER BY
-            game_date DESC
-        `;
+        var params = [];
 
-        pool.query(sql, [season], (error, results) => {
-            if (error) {
-                console.error(error);
-                res.status(500).json({
-                    message: 'Error occurred',
-                    status: 'Failure'
-                });
-            } else {
-                res.json(results);
-            }});
-    } else if (season !== '0' && team === '0' && league !== '0') {
+        if(season != 0) {params.push(season)}  
+        if(team != 0) {params.push(team)}  
+        if(team != 0) {params.push(team)}  
+        if(league != 0) {params.push(league)}  
+        
         const sql = `
                 SELECT DISTINCT
                     g.id AS 'id_games',
@@ -245,55 +209,15 @@ statApp.post('/matchsubmit/:season/:team/:league', async (req, res) => {
                     franchise_game fg ON fg.id_games = g.id 
                 JOIN
                     league l ON fg.id_league = l.id
-                WHERE
-                    fg.id_season = ?  AND l.id = ?
+                WHERE 1 = 1
+                    ${season != 0 ? 'AND fg.id_season = ?' : ''}
+                    ${team != 0 ? 'AND (g.teamIdHome = ? OR g.teamIdVisitor = ?)' : ''}
+                    ${league != 0 ? 'AND l.id = ?' : ''}
                 ORDER BY
                     game_date DESC
                 `;
 
-                pool.query(sql, [season, league], (error, results) => {
-                    if (error) {
-                        console.error(error);
-                        res.status(500).json({
-                            message: 'Error occurred',
-                            status: 'Failure'
-                        });
-                    } else {
-                        res.json(results);
-                    }});
-    } else if (season !== '0' && team !== '0' && league !== '0') {
-        const sql = `
-                SELECT DISTINCT
-                    g.id AS 'id_games',
-                    g.game_date AS 'game_date',
-                    g.game_day AS 'game_day',
-                    l.league_logo AS 'league_logo',
-                    l.id AS 'league_id',
-                    g.teamIdHome AS 'home_franchise_id',
-                    f_home.franchise_name AS 'home_franchise_name',
-                    f_home.franchise_logo AS 'home_franchise_logo',
-                    g.teamHomeScore AS 'home_score',
-                    g.teamIdVisitor AS 'visitor_franchise_id',
-                    f_visitor.franchise_name AS 'visitor_franchise_name',
-                    f_visitor.franchise_logo AS 'visitor_franchise_logo',
-                    g.teamVisitorScore AS 'visitor_score'
-                FROM
-                    games g
-                JOIN
-                    franchise f_home ON g.teamIdHome = f_home.id
-                JOIN
-                    franchise f_visitor ON g.teamIdVisitor = f_visitor.id
-                JOIN
-                    franchise_game fg ON fg.id_games = g.id 
-                JOIN
-                    league l ON fg.id_league = l.id
-                WHERE
-                    fg.id_season = ? AND (g.teamIdHome = ? OR g.teamIdVisitor = ?) AND l.id = ?
-                ORDER BY
-                    game_date DESC
-                `;
-
-                pool.query(sql, [season, team, team, league], (error, results) => {
+                pool.query(sql, params, (error, results) => {
                     if (error) {
                         console.error(error);
                         res.status(500).json({
@@ -305,73 +229,11 @@ statApp.post('/matchsubmit/:season/:team/:league', async (req, res) => {
                     }});
 
                     
-    }   else if (season !== '0' && team !== '0' && league === '0') {
-        const sql = `
-                SELECT DISTINCT
-                    g.id AS 'id_games',
-                    g.game_date AS 'game_date',
-                    g.game_day AS 'game_day',
-                    l.league_logo AS 'league_logo',
-                    l.id AS 'league_id',
-                    g.teamIdHome AS 'home_franchise_id',
-                    f_home.franchise_name AS 'home_franchise_name',
-                    f_home.franchise_logo AS 'home_franchise_logo',
-                    g.teamHomeScore AS 'home_score',
-                    g.teamIdVisitor AS 'visitor_franchise_id',
-                    f_visitor.franchise_name AS 'visitor_franchise_name',
-                    f_visitor.franchise_logo AS 'visitor_franchise_logo',
-                    g.teamVisitorScore AS 'visitor_score'
-                FROM
-                    games g
-                JOIN
-                    franchise f_home ON g.teamIdHome = f_home.id
-                JOIN
-                    franchise f_visitor ON g.teamIdVisitor = f_visitor.id
-                JOIN
-                    franchise_game fg ON fg.id_games = g.id 
-                JOIN
-                    league l ON fg.id_league = l.id
-                WHERE
-                    fg.id_season = ? AND (g.teamIdHome = ? OR g.teamIdVisitor = ?)
-                ORDER BY
-                    game_date DESC
-                `;
-
-                pool.query(sql, [season, team, team], (error, results) => {
-                    if (error) {
-                        console.error(error);
-                        res.status(500).json({
-                            message: 'Error occurred',
-                            status: 'Failure'
-                        });
-                    } else {
-                        res.json(results);
-                    }});
-
+   
                     
-    }   else {
-        res.status(400).json({ error: 'Combinaison de paramètres non gérée.' });
-    }
+     
+   
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // Endpoint pour récupérer les 10 premières lignes de la table 'games'

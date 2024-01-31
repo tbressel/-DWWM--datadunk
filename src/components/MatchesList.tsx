@@ -1,7 +1,10 @@
 ////////////////////////////////////////////////////////
 //////////////////   IMPORTATIONS   ////////////////////
 ////////////////////////////////////////////////////////
+
+// React importations
 import React, { useState, useEffect } from 'react';
+
 // Style importations
 import styled from 'styled-components';
 import { colors } from '../colors';
@@ -38,10 +41,10 @@ const MatchesList: React.FC<{ matches: MatchDataType[]; onSelectMatch: (id: numb
       setFilteredMatches(props.matches);
     }, [props.matches]);
   
-    const handleFilterChange = (filteredMatches: MatchDataType[]) => {
-      // Mettez à jour les matches filtrés lorsqu'ils changent
-      setFilteredMatches(filteredMatches);
-    };
+    // const handleFilterChange = (filteredMatches: MatchDataType[]) => {
+    //   // Mettez à jour les matches filtrés lorsqu'ils changent
+    //   setFilteredMatches(filteredMatches);
+    // };
   
     return (
       <MatchListContainer>

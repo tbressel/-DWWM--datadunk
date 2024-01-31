@@ -7,6 +7,7 @@ const validator = require('validator');
 
 // Cors library used for cross-origin resource sharing
 const cors = require('cors');
+
 userApp.use(cors());
 
 // Dotenv library used for environment variables

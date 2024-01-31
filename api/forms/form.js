@@ -2,11 +2,12 @@ const express = require('express');
 const formApp = express();
 
 
-const mysql = require('mysql');
 const cors = require('cors');
 
-require('dotenv').config();
 formApp.use(cors());
+
+const mysql = require('mysql');
+require('dotenv').config();
 
 const pool = mysql.createPool({
     connectionLimit: 10,

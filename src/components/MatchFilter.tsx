@@ -154,8 +154,7 @@ text-align: center;
         }
 
 
-`
-
+`;
 ////////////////////////////////////////////////////////////
 //////////////////   MAIN COMPONENT   //////////////////////
 ////////////////////////////////////////////////////////////
@@ -166,7 +165,7 @@ const MatchFilter: React.FC<MatchFilterProps> = ({ onFilterChange }) => {
         selectedSeason: '24',
         selectedLeague: '0',
         selectedTeam: '0',
-    });
+    }); 
 
     const [seasonsList, setSeasonsList] = useState<SeasonsListDataType[]>([]);
     const [teamsList, setTeamsList] = useState<TeamsListDataType[]>([]);
@@ -201,9 +200,14 @@ const MatchFilter: React.FC<MatchFilterProps> = ({ onFilterChange }) => {
     }, []);
 
     const handleOptionSeason = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setFormData({ ...formData, selectedSeason: event.target.value });
+        setFormData(prevFormData => {
+            return {
+                selectedSeason: event.target.value,
+                selectedLeague: prevFormData.selectedLeague,
+                selectedTeam: prevFormData.selectedTeam
+            };
+        });
     };
-
     const handleOptionLeague = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setFormData({ ...formData, selectedLeague: event.target.value });
     };
@@ -212,11 +216,13 @@ const MatchFilter: React.FC<MatchFilterProps> = ({ onFilterChange }) => {
         setFormData({ ...formData, selectedTeam: event.target.value });
     };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
         try {
-            const response = await fetch(`${API_BASE_URL}/api/stats/matchsubmit/${formData.selectedSeason}/${formData.selectedTeam}/${formData.selectedLeague}`, {
+            const response = await fetch(`${API_BASE_URL}/api/stats/matchsubmit/
+            ${formData.selectedSeason}/
+            ${formData.selectedTeam}/
+            ${formData.selectedLeague}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -225,14 +231,13 @@ const MatchFilter: React.FC<MatchFilterProps> = ({ onFilterChange }) => {
                     selectedSeason: formData.selectedSeason,
                     selectedLeague: formData.selectedLeague,
                     selectedTeam: formData.selectedTeam,
-
                 }),
             });
 
             if (response.ok) {
                 let data = await response.json();
-                console.log(data);
-                console.log('Formulaire soumis avec succès');
+                console.log('Données reçues : ', data);
+                console.log('Formulaire OK');
                 onFilterChange(data);
             } else {
                 console.error('Erreur lors de la soumission du formulaire');
@@ -272,15 +277,13 @@ const MatchFilter: React.FC<MatchFilterProps> = ({ onFilterChange }) => {
 
             {showForm && (
                 <FilterForm onSubmit={handleSubmit}>
-                    {/* <FilterInput type="text" value={inputValue} onChange={handleInputChange} /> */}
-
                     <FilterSelect value={formData.selectedTeam} onChange={handleOptionTeam}>
                     <option value="0">Sélection d'une équipe</option>
                         {teamsList.map((team) => (
                             <option key={team.id} value={team.id}>
                                 {team.team_field}
                             </option>
-                        ))}
+                        ))};
                     </FilterSelect>
 
                     <FilterSelect value={formData.selectedLeague} onChange={handleOptionLeague}>
@@ -289,7 +292,7 @@ const MatchFilter: React.FC<MatchFilterProps> = ({ onFilterChange }) => {
                             <option key={league.id} value={league.id}>
                                 {league.league_field}
                             </option>
-                        ))}
+                        ))};
                     </FilterSelect>
 
                     <FilterSelect value={formData.selectedSeason} onChange={handleOptionSeason}>
@@ -297,7 +300,7 @@ const MatchFilter: React.FC<MatchFilterProps> = ({ onFilterChange }) => {
                             <option key={season.id} value={season.id}>
                                 {season.season_field}
                             </option>
-                        ))}
+                        ))};
                     </FilterSelect>
 
                     <FilterButton type="submit">Valider</FilterButton>
