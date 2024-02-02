@@ -203,8 +203,16 @@ ORDER BY
 
 
 
-
-
+--
+-- LISTE DE TOUTES LES STATS DES JOUEURS DES DEUX EQUIPES D'UN MATCH
+--
+SELECT * 
+FROM game_stats 
+WHERE id IN ( 
+    SELECT id_game_stats 
+    FROM to_play 
+    WHERE id_games = "26501") 
+    ORDER BY `id` ASC;
 
 
 

@@ -6,7 +6,6 @@ export type NavigationDataType = {
   };
 }
 
-
 export type TeamDataType = {
       season_id: number;
       franchise_id: number;
@@ -94,4 +93,36 @@ export interface NotificationDataType {
 export interface SeasonsListDataType {
   id: number;
   season_field: string;
+}
+
+
+export interface MatchSummaryDataType {
+ 
+  id : number;
+  id_franchise : number;
+  fiveD : number;
+  min: number;
+  pts: number;
+  twoR: number;
+  twoT: number;
+  twoPerc: number;
+  threeR: number;
+  threeT: number;
+  threetPerc: number;
+  lr: number;
+  lt: number;
+  lPerc: number;
+  ro: number;
+  rt: number;
+  rd: number;
+  pd: number;
+  ct: number;
+  cs: number;
+  in: number;
+  bp: number;
+  fte: number;
+  fpr: number;
+  eval: number;
+  plusMinus: number;
+
 }

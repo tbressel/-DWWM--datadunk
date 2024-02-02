@@ -49,5 +49,34 @@
             "name": "Joueurs",
             "path": "/players"
         }
-    }
+    },
+
+    "matchsummary" : {
+        "Equipe": "Equipe",
+        "PTS": "Points marqués",
+        "OPP PTS": "Points adverses",
+        "FGM": "Paniers marqués (Field Goals Made)",
+        "FGA": "Tentatives de paniers (Field Goals Attempted)",
+        "FG%": "Pourcentage de réussite aux tirs (Field Goal Percentage)",
+        "2PM": "Paniers à deux points marqués",
+        "2PA": "Tentatives de paniers à deux points",
+        "2P%": "Pourcentage de réussite aux tirs à deux points",
+        "3PM": "Paniers à trois points marqués",
+        "3PA": "Tentatives de paniers à trois points",
+        "3P%": "Pourcentage de réussite aux tirs à trois points",
+        "FTM": "Lancers francs réussis",
+        "FTA": "Tentatives de lancers francs",
+        "FT%": "Pourcentage de réussite aux lancers francs",
+        "OREB": "Rebonds offensifs",
+        "DREB": "Rebonds défensifs",
+        "REB": "Total des rebonds",
+        "AST": "Passes décisives (Assists)",
+        "TOV": "Balles perdues (Turnovers)",
+        "STL": "Interceptions (Steals)",
+        "BLK": "Contres (Blocks)",
+        "PF": "Fautes personnelles",
+        "PFD": "Fautes provoquées",
+        "EVAL": "Évaluation (efficacité statistique)"
+      }
+      
 }
