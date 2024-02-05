@@ -177,11 +177,13 @@ const ToolTips = styled.div`
     text-align: center;
 
     border-radius: 5px;
-    border: dotted 2px ${colors.bleu};
+
     width: 135px;
     height: 60px;
-    background-color: ${colors.gris1};
+    background-color: #d4d4d4;;
+    box-shadow: gray 2px 2px 5px;
     margin: 20px;
+    padding: 4px;
   }
 `
   
@@ -342,13 +344,13 @@ const MatchSummary: React.FC<{ matchId: string, matches: MatchDataType[] }> = (p
   const handleHeaderMouseOver = (header: string, event: React.MouseEvent<HTMLTableHeaderCellElement>) => {
     const tooltipContent: string = matchsummaryheaders[header];
     setTooltipContent(tooltipContent);
-    setTooltipPosition({ top: event.clientY-120, left: event.clientX });
+    setTooltipPosition({ top: event.clientY-110, left: event.clientX-80 });
   };
   
   const handleHeaderMouseOut = () => {
     // Reset tooltip content and position
-      setTooltipContent('');
-      setTooltipPosition({ top: 0, left: 0 });
+       setTooltipContent('');
+       setTooltipPosition({ top: 0, left: 0 });
   };
 
 
