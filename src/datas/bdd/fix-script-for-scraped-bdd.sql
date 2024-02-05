@@ -554,10 +554,12 @@ GROUP BY
 
 -- Aoute d'une photo par defaut dans toutes les ligne de player_photo
 UPDATE player
-SET player_photo = CONCAT("player-",player_firstname,player_name, '.png');
+SET player_photo = CONCAT("player-",player_firstname,player_name);
 
 
-
+-- Renommer les noms de la colonne player_photo en enlevant la particule ".png"
+-- UPDATE player
+-- SET player_photo = REPLACE(player_photo, '.png', '');
 
 
 -- Modifier le type de données des colonnes de DOUBLE(10,4) à INT ou DECIMAL (5,2)

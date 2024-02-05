@@ -8,7 +8,7 @@ const Players = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const responseStats = await fetch(`${API_BASE_URL}/api/stats/players/2023`);
+                const responseStats = await fetch(`${API_BASE_URL}/api/cards/players/2023`);
                 const statsData = await responseStats.json();
                 setPlayers(statsData);
                 console.log(statsData);

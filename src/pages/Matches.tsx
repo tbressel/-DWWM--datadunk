@@ -41,7 +41,7 @@ const Matches = () => {
   useEffect(() => {
     const fetchData = async ()   => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/stats/games/24`);
+        const response = await fetch(`${API_BASE_URL}/api/cards/games/24`);
         const data = await response.json();
         setMatches(data);
         console.log(data);

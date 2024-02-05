@@ -49,7 +49,6 @@ formApp.get('/seasons_list', (req, res) => {
         }
     });
 });
-
 formApp.get('/teams_list', (req, res) => {
 
     console.log('connected to season_list route');

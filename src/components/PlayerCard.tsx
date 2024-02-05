@@ -175,7 +175,7 @@ const PlayerCard: React.FC<{ player: PlayerDataType }> = (props) => {
                     </Name>
                 </div>
                 <PlayerImage>
-                    <BackPhoto bgphoto={`assets/images/players-2023-2024/${player_photo}`}></BackPhoto>
+                    <BackPhoto bgphoto={`assets/images/players-2023-2024/${player_photo}.webp`}></BackPhoto>
                 </PlayerImage>
             </PlayerCardContainer>
         </>

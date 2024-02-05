@@ -170,6 +170,9 @@ const MatchFilter: React.FC<MatchFilterProps> = ({ onFilterChange }) => {
     const [seasonsList, setSeasonsList] = useState<SeasonsListDataType[]>([]);
     const [teamsList, setTeamsList] = useState<TeamsListDataType[]>([]);
     const [leaguesList, setLeaguesList] = useState<LeaguesListDataType[]>([]);
+
+
+    
     const [showForm, setShowForm] = useState(false);
     const [toggleButton, setToggleButton] = useState(false);
 
@@ -219,7 +222,7 @@ const MatchFilter: React.FC<MatchFilterProps> = ({ onFilterChange }) => {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try {
-            const response = await fetch(`${API_BASE_URL}/api/stats/matchsubmit/
+            const response = await fetch(`${API_BASE_URL}/api/cards/matchsubmit/
             ${formData.selectedSeason}/
             ${formData.selectedTeam}/
             ${formData.selectedLeague}`, {

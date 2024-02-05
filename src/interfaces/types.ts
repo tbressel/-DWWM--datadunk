@@ -126,3 +126,41 @@ export interface MatchSummaryDataType {
   plusMinus: number;
 
 }
+export interface MatchEfficiencyDataType {
+ 
+  id : number;
+
+
+}
+
+export interface MatchFourfactorsDataType {
+ 
+  id : number;
+
+
+}
+export interface MatchShootingsuccessDataType {
+ 
+  id : number;
+
+
+}
+export interface MatchShootingdefenseDataType {
+ 
+  id : number;
+
+
+}
+
+export interface MatchReboundEfficiencyDataType {
+ 
+  id : number;
+
+
+}
+export interface MatchDefenseAttackDataType {
+ 
+  id : number;
+
+
+}

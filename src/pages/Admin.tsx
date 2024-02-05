@@ -5,27 +5,24 @@ import { LoginContext } from "../contexts/LoginContext";
 
 
 const Admin = () => {
-    
+
     const { user } = useContext(LoginContext);
 
-    
-    if (user?.status !== 2 ) {
+
+    if (user?.status !== 2) {
         return (
             <>
-            <h1>Vous n'avez pas les authorisation nécessaire pour acceder à cette page.</h1>
+                <h1>Vous n'avez pas les authorisation nécessaire pour acceder à cette page.</h1>
             </>
         )
-    } 
-   
-
-return (
-<>
+    }
 
 
-<UsersList/>
-
-</>
-)
+    return (
+        <>
+            <UsersList />
+        </>
+    )
 
 
 }

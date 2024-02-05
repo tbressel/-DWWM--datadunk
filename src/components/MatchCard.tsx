@@ -21,15 +21,12 @@ import { MatchDataType } from '../interfaces/types';
          display: flex;
          flex-direction: column;
          align-items: center;
-         /* min-width: 450px;
-         max-width: 450px; */
          height: fit-content;
          border-radius: 10px;
          background-color: ${colors.violet1};
-         /* padding: 5px 20px 5px 20px; */
          box-shadow: #d0d0d0 5px 5px 5px;
          transition: 200ms ease-in-out;
-         opacity: 0.7;
+         opacity: 0.9;
          @media screen and (min-width: 768px) {       
              cursor: pointer;
              &:hover {
