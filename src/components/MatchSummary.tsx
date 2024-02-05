@@ -19,7 +19,8 @@ import { MatchShootingdefenseDataType } from '../interfaces/types';
 import { MatchReboundEfficiencyDataType } from '../interfaces/types';
 import { MatchDefenseAttackDataType } from '../interfaces/types';
 
-import { matchsummary } from '../datas/lang/fr.json';
+import frJson from '../datas/lang/fr.json';
+
 
 ////////////////////////////////////////////////////////////
 //////////////////   STYLE COMPONENTS   ////////////////////
@@ -125,6 +126,7 @@ const HeaderTr = styled.tr`
   font-family: 'Barlow Bold';
   `
 const HeaderTh = styled.th`
+cursor: pointer;
       padding: 10px;
 white-space: nowrap;
     background-color: ${colors.gris1};
@@ -162,7 +164,27 @@ h2 {
 
 
 `;
+const ToolTips = styled.div`
 
+    display: none;
+
+  @media screen and (min-width: 768px) {
+    position: fixed;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    border-radius: 5px;
+    border: dotted 2px ${colors.bleu};
+    width: 135px;
+    height: 60px;
+    background-color: ${colors.gris1};
+    margin: 20px;
+  }
+`
+  
 ////////////////////////////////////////////////////////////
 //////////////////   MAIN COMPONENT   //////////////////////
 ////////////////////////////////////////////////////////////
@@ -184,8 +206,6 @@ const MatchSummary: React.FC<{ matchId: string, matches: MatchDataType[] }> = (p
   const [shootingdefense, setShootingdefense] = useState<MatchShootingdefenseDataType[]>([]);
   const [reboundefficiency, setReboundefficiency] = useState<MatchReboundEfficiencyDataType[]>([]);
   const [defenseattack, setDefenseattack] = useState<MatchDefenseAttackDataType[]>([]);
-
-  // console.log(matchsummary);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -210,9 +230,9 @@ const MatchSummary: React.FC<{ matchId: string, matches: MatchDataType[] }> = (p
   }, []);
 
 
-//////////////////////////////////////////////
-////////// STATISTIQUES GLOBALES /////////////
-//////////////////////////////////////////////
+  //////////////////////////////////////////////
+  ////////// STATISTIQUES GLOBALES /////////////
+  //////////////////////////////////////////////
   const summaryTableHeaders = ['Equipe', 'PTS', 'OPP PTS', 'FGM', 'FGA', 'FG%', '2PM', '2PA', '2P%', '3PM', '3PA', '3P%', 'FTM', 'FTA', 'FT%', 'OREB', 'DREB', 'REB', 'AST', 'TOV', 'STL', 'BLK', 'PF', 'PFD', 'EVAL'];
   let summaryTableDatas: any[] = [];
   if (summary[0] && matchsummary) {
@@ -262,54 +282,77 @@ const MatchSummary: React.FC<{ matchId: string, matches: MatchDataType[] }> = (p
       summary[1].eval],
     ];
   }
-////////////////////////////////////////////////////////////
-////////// EFFICACITE OFFENSIVES ET DEFENSIVES /////////////
-////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////
+  ////////// EFFICACITE OFFENSIVES ET DEFENSIVES /////////////
+  ////////////////////////////////////////////////////////////
   const efficiencyTableHeaders = ['Equipe', 'Poss', 'Action', 'ORtg', 'Floor%', 'DRtg', 'Stop%', 'NetRtg'];
   let efficiencyTableDatas: any[] = [];
   if (efficiency[0] && matchefficiency) {
     efficiencyTableDatas = [];
   }
-//////////////////////////////////
-////////// 4 FACTORS /////////////
-/////////////////////////////////
+  //////////////////////////////////
+  ////////// 4 FACTORS /////////////
+  /////////////////////////////////
   const fourfactorsTableHeaders = ['Equipe', 'eFG%', '2PM', '2PA', '2P%', '3PM', '3PA', '3P%', 'FTM', 'FTA', '%tir2P', '%tri3P'];
   let fourfactorsTableDatas: any[] = [];
   if (fourfactors[0] && matchfourfactors) {
     fourfactorsTableDatas = [];
   }
-/////////////////////////////////////////////
-////////// SUCCESS  AUX TIRES /////////////
-/////////////////////////////////////////////
+  /////////////////////////////////////////////
+  ////////// SUCCESS  AUX TIRES /////////////
+  /////////////////////////////////////////////
   const shootingsuccessTableHeaders = ['Equipe', 'eFG%', '2PM', '2PA', '2P%', '3PM', '3PA', '3P%', 'FTM', 'FTA', 'FT%', '%tir2P', '%tir3P'];
   let shootingsuccessTableDatas: any[] = [];
   if (shootingsuccess[0] && matchshootingsuccess) {
     shootingsuccessTableDatas = [];
   }
-/////////////////////////////////////////////
-////////// STATISTIQUES DEFENSE /////////////
-/////////////////////////////////////////////
+  /////////////////////////////////////////////
+  ////////// STATISTIQUES DEFENSE /////////////
+  /////////////////////////////////////////////
   const shootingdefenseTableHeaders = ['Equipe', 'eFG% adv', '2PM adv', '2PA adv', '2P% adv', '3PM adv', '3PA adv', '3P% adv', 'FTM adv', 'FTA adv', 'FT% adv', '%tirs2P adv', '%tirs3P adv'];
   let shootingdefenseTableDatas: any[] = [];
   if (shootingdefense[0] && matchshootingdefense) {
     shootingdefenseTableDatas = [];
   }
-//////////////////////////////////////
-////////// SUCCES REBOND /////////////
-//////////////////////////////////////
-  const reboundefficiencyTableHeaders = ['Equipe','OREB','OREB%','DREB','DREB%','REB','REB%'];
+  //////////////////////////////////////
+  ////////// SUCCES REBOND /////////////
+  //////////////////////////////////////
+  const reboundefficiencyTableHeaders = ['Equipe', 'OREB', 'OREB%', 'DREB', 'DREB%', 'REB', 'REB%'];
   let reboundefficiencyTableDatas: any[] = [];
   if (reboundefficiency[0] && matchreboundefficiency) {
     reboundefficiencyTableDatas = [];
   }
-///////////////////////////////////////////////////////
-////////// SUCCES OFFENVIVE ET DEFENSIVES /////////////
-///////////////////////////////////////////////////////
-  const defenseattackTableHeaders = ['Equipe','AST%','AST/TOV','3PA/Poss','FTA/Poss','STL%', 'BLK%'];
+  ///////////////////////////////////////////////////////
+  ////////// SUCCES OFFENVIVE ET DEFENSIVES /////////////
+  ///////////////////////////////////////////////////////
+  const defenseattackTableHeaders = ['Equipe', 'AST%', 'AST/TOV', '3PA/Poss', 'FTA/Poss', 'STL%', 'BLK%'];
   let defenseattackTableDatas: any[] = [];
   if (defenseattack[0] && matchdefenseattack) {
     defenseattackTableDatas = [];
   }
+
+
+  //////////////////////////////////////////////////////
+  ////////////////////   TOOL TIPS   ///////////////////
+  //////////////////////////////////////////////////////
+  const matchsummaryheaders: Record<string, string> = frJson.matchsummaryheaders;
+  const [tooltipContent, setTooltipContent] = useState<string>('');
+  const [tooltipPosition, setTooltipPosition] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
+
+  const handleHeaderMouseOver = (header: string, event: React.MouseEvent<HTMLTableHeaderCellElement>) => {
+    const tooltipContent: string = matchsummaryheaders[header];
+    setTooltipContent(tooltipContent);
+    setTooltipPosition({ top: event.clientY-120, left: event.clientX });
+  };
+  
+  const handleHeaderMouseOut = () => {
+    // Reset tooltip content and position
+      setTooltipContent('');
+      setTooltipPosition({ top: 0, left: 0 });
+  };
+
+
+
 
 
   return (
@@ -339,10 +382,19 @@ const MatchSummary: React.FC<{ matchId: string, matches: MatchDataType[] }> = (p
           <SummaryStatTable>
             <h2>STATISTIQUES GLOBALES</h2>
             <Table>
+
               <thead>
+              {tooltipContent && (
+                <ToolTips className="tooltip" style={{ top: tooltipPosition.top, left: tooltipPosition.left }}>
+                  {tooltipContent}
+                </ToolTips>
+              )}
+
                 <HeaderTr>
                   {summaryTableHeaders.map((header, index) => (
-                    <HeaderTh key={index}>{header}</HeaderTh>
+                    <HeaderTh key={index} onMouseOver={(event) => handleHeaderMouseOver(header, event)} onMouseOut={handleHeaderMouseOut}>
+                      {header}
+                    </HeaderTh>
                   ))}
                 </HeaderTr>
               </thead>

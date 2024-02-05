@@ -51,7 +51,7 @@
         }
     },
 
-    "matchsummary" : {
+    "matchsummaryheaders" : {
         "Equipe": "Equipe",
         "PTS": "Points marqués",
         "OPP PTS": "Points adverses",
