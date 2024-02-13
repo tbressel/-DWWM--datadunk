@@ -73,7 +73,8 @@ const App = () => {
             <Reset />
             <GlobalStyle />
             <BrowserRouter>
-              <Navbar />
+    
+              <Navbar /> 
               <Space></Space>
               <Header />
               <Routes>
@@ -88,6 +89,8 @@ const App = () => {
                 <Route path='/admin' element={<Admin />} />
                 <Route path="*" element={<Error />} />
               </Routes>
+      
+             
             </BrowserRouter>
         </NotificationContext.Provider>
       </LoginContext.Provider>

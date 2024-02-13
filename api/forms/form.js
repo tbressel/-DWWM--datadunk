@@ -2,13 +2,29 @@ const express = require('express');
 const formApp = express();
 
 
+/////////////////////////////////////////
+//////////    MIDDLEWARES   /////////////
+/////////////////////////////////////////
+
+// cors (against cross-origin requests but from http://coach.datadunk.io)
+// and configure accessiblility of the API
 const cors = require('cors');
 
-formApp.use(cors());
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    credentials: true,
+    // origin: 'http://coach.datadunk.io',
+    optionsSuccessStatus: 200
+};
+formApp.use(cors(corsOptions));
+
+
+
 
 const mysql = require('mysql');
 require('dotenv').config();
 
+// Create a pool of connections to the database
 const pool = mysql.createPool({
     connectionLimit: 10,
     host: process.env.DB_HOST,
@@ -18,14 +34,15 @@ const pool = mysql.createPool({
     port: process.env.DB_PORT
 });
 
-// Vérifie si la connexion à la base de données est réussie
+// Check if database connexion is OK
 pool.getConnection((err, connection) => {
     if (err) {
         console.error(err);
         return;
     }
-    console.log('Connected to MySQL');
-    connection.release(); // Libère la connexion du pool après utilisation
+    console.log('Connected to MySQL database');
+// Free pool connexion after using it
+    connection.release(); 
 });
 
 

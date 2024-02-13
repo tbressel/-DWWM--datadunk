@@ -73,6 +73,7 @@ export interface UserDataType {
   status: number;
   status_name: string;
   avatar: string;
+  token: string;
 }
 export interface UsersListDataType {
   id: number;
@@ -96,9 +97,43 @@ export interface SeasonsListDataType {
 }
 
 
-export interface MatchSummaryDataType {
- 
-  id : number;
+  export interface MatchSummaryPlayersDataType {
+    [key: string]: {
+      id: number;
+      id_franchise: number;
+      fiveD: number;
+      min: number;
+      pts: number;
+      twoR: number;
+      twoT: number;
+      twoPerc: number;
+      threeR: number;
+      threeT: number;
+      threetPerc: number;
+      lr: number;
+      lt: number;
+      lPerc: number;
+      ro: number;
+      rt: number;
+      rd: number;
+      pd: number;
+      ct: number;
+      cs: number;
+      in: number;
+      bp: number;
+      fte: number;
+      fpr: number;
+      eval: number;
+      plusMinus: number;
+      id_player: number;
+      player_name: string | null;
+      player_firstname: string | null;
+      player_photo: string | null;
+    };
+  }
+  export interface MatchSummaryTeamsDataType {
+    
+    id : number;
   id_franchise : number;
   fiveD : number;
   min: number;

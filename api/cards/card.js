@@ -3,9 +3,24 @@ const cardApp = express();
 cardApp.use(express.json());
 
 
+/////////////////////////////////////////
+//////////    MIDDLEWARES   /////////////
+/////////////////////////////////////////
+
+// cors (against cross-origin requests but from http://coach.datadunk.io)
+// and configure accessiblility of the API
 const cors = require('cors');
 
-cardApp.use(cors());
+const corsOptions = {
+    origin: 'http://localhost:3000',
+
+    // origin: 'http://coach.datadunk.io',
+    optionsSuccessStatus: 200
+};
+cardApp.use(cors(corsOptions));
+
+
+
 
 const mysql = require('mysql');
 
@@ -147,34 +162,6 @@ cardApp.get('/players/2023', (req, res) => {
     });
 });
 
-
-// Endpoint pour récupérer les données de la table 'franchise'
-cardApp.get('/formule', (req, res) => {
-    const sql = `SELECT * FROM game_stats gs 
-    WHERE gs.id IN ( 
-        SELECT id_game_stats 
-        FROM to_play 
-        WHERE id_games IN ( 
-            SELECT DISTINCT g.id 
-            FROM games g 
-            JOIN franchise_game fg ON fg.id_games = g.id 
-            WHERE fg.id_season = 24 
-            ORDER BY g.id DESC ) ) 
-            ORDER BY gs.id ASC
-            LIMIT 20;
-`;    
-    pool.query(sql, (error, results) => {
-        if (error) {
-            console.error(error);
-            res.status(500).json({
-                message: 'Error occurred',
-                status: 'Failure'
-            });
-        } else {
-            res.json(results);
-        }
-    });
-});
 
 
 cardApp.post('/matchsubmit/:season/:team/:league', async (req, res) => {

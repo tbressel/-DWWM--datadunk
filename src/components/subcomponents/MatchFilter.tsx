@@ -4,16 +4,21 @@
 
 
 import React, { useState, useEffect } from 'react';
-import { API_BASE_URL } from '../config';
-import { MatchDataType } from '../interfaces/types';
+import { API_BASE_URL } from '../../config';
+import { MatchDataType } from '../../interfaces/types';
 import styled from 'styled-components';
-import { colors } from '../colors';
+import { colors } from '../../colors';
+import SwitchFilter from './SwitchFilter';
+
+
+////////////////////////////////////////////////////////
+////////////////   TYPES INTERFACES   ////////////////////
+////////////////////////////////////////////////////////
 
 interface MatchFilterProps {
     onFilterChange: (filteredMatches: MatchDataType[]) => void;
   }
   
-
 interface SeasonsListDataType {
     id: number;
     season_field: string;
@@ -161,6 +166,11 @@ text-align: center;
 
 const MatchFilter: React.FC<MatchFilterProps> = ({ onFilterChange }) => {
 
+
+
+    
+const [showForm, setShowForm] = useState(false);
+    
     const [formData, setFormData] = useState({
         selectedSeason: '24',
         selectedLeague: '0',
@@ -171,10 +181,6 @@ const MatchFilter: React.FC<MatchFilterProps> = ({ onFilterChange }) => {
     const [teamsList, setTeamsList] = useState<TeamsListDataType[]>([]);
     const [leaguesList, setLeaguesList] = useState<LeaguesListDataType[]>([]);
 
-
-    
-    const [showForm, setShowForm] = useState(false);
-    const [toggleButton, setToggleButton] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -191,9 +197,9 @@ const MatchFilter: React.FC<MatchFilterProps> = ({ onFilterChange }) => {
                 setTeamsList(dataTeams);
                 setLeaguesList(dataLeagues);
 
-                console.log('Liste des saisons : ', dataSeasons);
-                console.log('Liste des équipes : ', dataTeams);
-                console.log('Liste des ligues : ', dataLeagues);
+                // console.log('Liste des saisons : ', dataSeasons);
+                // console.log('Liste des équipes : ', dataTeams);
+                // console.log('Liste des ligues : ', dataLeagues);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -222,61 +228,52 @@ const MatchFilter: React.FC<MatchFilterProps> = ({ onFilterChange }) => {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try {
-            const response = await fetch(`${API_BASE_URL}/api/cards/matchsubmit/
-            ${formData.selectedSeason}/
-            ${formData.selectedTeam}/
-            ${formData.selectedLeague}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    selectedSeason: formData.selectedSeason,
-                    selectedLeague: formData.selectedLeague,
-                    selectedTeam: formData.selectedTeam,
-                }),
-            });
-
-            if (response.ok) {
-                let data = await response.json();
-                console.log('Données reçues : ', data);
-                console.log('Formulaire OK');
-                onFilterChange(data);
-            } else {
-                console.error('Erreur lors de la soumission du formulaire');
+          const response = await fetch(
+            `${API_BASE_URL}/api/cards/matchsubmit/${formData.selectedSeason}/${formData.selectedTeam}/${formData.selectedLeague}`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                selectedSeason: formData.selectedSeason,
+                selectedLeague: formData.selectedLeague,
+                selectedTeam: formData.selectedTeam,
+              }),
+             
             }
+          );
+    
+          if (response.ok) {
+            let data = await response.json();
+            // console.log('Données reçues : ', data);
+            // console.log('Formulaire OK');
+            onFilterChange(data);
+          } else {
+            console.error('Erreur lors de la soumission du formulaire');
+          }
         } catch (error) {
-            console.error('Erreur lors de la soumission du formulaire:', error);
+          console.error('Erreur lors de la soumission du formulaire:', error);
         }
-    };
+      };
 
 
-    const handleToggleForm = () => {
-        setShowForm(!showForm);
-        setToggleButton(!toggleButton);
-    };
-
+      const switchText = [
+        { switchName: "Filtres : " },
+        { leftButtonText: "On" },
+        { rightButtonText: "Off" },
+      ];
+    
+    //   console.log('Mon SWITCH TEXT', switchText);
 
 
     return (
         <FilterContainer>
-            <SwitchContainer onClick={handleToggleForm}>
-                <SwitchText>
-                    <p>Filtres :</p>
-                </SwitchText>
-                <ButtonContainer>
-                    <ButtonLeft className={toggleButton ? 'active' : ''}>
-                        <p>
-                            On
-                        </p>
-                    </ButtonLeft>
-                    <ButtonRight className={toggleButton ? '' : 'active'}>
-                        <p>
-                            Off
-                        </p>
-                    </ButtonRight>
-                </ButtonContainer>
-            </SwitchContainer>
+           
+
+
+           <SwitchFilter showForm={showForm} setShowForm={setShowForm} switchText={switchText}/>
+
 
             {showForm && (
                 <FilterForm onSubmit={handleSubmit}>

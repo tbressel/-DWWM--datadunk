@@ -4,15 +4,16 @@
 
 // Style importations
 import styled from 'styled-components';
-import { colors } from '../colors';
+import { colors } from '../../colors';
 
 // React importations
-import React, {useState, useContext} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 
 // Context importation
-import { LoginContext } from '../contexts/LoginContext';
+import { LoginContext } from '../../contexts/LoginContext';
 
-import { API_BASE_URL } from '../config';
+// Config importation
+import { API_BASE_URL } from '../../config';
 
 ////////////////////////////////////////////////////////////
 //////////////////   STYLE COMPONENTS   ////////////////////
@@ -114,15 +115,24 @@ interface LoginFormProps {
 ////////////////////////////////////////////////////////////
 const LoginForm = (props: LoginFormProps) => {
 
-    // declaration of the state variables
-    const { user, setUser } = useContext(LoginContext);
-    const [formData, setFormData] = useState({});
-    
 
-    
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        // console.log('Form data submitted:', formData);
+    // Get the user from the context
+    const { user, setUser } = useContext(LoginContext);
+
+
+    // Get datas from the form
+    const [formData, setFormData] = useState({});
+
+
+    /**
+     * 
+     * Handle the form submission including the CSRF token
+     * 
+     * @param event 
+     */
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
 
         try {
             const response = await fetch(`${API_BASE_URL}/api/users/login`, {
@@ -131,41 +141,54 @@ const LoginForm = (props: LoginFormProps) => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(formData),
+                credentials: 'include'
             });
 
             if (!response.ok) {
-                throw new Error('Erreur lors de la requête POST');
+                throw new Error('POST request error');
+            } else {
+                const jsonResponse = await response.json();
+
+                // update the user context with the response
+                setUser(jsonResponse);
+
+                props.onLogin();
             }
 
-            // Traitez la réponse ici si nécessaire
-            const jsonResponse = await response.json();
-            setUser(jsonResponse);
-      
-            // console.log('Réponse JSON:', jsonResponse); 
-            // console.log('le tyle de ma data : ',typeof user);
-
-            props.onLogin();
-
         } catch (error) {
-            console.error('Erreur lors de la soumission du formulaire:', error);
+            console.error('Error during the form send', error);
         }
-        // Ajoutez ici la logique pour envoyer vos données (fetch, axios, etc.)
     };
 
 
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+    /**
+     * 
+     * Update the form data when the user types in the form
+     * @param event 
+     */
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
             ...formData,
-            [e.target.name]: e.target.value,
+            [event.target.name]: event.target.value,
         });
         // console.log('Form data updated:', formData);
     };
 
 
-     const handleCrossClick = () => {
-         props.onCrossClick();
-     };
+
+
+
+    /**
+     * Close the form when clicking the cross
+     */
+    const handleCrossClick = () => {
+        props.onCrossClick();
+    };
+
+
+
 
 
 
@@ -191,6 +214,7 @@ const LoginForm = (props: LoginFormProps) => {
                                         <input onChange={handleInputChange} id="passwordField" name="password" type="password" placeholder="Saisissez votre mot de passe ici ..." required autoComplete="current-password" />
                                     </label>
                                 </LoginField>
+         
                                 <LoginFormButton type="submit">Valider</LoginFormButton>
 
                             </LoginFormField>

@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 
 // Components importations
 import MatchSummary from '../components/MatchSummary';
-import MatchFilter from '../components/MatchFilter';
+import MatchFilter from '../components/subcomponents/MatchFilter';
 import MatchesList from '../components/MatchesList';
 
 // Types importation
@@ -16,12 +16,17 @@ import { MatchDataType } from '../interfaces/types';
 // Config importation
 import { API_BASE_URL } from '../config';
 
+import { useNavigate } from 'react-router-dom'; // Importer useHistory pour gérer les redirections
 
 ////////////////////////////////////////////////////////////
 //////////////////   MAIN COMPONENT   //////////////////////
 ////////////////////////////////////////////////////////////
 
 const Matches = () => {
+
+
+  // Utiliser useNavigate pour gérer les redirections
+  const navigate = useNavigate(); 
 
 
   /**
@@ -44,7 +49,7 @@ const Matches = () => {
         const response = await fetch(`${API_BASE_URL}/api/cards/games/24`);
         const data = await response.json();
         setMatches(data);
-        console.log(data);
+        // console.log(data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }

@@ -722,7 +722,25 @@ CALL calcul_gmsc();
 
 
 
+UPDATE player
+SET player_photo = REPLACE(player_photo, 'é', 'e')
+WHERE player_photo LIKE "%é%";
 
+UPDATE player
+SET player_photo = REPLACE(player_photo, 'è', 'e')
+WHERE player_photo LIKE "%è%";
+
+UPDATE player
+SET player_photo = REPLACE(player_photo, 'ê', 'e')
+WHERE player_photo LIKE "%ê%";
+
+UPDATE player
+SET player_photo = REPLACE(player_photo, 'ô', 'o')
+WHERE player_photo LIKE "%ô%";
+
+UPDATE player
+SET player_photo = REPLACE(player_photo, 'ë', 'e')
+WHERE player_photo LIKE "%ë%";
 
 ---------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------

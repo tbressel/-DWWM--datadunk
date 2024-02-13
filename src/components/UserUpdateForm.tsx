@@ -254,7 +254,7 @@ const UserUpdateForm = (props: UserUpdateFormProps) => {
         try {
 
            // Fetching data from the API route
-            const response = await fetch(`${ API_BASE_URL }api/users/update`, {
+            const response = await fetch(`${ API_BASE_URL }/api/users/update`, {
 
             // sending a POST json document
                 method: 'POST',

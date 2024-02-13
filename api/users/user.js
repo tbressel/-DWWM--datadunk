@@ -1,21 +1,76 @@
-// Express library used for routing, middleware, etc.
+// notification messages
+const notificationMessage = { 
+    'login_success': "Connexion à votre compte réussie",
+    'delete_success': "La suppression de l'utilisateur a réussie",
+    'login_failed': "Connexion à votre compte à échouée",
+    'logout_success': "Vous allez être à présent déconnecté de votre compte",
+    'add_success': 'L\'utilisateur a bien été ajouté',
+}
+
+const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
+
+///////////////////////////////////////
+//////////    FRAMEWORK   /////////////
+///////////////////////////////////////
+
+// Express (to use routes and)
 const express = require('express');
 const userApp = express();
 
-// Module pour la validation des données
-const validator = require('validator'); 
 
-// Cors library used for cross-origin resource sharing
+
+/////////////////////////////////////////
+/////////    MIDDLEWARES   //////////////
+/////////////////////////////////////////
+
+
+// cors (against cross-origin requests but from http://coach.datadunk.io)
 const cors = require('cors');
 
-userApp.use(cors());
+
+// configure accessiblility of the API
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    credentials: true,
+    // origin: 'http://coach.datadunk.io',
+    optionsSuccessStatus: 200
+};
+
+
+userApp.use(cors(corsOptions));
+
+
+
+
+
+
+/////////////////////////////////////
+//////////    LIBRARY   /////////////
+////////////////////////////////////
+
+// validator (pour valider les données)
+const validator = require('validator');
+
+
+
+
+
+
+/////////////////////////////////////
+//////////    MODULE   /////////////
+////////////////////////////////////
+
 
 // Dotenv library used for environment variables
 const dotenv = require('dotenv');
 dotenv.config();
 
+
 // MySQL library used for database connection
 const mysql = require('mysql');
+
+// Create a pool of connections to the database
 const pool = mysql.createPool({
     connectionLimit: 10,
     host: process.env.DB_HOST,
@@ -25,12 +80,24 @@ const pool = mysql.createPool({
     port: process.env.DB_PORT
 });
 
+
+
 // Body-parser library used for parsing request bodies
+// Actually used to send Formdata from form.
 const bodyParser = require('body-parser');
 userApp.use(bodyParser.json());
 
+
+
+
 // Bcrypt library used for password hashing
 const bcrypt = require('bcrypt');
+
+
+module.exports = userApp;
+
+
+
 
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
@@ -39,14 +106,11 @@ const bcrypt = require('bcrypt');
 ///////////////////////////////////////////////////////////////
 
 
-
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////       USER LOGIN      /////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
-
 userApp.post('/login', (req, res) => {
+
 
     // Récupérer les données de la requête POST
     const { action, pseudo, password } = req.body;
@@ -86,6 +150,10 @@ userApp.post('/login', (req, res) => {
                             });
                         } else {
                             if (isMatch) {
+// Générer un token JWT
+const secretKey = crypto.randomBytes(32).toString('hex');
+
+const token = jwt.sign({ id: queryResult[0].id }, secretKey, { expiresIn: '1h' });
                                 res.json({
                                     action: action,
                                     message: notificationMessage.login_success,
@@ -97,7 +165,8 @@ userApp.post('/login', (req, res) => {
                                     email: queryResult[0].user_email,
                                     status: queryResult[0].user_role,
                                     status_name: queryResult[0].user_role_name,
-                                    avatar: queryResult[0].user_avatar
+                                    avatar: queryResult[0].user_avatar,
+                                    token: token,
                                 });
                             } else {
                                 res.status(401).json({
@@ -117,8 +186,6 @@ userApp.post('/login', (req, res) => {
         });
     });
 });
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////       USER LOGOUT      /////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -155,16 +222,13 @@ userApp.delete('/delete', (req, res) => {
         }
     });
 });
-
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////       USER ADD      /////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
 userApp.post('/add', (req, res) => {
     let {lastname, firstname, nickname, email, password, role } = req.body;
 
-    // Validation des données
+    // datas validation
     firstname = validator.escape(firstname);
     lastname = validator.escape(lastname);
     nickname = validator.escape(nickname);
@@ -179,9 +243,13 @@ userApp.post('/add', (req, res) => {
         });
     }
 
-    // Hashage du mot de passe
+    // calling bcrypt 
     const bcrypt = require('bcrypt');
+    
+    // repeat salt process during 10 rounds
     const saltRounds = 10;
+    
+    // hash the password with salt
     bcrypt.hash(password, saltRounds, function(err, hash) {
         if (err) {
             console.error(err);
@@ -190,8 +258,7 @@ userApp.post('/add', (req, res) => {
                 status: 'Failure'
             });
         }
-
-        password = hash;
+    password = hash;
 
         const avatar = ('avatar-' + firstname + lastname + nickname + '.png').toLowerCase();
         console.log ('avatar:', avatar);
@@ -214,12 +281,9 @@ userApp.post('/add', (req, res) => {
         });
     });
 });
-
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////       USER UPDATE      /////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
-
-
 userApp.post('/update', (req, res) => {
 
     // Get the data from the POST request and send them into variables
@@ -290,7 +354,6 @@ userApp.post('/update', (req, res) => {
         });
     });
 });
-
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////       USERS LIST      /////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -312,18 +375,6 @@ userApp.get('/list', (req, res) => {
     });
 });
 
-
-module.exports = userApp;
-
-
-
-const notificationMessage = { 
-    'login_success': "Connexion à votre compte réussie",
-    'delete_success': "La suppression de l'utilisateur a réussie",
-    'login_failed': "Connexion à votre compte à échouée",
-    'logout_success': "Vous allez être à présent déconnecté de votre compte",
-    'add_success': 'L\'utilisateur a bien été ajouté',
-}
 
 
 

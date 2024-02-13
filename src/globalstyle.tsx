@@ -10,8 +10,10 @@ export const GlobalStyle = createGlobalStyle`
     min-width: 320px;
     background-color: ${colors.violet1};
     font-family: 'Barlow Medium';
-
   }
+
+
+
   a {
     text-decoration: none;
     color: inherit;

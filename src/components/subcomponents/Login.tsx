@@ -4,21 +4,21 @@
 
 // Style importations
 import styled from 'styled-components';
-import { colors } from '../colors';
+import { colors } from '../../colors';
 
 // React importations
 import { useContext, useState } from 'react';
 
 // Components importations
 import LoginForm from './LoginForm';
-import UserPostNotification from './UserPostNotification';
-import { API_BASE_URL } from '../config';
+import UserPostNotification from '../UserPostNotification';
+import { API_BASE_URL } from '../../config';
 
 // Context importation
-import { LoginContext } from '../contexts/LoginContext';
+import { LoginContext } from '../../contexts/LoginContext';
 
 // Types importation
-import { UserDataType } from '../interfaces/types';
+import { UserDataType } from '../../interfaces/types';
 
 ////////////////////////////////////////////////////////////
 //////////////////   STYLE COMPONENTS   ////////////////////

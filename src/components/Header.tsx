@@ -10,7 +10,7 @@ import { colors } from '../colors';
 import { useContext } from 'react';
 
 // Components importations
-import Login from '../components/Login';
+import Login from './subcomponents/Login';
 
 // Context importation
 import { LoginContext } from '../contexts/LoginContext';
