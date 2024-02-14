@@ -1,6 +1,8 @@
 ////////////////////////////////////////////////////////
 //////////////////   IMPORTATIONS   ////////////////////
 ////////////////////////////////////////////////////////
+import { API_BASE_URL } from './config';
+
 
 // Style importations
 import { Reset } from 'styled-reset';
@@ -53,14 +55,17 @@ const Space = styled.div`
 
 const App = () => {
 
+ 
+
+
 
   // declaration of the state variables
   const [user, setUser] = useState<UserDataType | null>(null);
   const [msg, setMsg] = useState<NotificationDataType | null>(null);
 
-  const [seasonsList, setSeasonsList] = useState<any[]>([]); // Remplacez "any" par le type approprié
-  const [teamsList, setTeamsList] = useState<any[]>([]); // Remplacez "any" par le type approprié
-  const [leaguesList, setLeaguesList] = useState<any[]>([]); // Remplacez "any" par le type approprié
+  // const [seasonsList, setSeasonsList] = useState<any[]>([]); 
+  // const [teamsList, setTeamsList] = useState<any[]>([]); 
+  // const [leaguesList, setLeaguesList] = useState<any[]>([]); 
   
 
 

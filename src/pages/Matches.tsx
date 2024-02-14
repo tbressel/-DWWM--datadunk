@@ -16,26 +16,20 @@ import { MatchDataType } from '../interfaces/types';
 // Config importation
 import { API_BASE_URL } from '../config';
 
-
 ////////////////////////////////////////////////////////////
 //////////////////   MAIN COMPONENT   //////////////////////
 ////////////////////////////////////////////////////////////
 
 const Matches = () => {
 
-
 // Represents the state of matches.
   const [matches, setMatches] = useState<MatchDataType[]>([]);
-
 
 // Represents the state of the selected match.
   const [selectedMatchId, setSelectedMatchId] = useState<string | null>(null);
 
-
 // Represents the state of the filter.
   const [showFilter, setShowFilter] = useState<boolean>(true);
-
-
 
 
 

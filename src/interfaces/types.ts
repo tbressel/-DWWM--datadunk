@@ -29,6 +29,11 @@ export type MatchDataType = {
       visitor_franchise_logo: string;
       visitor_score: number;
 };
+export type LeagueDataType = {
+      id: number;
+      league_logo: string;
+      league_name: string;
+};
 
 export type PlayerDataType = {
   id_franchise: number;

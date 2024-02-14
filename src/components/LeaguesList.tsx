@@ -10,16 +10,16 @@ import styled from 'styled-components';
 import { colors } from '../colors';
 
 // Components importations
-import MatchCard from "./MatchCard";
+import LeagueCard from "./LeagueCard";
 
 // Types importation
-import { MatchDataType } from '../interfaces/types';
+import { LeagueDataType } from '../interfaces/types';
 
 ////////////////////////////////////////////////////////////
 //////////////////   STYLE COMPONENTS   ////////////////////
 ////////////////////////////////////////////////////////////
 
-const MatchListContainer = styled.div`
+const LeagueListContainer = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -33,22 +33,29 @@ const MatchListContainer = styled.div`
 ////////////////////////////////////////////////////////////
 //////////////////   MAIN COMPONENT   //////////////////////
 ////////////////////////////////////////////////////////////
-const MatchesList: React.FC<{ matches: MatchDataType[]; onSelectMatch: (id: number) => void }> = (props) => {
-    const [filteredMatches, setFilteredMatches] = useState<MatchDataType[]>(props.matches);
+const LeaguesList: React.FC<{ leagues: LeagueDataType[]; onSelectLeague: (id: number) => void }> = (props) => {
+    const [filteredLeagues, setFilteredLeagues] = useState<LeagueDataType[]>(props.leagues);
   
+
+
+    
     useEffect(() => {
-      setFilteredMatches(props.matches);
-    }, [props.matches]);
-  
+      setFilteredLeagues(props.leagues);
+    }, [props.leagues]);
+    
+    
+    console.log (filteredLeagues);
   
     return (
-      <MatchListContainer>
-        {filteredMatches.map((match, index) => (
-          <MatchCard key={index} match={match} onSelectMatch={props.onSelectMatch} />
+      <LeagueListContainer>
+        {filteredLeagues.map((league, index) => (
+          console.log(league),
+          console.log(index),
+          <LeagueCard key={index} league={league} onSelectLeague={props.onSelectLeague} />
         ))}
-      </MatchListContainer>
+      </LeagueListContainer>
     );
   };
   
-  export default MatchesList;
+  export default LeaguesList;
 

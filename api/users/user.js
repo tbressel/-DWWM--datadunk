@@ -27,6 +27,7 @@ const jwt = require('jsonwebtoken');
 // Express application
 const express = require('express');
 
+
 // To create cookie (include a token inside)
 const cookieParser = require('cookie-parser');
 
@@ -45,6 +46,8 @@ const validator = require('validator');
 // Start using Express on "userApp" endpoints
 const userApp = express();
 
+userApp.use(express.json());
+
 // Setting Cors option
 const corsOptions = {
     origin: 'http://localhost:3000', // Remplacez par l'origine de votre client
@@ -62,21 +65,21 @@ userApp.use(cookieParser());
 // Analyse body requests
 userApp.use(bodyParser.urlencoded({ extended: false }));
 
-// Setting of csurf to use customized cookie
-const csrfProtection = csurf({
-    cookie: {
-        key: '_csrf',
-        secure: false, // ligne used only for local project
-        httpOnly: true,
-        sameSite: true,
-        maxAge: 24 * 60 * 60 * 1000
-    },
-    // Read CSRF token from header  'csrf-token'
-    value: (req) => req.headers['csrf-token'] 
-});
+// // Setting of csurf to use customized cookie
+// const csrfProtection = csurf({
+//     cookie: {
+//         key: '_csrf',
+//         secure: false, // ligne used only for local project
+//         httpOnly: true,
+//         sameSite: true,
+//         maxAge: 24 * 60 * 60 * 1000
+//     },
+//     // Read CSRF token from header  'csrf-token'
+//     value: (req) => req.headers['csrf-token'] 
+// });
 
-// Use csurf on all routes
-userApp.use(csrfProtection);
+// // Use csurf on all routes
+// userApp.use(csrfProtection);
 
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
@@ -88,11 +91,12 @@ userApp.use(csrfProtection);
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////       USER LOGIN      /////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
-userApp.post('/login', csrfProtection, (req, res) => {
+// userApp.post('/login', csrfProtection, (req, res) => {
+userApp.post('/login', (req, res) => {
 
 
-   // Generate a CSRF Token
-  const csrfToken = req.csrfToken();
+//    // Generate a CSRF Token
+//   const csrfToken = req.csrfToken();
 
     // Get datas from POST request
     const { action, pseudo, password } = req.body;
@@ -166,7 +170,7 @@ userApp.post('/login', csrfProtection, (req, res) => {
                                     status_name: queryResult[0].user_role_name,
                                     avatar: queryResult[0].user_avatar,
                                     token: token,
-                                    csrfToken: csrfToken,
+                                    // csrfToken: csrfToken,
                                 });
                             } else {
                                 res.status(401).json({

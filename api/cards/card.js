@@ -226,6 +226,23 @@ cardApp.post('/matchsubmit/:season/:team/:league', async (req, res) => {
 });
 
 
+// Endpoint pour récupérer les données de la table 'franchise'
+cardApp.get('/league/', (req, res) => {
+    const sql = `SELECT * FROM league;`
+    
+    pool.query(sql, (error, results) => {
+        if (error) {
+            console.error(error);
+            res.status(500).json({
+                message: 'Error occurred',
+                status: 'Failure'
+            });
+        } else {
+            res.json(results);
+        }
+    });
+});
+
 
 
 module.exports = cardApp;
