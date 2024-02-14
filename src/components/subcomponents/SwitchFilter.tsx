@@ -2,11 +2,12 @@
 //////////////////   IMPORTATIONS   ////////////////////
 ////////////////////////////////////////////////////////
 
-import styled from 'styled-components';
-
-import { colors } from '../../colors';
-
+// React importations
 import { useState } from 'react';
+
+// Style importation
+import styled from 'styled-components';
+import { colors } from '../../colors';
 
 
 ////////////////////////////////////////////////////////////
@@ -103,29 +104,42 @@ text-align: center;
 ////////////////////////////////////////////////////////////
 //////////////////   MAIN COMPONENT   //////////////////////
 ////////////////////////////////////////////////////////////
-const SwitchFilter = ({ showForm, setShowForm, switchText}: any) => {
+const SwitchFilter = ({ showForm, setShowForm, switchText }: any) => {
 
-// console.log('2eme switchText', switchText);
-
-    const handleToggleForm = () => {
-        setShowForm(!showForm);
-        setToggleButton(!toggleButton);
-    };
-    
+    // Represents the state of the button.
     const [toggleButton, setToggleButton] = useState(false);
 
+
+
+
+    /**
+     * Function that handles the toggle of the form and updates the state of showForm.
+     */
+    const handleToggleForm = () => {
+        // display or hide the form
+        setShowForm(!showForm);
+
+        // The button is active or not
+        setToggleButton(!toggleButton);
+    };
+
+
+
+
+    
+
     return (
-        
+
         <SwitchContainer onClick={handleToggleForm}>
             <SwitchText>
                 <p>{switchText[0].switchName}</p>
             </SwitchText>
             <ButtonContainer>
                 <ButtonLeft className={toggleButton ? 'active' : ''}>
-                <p>{switchText[1].leftButtonText}</p>
+                    <p>{switchText[1].leftButtonText}</p>
                 </ButtonLeft>
                 <ButtonRight className={toggleButton ? '' : 'active'}>
-                <p>{switchText[2].rightButtonText}</p>
+                    <p>{switchText[2].rightButtonText}</p>
                 </ButtonRight>
             </ButtonContainer>
         </SwitchContainer>

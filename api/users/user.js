@@ -1,71 +1,6 @@
-// notification messages
-const notificationMessage = { 
-    'login_success': "Connexion à votre compte réussie",
-    'delete_success': "La suppression de l'utilisateur a réussie",
-    'login_failed': "Connexion à votre compte à échouée",
-    'logout_success': "Vous allez être à présent déconnecté de votre compte",
-    'add_success': 'L\'utilisateur a bien été ajouté',
-}
-
-const crypto = require('crypto');
-const jwt = require('jsonwebtoken');
-
-///////////////////////////////////////
-//////////    FRAMEWORK   /////////////
-///////////////////////////////////////
-
-// Express (to use routes and)
-const express = require('express');
-const userApp = express();
-
-
-
-/////////////////////////////////////////
-/////////    MIDDLEWARES   //////////////
-/////////////////////////////////////////
-
-
-// cors (against cross-origin requests but from http://coach.datadunk.io)
-const cors = require('cors');
-
-
-// configure accessiblility of the API
-const corsOptions = {
-    origin: 'http://localhost:3000',
-    credentials: true,
-    // origin: 'http://coach.datadunk.io',
-    optionsSuccessStatus: 200
-};
-
-
-userApp.use(cors(corsOptions));
-
-
-
-
-
-
-/////////////////////////////////////
-//////////    LIBRARY   /////////////
-////////////////////////////////////
-
-// validator (pour valider les données)
-const validator = require('validator');
-
-
-
-
-
-
-/////////////////////////////////////
-//////////    MODULE   /////////////
-////////////////////////////////////
-
-
 // Dotenv library used for environment variables
 const dotenv = require('dotenv');
 dotenv.config();
-
 
 // MySQL library used for database connection
 const mysql = require('mysql');
@@ -80,24 +15,68 @@ const pool = mysql.createPool({
     port: process.env.DB_PORT
 });
 
-
-
-// Body-parser library used for parsing request bodies
-// Actually used to send Formdata from form.
-const bodyParser = require('body-parser');
-userApp.use(bodyParser.json());
-
-
-
-
-// Bcrypt library used for password hashing
+// Used to encrypt password
 const bcrypt = require('bcrypt');
 
+// Used to generate random string
+const crypto = require('crypto');
 
-module.exports = userApp;
+// Used to generate a token
+const jwt = require('jsonwebtoken');
+
+// Express application
+const express = require('express');
+
+// To create cookie (include a token inside)
+const cookieParser = require('cookie-parser');
+
+// to parse a body from a request 
+const bodyParser = require('body-parser');
+
+// Generate a token agains CSRF attak
+const csurf = require('csurf');
+
+// to setting this API with requests coming only from one URL
+const cors = require('cors');
+
+// to clean up variables
+const validator = require('validator');
+
+// Start using Express on "userApp" endpoints
+const userApp = express();
+
+// Setting Cors option
+const corsOptions = {
+    origin: 'http://localhost:3000', // Remplacez par l'origine de votre client
+    credentials: true, // Autorise les credentials
+    optionsSuccessStatus: 200 // Réponse de succès pour les requêtes OPTIONS pré-vol
+};
+
+// Using Cors with previous setted options
+userApp.use(cors(corsOptions));
 
 
+// Analyse cookies 
+userApp.use(cookieParser());
 
+// Analyse body requests
+userApp.use(bodyParser.urlencoded({ extended: false }));
+
+// Setting of csurf to use customized cookie
+const csrfProtection = csurf({
+    cookie: {
+        key: '_csrf',
+        secure: false, // ligne used only for local project
+        httpOnly: true,
+        sameSite: true,
+        maxAge: 24 * 60 * 60 * 1000
+    },
+    // Read CSRF token from header  'csrf-token'
+    value: (req) => req.headers['csrf-token'] 
+});
+
+// Use csurf on all routes
+userApp.use(csrfProtection);
 
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
@@ -109,32 +88,36 @@ module.exports = userApp;
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////       USER LOGIN      /////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
-userApp.post('/login', (req, res) => {
+userApp.post('/login', csrfProtection, (req, res) => {
 
 
-    // Récupérer les données de la requête POST
+   // Generate a CSRF Token
+  const csrfToken = req.csrfToken();
+
+    // Get datas from POST request
     const { action, pseudo, password } = req.body;
     const sql = 'SELECT * FROM _user_ WHERE user_pseudo = ?';
 
-    // Utiliser le pool de connexions pour éviter la gestion manuelle des connexions
+    // Use the connexion pools
     pool.getConnection((error, connection) => {
         if (error) {
             console.error(error);
             res.status(500).json({
-                message: 'Problème de connexion à la base de données',
+                message: 'There is a probleme to connect to the database',
                 status: 'Failure'
             });
             return;
         }
 
-        // Exécuter la requête SQL
+        // Execute a SQL query
         connection.query(sql, [pseudo], (error, queryResult) => {
-            connection.release(); // Libérer la connexion du pool
+            // Free the pool connexion
+            connection.release(); 
 
             if (error) {
                 console.error(error);
                 res.status(500).json({
-                    message: 'La requête a échoué',
+                    message: 'Fail of this request',
                     status: 'Failure'
                 });
             } else {
@@ -145,15 +128,31 @@ userApp.post('/login', (req, res) => {
                         if (err) {
                             console.error(err);
                             res.status(500).json({
-                                message: 'Erreur interne du serveur : comparaison des mots de passe a échoué',
+                                message: 'Passwords are not the same',
                                 status: 'Failure'
                             });
                         } else {
                             if (isMatch) {
-// Générer un token JWT
-const secretKey = crypto.randomBytes(32).toString('hex');
 
-const token = jwt.sign({ id: queryResult[0].id }, secretKey, { expiresIn: '1h' });
+                                // Generate a random string for the secret key
+                                const secretKey = crypto.randomBytes(32).toString('hex');
+
+                                // Generate a token with user information and the secret key
+                                const token = jwt.sign(
+                                    {
+                                        id: queryResult[0].id,
+                                        firstname: queryResult[0].user_firstname,
+                                        lastname: queryResult[0].user_lastname,
+                                        pseudo: queryResult[0].user_pseudo,
+                                        email: queryResult[0].user_email,
+                                        status: queryResult[0].user_role,
+                                        status_name: queryResult[0].user_role_name,
+                                        avatar: queryResult[0].user_avatar,
+                                    },
+                                    secretKey,
+                                    { expiresIn: '1h' }
+                                );
+                                // Generate the Json response    
                                 res.json({
                                     action: action,
                                     message: notificationMessage.login_success,
@@ -167,10 +166,11 @@ const token = jwt.sign({ id: queryResult[0].id }, secretKey, { expiresIn: '1h' }
                                     status_name: queryResult[0].user_role_name,
                                     avatar: queryResult[0].user_avatar,
                                     token: token,
+                                    csrfToken: csrfToken,
                                 });
                             } else {
                                 res.status(401).json({
-                                    message: 'Le mot de passe ou le pseudo ne correspondent pas',
+                                    message: 'Wrong password or nikename',
                                     status: 'Failure'
                                 });
                             }
@@ -178,7 +178,7 @@ const token = jwt.sign({ id: queryResult[0].id }, secretKey, { expiresIn: '1h' }
                     });
                 } else {
                     res.status(404).json({
-                        message: 'Utilisateur inconnu',
+                        message: 'Unknown user',
                         status: 'Failure'
                     });
                 }
@@ -377,4 +377,13 @@ userApp.get('/list', (req, res) => {
 
 
 
+// notification messages
+const notificationMessage = { 
+    'login_success': "Connexion à votre compte réussie",
+    'delete_success': "La suppression de l'utilisateur a réussie",
+    'login_failed': "Connexion à votre compte à échouée",
+    'logout_success': "Vous allez être à présent déconnecté de votre compte",
+    'add_success': 'L\'utilisateur a bien été ajouté',
+}
 
+module.exports = userApp;

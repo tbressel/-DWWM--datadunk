@@ -25,6 +25,7 @@ const UsersListContainer = styled.div`
     justify-content: space-around; 
     background-color: ${colors.blanc};
     border-radius: 10px;
+    margin-bottom: 90px;
 `;
 const AddButtonContainer = styled.div`
 cursor: pointer;

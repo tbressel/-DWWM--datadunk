@@ -1,3 +1,5 @@
+const { API_BASE_URL } = require('../config.js');
+
 const express = require('express');
 const cardApp = express();
 cardApp.use(express.json());
@@ -12,9 +14,7 @@ cardApp.use(express.json());
 const cors = require('cors');
 
 const corsOptions = {
-    origin: 'http://localhost:3000',
-
-    // origin: 'http://coach.datadunk.io',
+    origin: { API_BASE_URL },
     optionsSuccessStatus: 200
 };
 cardApp.use(cors(corsOptions));

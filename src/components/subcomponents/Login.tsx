@@ -130,6 +130,7 @@ const Login = ({ user }: LoginProps) => {
             // Traitez la réponse ici si nécessaire
             const jsonResponse = await response.json();
             setUser(jsonResponse);
+            localStorage.removeItem('authToken');
            
 
         } catch (error) {

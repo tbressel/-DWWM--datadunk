@@ -11,7 +11,9 @@ export const GlobalStyle = createGlobalStyle`
     background-color: ${colors.violet1};
     font-family: 'Barlow Medium';
   }
-
+ td {
+      vertical-align: middle;
+ }
 
 
   a {

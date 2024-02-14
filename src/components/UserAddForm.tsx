@@ -2,6 +2,7 @@
 //////////////////   IMPORTATIONS   ////////////////////
 ////////////////////////////////////////////////////////
 
+
 // Style importations
 import styled from 'styled-components';
 import { colors } from '../colors';
@@ -43,8 +44,12 @@ flex-direction: column;
 border-radius: 20px;
 background: ${colors.blanc};
 position: relative;
-top: 172px;
+top: 368px;
 width: 90%;
+
+@media screen and (min-width: 768px) {
+    top: 172px;
+}
 
 `;
 const UserAddFormTitle = styled.div`
@@ -69,8 +74,11 @@ const UserAddFormInputContainer = styled.div`
     padding: 15px 38px;
     flex-direction: column;  
     align-items: center;
-    gap: 50px;
+    gap: 20px;
     
+    @media screen and (min-width: 768px) {
+        gap: 50px;
+}
     `;
 const InputField = styled.div`
         font-family: 'Barlow Medium';
@@ -96,14 +104,14 @@ const UserAddFormCheckboxContainer = styled.div`
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 50px;
+    gap: 20px;
     flex-wrap: wrap;
 
         .checkbox__container {        
             display: flex;
-            width: 150px;
+            width: 100%;
             height: 42px;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
             gap: 10px;
 
@@ -115,7 +123,14 @@ const UserAddFormCheckboxContainer = styled.div`
                     align-items: center;
                     gap: 14.292px;
                 }
+                @media screen and (min-width: 768px) {
+                    width: 150px;
+                    
         }
+    }
+        @media screen and (min-width: 768px) {
+        gap: 50px;
+}
 `;
 const UserAddFormPasswordContainer = styled.div`
     display: flex;
@@ -295,6 +310,8 @@ const UserAddForm = (props: UserAddFormProps) => {
            setNotification({ state: false, action: '' });
        }, 2000);
 
+       // refresh the page after delay
+       window.location.href = '/admin';
       }
 
 
@@ -304,7 +321,6 @@ const UserAddForm = (props: UserAddFormProps) => {
      * Function to show/hide password
      */
     const handleEye1Change = () => {
-
         setEye1(!eye1);
     }
 
@@ -314,7 +330,6 @@ const UserAddForm = (props: UserAddFormProps) => {
      * Function to show/hide password
      */
     const handleEye2Change = () => {
-
         setEye2(!eye2);
     }
 
@@ -376,7 +391,7 @@ const UserAddForm = (props: UserAddFormProps) => {
                             </label>
                         </InputField>
                         <div className="button__eye"  onClick={handleEye1Change}>
-                          {eye2 ? <img src="./assets/images/icons/icon-eye-open.png" alt="" /> : <img src="./assets/images/icons/icon-eye-close.svg" alt="" />}
+                          {eye1 ? <img src="./assets/images/icons/icon-eye-close.svg" alt="" /> : <img src="./assets/images/icons/icon-eye-open.svg" alt="" />}
                         </div>
                     </UserAddFormPasswordContainer>
 
@@ -390,7 +405,7 @@ const UserAddForm = (props: UserAddFormProps) => {
                             </label>
                         </InputField>
                         <div className="button__eye"  onClick={handleEye2Change}>
-                          {eye2 ? <img src="./assets/images/icons/icon-eye-open.png" alt="" /> : <img src="./assets/images/icons/icon-eye-close.svg" alt="" />}
+                          {eye2 ? <img src="./assets/images/icons/icon-eye-close.svg" alt="" /> : <img src="./assets/images/icons/icon-eye-open.svg" alt="" />}
                         </div>
                     </UserAddFormPasswordContainer>
                     <UserAddFormButtonContainer>

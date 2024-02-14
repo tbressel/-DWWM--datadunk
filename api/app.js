@@ -1,3 +1,5 @@
+const { API_LISTEN_PORT } = require('./config.js');
+
 ///////////////////////////////////////
 //////////    FRAMEWORK   /////////////
 ///////////////////////////////////////
@@ -6,8 +8,8 @@
 const express = require('express');
 const app = express();
 
-// const port = process.env.PORT || 4000;
-const port = process.env.PORT || 5000;
+
+const port = process.env.PORT || API_LISTEN_PORT;
 
 app.listen(port, () => {
     console.log('Serveur en écoute sur le port', port);

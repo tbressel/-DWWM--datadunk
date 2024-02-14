@@ -6,13 +6,21 @@
 import styled from 'styled-components';
 import { colors } from '../colors';
 
+// React importations
+import { useContext, useState } from 'react';
+
+
+// Context importation
+import { LoginContext } from '../contexts/LoginContext';
+
 // Types importation
 import { MatchDataType } from '../interfaces/types';
+
+// Components importations
 import MatchSummaryTeams from './MatchSummaryTeams';
 import MatchSummaryPlayers from './MatchSummaryPlayers';
+import SwitchFilter from './subcomponents/SwitchFilter';
 
-import { useContext } from 'react';
-import { LoginContext } from '../contexts/LoginContext';
 
 ////////////////////////////////////////////////////////////
 //////////////////   STYLE COMPONENTS   ////////////////////
@@ -21,7 +29,7 @@ import { LoginContext } from '../contexts/LoginContext';
 const BannerContainer = styled.div` 
 background: ${colors.blanc};
   border-radius: 20px;
-  margin-bottom: 40px;
+  margin: 40px 0;
   padding: 20px 20px 0px 20px;
 `
 const MatchBanner = styled.div`
@@ -33,9 +41,6 @@ justify-content: center;
 align-items: center;
 border-radius: 20px;
 background: ${colors.blanc};
-
-
-
 `
 const Title = styled.div`
   display: flex;
@@ -119,9 +124,7 @@ h2 {
   margin-bottom: 20px;
   font-size: 1.5rem;
 }
-
-
-`;
+`
 
 ////////////////////////////////////////////////////////////
 //////////////////   MAIN COMPONENT   //////////////////////
@@ -129,21 +132,44 @@ h2 {
 
 const MatchSummary: React.FC<{ matchId: string, matches: MatchDataType[] }> = (props) => {
   // console.log(props.matchId);
+
+  // get the id of the match from the props
+  const matchsummary = props.matches.find(match => match.id_games === Number(props.matchId));
+
+  // get the user from the context
   const { user } = useContext(LoginContext);
 
+  // get the token from the local storage
+  const authToken = localStorage.getItem('authToken');
+
+  console.log(authToken)
+  console.log(user?.token)
 
 
-  if (!user?.token) {
+  const [showForm, setShowForm] = useState(true);
+  
+  const switchText = [
+    { switchName: "Filtres : " },
+    { leftButtonText: "Joueurs" },
+    { rightButtonText: "Equipes" },
+  ];
+  
+
+  if ((!user?.token || user?.status !== 2)) {
       return (
           <>
-              <h1>Vous n'avez pas les authorisation nécessaire pour acceder à cette page.</h1>
+              <h1>Vous n'avez pas les authorisations nécessaires pour accéder à cette page.</h1>
           </>
       )
   }
-  const matchsummary = props.matches.find(match => match.id_games === Number(props.matchId));
+  
+  
 
   return (
     <>
+
+
+<SwitchFilter showForm={showForm} setShowForm={setShowForm} switchText={switchText} />
       {matchsummary &&
         <BannerContainer>
           <MatchBanner>
@@ -165,8 +191,14 @@ const MatchSummary: React.FC<{ matchId: string, matches: MatchDataType[] }> = (p
       }
 
       <SummaryContainer>
-      <MatchSummaryTeams matchId={props.matchId} matches={props.matches} />
-      <MatchSummaryPlayers matchId={props.matchId} matches={props.matches} />
+
+        {
+          (showForm) ?
+            <MatchSummaryTeams matchId={props.matchId} matches={props.matches} />
+
+            :
+            <MatchSummaryPlayers matchId={props.matchId} matches={props.matches} />
+        }
 
       </SummaryContainer>
     </>

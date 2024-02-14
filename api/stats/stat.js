@@ -1,3 +1,5 @@
+const { API_BASE_URL } = require('../config.js');
+
 const express = require('express');
 const statApp = express();
 statApp.use(express.json());
@@ -15,8 +17,7 @@ const cors = require('cors');
 
 // configure the cors package
 const corsOptions = {
-    origin: 'http://localhost:3000',
-    // origin: 'http://coach.datadunk.io',
+    origin: { API_BASE_URL },
     optionsSuccessStatus: 200
 };
 

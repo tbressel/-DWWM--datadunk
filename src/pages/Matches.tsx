@@ -16,7 +16,6 @@ import { MatchDataType } from '../interfaces/types';
 // Config importation
 import { API_BASE_URL } from '../config';
 
-import { useNavigate } from 'react-router-dom'; // Importer useHistory pour gérer les redirections
 
 ////////////////////////////////////////////////////////////
 //////////////////   MAIN COMPONENT   //////////////////////
@@ -25,24 +24,26 @@ import { useNavigate } from 'react-router-dom'; // Importer useHistory pour gér
 const Matches = () => {
 
 
-  // Utiliser useNavigate pour gérer les redirections
-  const navigate = useNavigate(); 
-
-
-  /**
-   * Represents the state of matches.
-   * @typeParam MatchDataType - The type of match data.
-   */
+// Represents the state of matches.
   const [matches, setMatches] = useState<MatchDataType[]>([]);
 
-  /**
-   * Represents the state of the selected match.
-   * @typeParam string - The type of match id.
-   */
+
+// Represents the state of the selected match.
   const [selectedMatchId, setSelectedMatchId] = useState<string | null>(null);
 
+
+// Represents the state of the filter.
   const [showFilter, setShowFilter] = useState<boolean>(true);
 
+
+
+
+
+
+/**
+ * Function that fetches the data from the API and updates the state of matches.
+ * It takes 24 in parameter which is the id of the last season.
+ */
   useEffect(() => {
     const fetchData = async ()   => {
       try {
@@ -54,15 +55,29 @@ const Matches = () => {
         console.error('Error fetching data:', error);
       }
     };
-
     fetchData();
   }, []);
 
+
+
+
+
+  /**
+   * 
+   * Function that handles the selection of a match and updates the state of selectedMatchId.
+   * @param id 
+   */
   const onSelectMatch = (id: number) => {
     const idString = id.toString();
+    // Get the id of the selected match and update the state of selectedMatchId
     setSelectedMatchId(idString);
+    // Hide filters when a match is selected
     setShowFilter(false);
   };
+
+
+
+
 
   /**
    * Function that handles the change of the filter while using setMatches function to update the state of matches.
@@ -72,6 +87,10 @@ const Matches = () => {
         setMatches(filteredMatches);
   };
 
+
+
+
+  
   return (
     <>
    {showFilter && <MatchFilter onFilterChange={handleFilterChange} />}

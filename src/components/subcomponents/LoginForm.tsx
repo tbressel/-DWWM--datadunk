@@ -133,12 +133,22 @@ const LoginForm = (props: LoginFormProps) => {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
+        // Get the CSRF token from the cookie
+        const csrfToken = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('_csrf'));
+
+        let tokenValue = '';
+        if (csrfToken) {
+            tokenValue = csrfToken.split('=')[1];
+        } 
 
         try {
             const response = await fetch(`${API_BASE_URL}/api/users/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'csrf-token': tokenValue // Include the CSRF token in the request header
                 },
                 body: JSON.stringify(formData),
                 credentials: 'include'
@@ -151,6 +161,7 @@ const LoginForm = (props: LoginFormProps) => {
 
                 // update the user context with the response
                 setUser(jsonResponse);
+                localStorage.setItem('authToken', jsonResponse.token);
 
                 props.onLogin();
             }
@@ -159,7 +170,6 @@ const LoginForm = (props: LoginFormProps) => {
             console.error('Error during the form send', error);
         }
     };
-
 
 
 
