@@ -46,8 +46,12 @@ flex-direction: column;
 border-radius: 20px;
 background: ${colors.blanc};
 position: relative;
-top: 172px;
+top: 368px;
 width: 90%;
+
+@media screen and (min-width: 768px) {
+    top: 172px;
+}
 
 `;
 const UserUpdateFormTitle = styled.div`
@@ -72,8 +76,11 @@ const UserUpdateFormInputContainer = styled.div`
     padding: 15px 38px;
     flex-direction: column;  
     align-items: center;
-    gap: 50px;
+    gap: 20px;
     
+    @media screen and (min-width: 768px) {
+        gap: 50px;
+}
     `;
 const InputField = styled.div`
         font-family: 'Barlow Medium';
@@ -85,9 +92,9 @@ const InputField = styled.div`
                 border-radius: 10px;           
                 background: ${colors.violet1};
                 font-family: 'Barlow Medium';
-                font-size: 22px;             
+                font-size: 13px;             
                 font-weight: 600;             
-                
+                color: ${colors.violet3};
             }
             label {
   width: 226px;
@@ -99,14 +106,14 @@ const UserUpdateFormCheckboxContainer = styled.div`
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 50px;
+    gap: 20px;
     flex-wrap: wrap;
 
         .checkbox__container {        
             display: flex;
-            width: 150px;
+            width: 100%;
             height: 42px;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
             gap: 10px;
 
@@ -118,7 +125,14 @@ const UserUpdateFormCheckboxContainer = styled.div`
                     align-items: center;
                     gap: 14.292px;
                 }
+                @media screen and (min-width: 768px) {
+                    width: 150px;
+                    
         }
+    }
+        @media screen and (min-width: 768px) {
+        gap: 50px;
+}
 `;
 const UserUpdateFormPasswordContainer = styled.div`
     display: flex;
@@ -149,7 +163,7 @@ const UserUpdateFormButtonContainer = styled.div`
     align-self: stretch; 
 `;
 const UserAddPlainButton = styled.button`
-    cursor: pointer;
+   cursor: pointer;
     display: inline-flex;
     height: 50px;
     padding: 10px 24px;
@@ -172,7 +186,7 @@ const UserAddPlainButton = styled.button`
 
 `;
 const UserAddEmptyButton = styled.button`
-    cursor: pointer;
+   cursor: pointer;
     display: inline-flex;
     height: 50px;
     padding: 10px 24px;

@@ -18,8 +18,6 @@ const pool = mysql.createPool({
 // Used to encrypt password
 const bcrypt = require('bcrypt');
 
-// Used to generate random string
-const crypto = require('crypto');
 
 // Used to generate a token
 const jwt = require('jsonwebtoken');
@@ -34,8 +32,6 @@ const cookieParser = require('cookie-parser');
 // to parse a body from a request 
 const bodyParser = require('body-parser');
 
-// Generate a token agains CSRF attak
-const csurf = require('csurf');
 
 // to setting this API with requests coming only from one URL
 const cors = require('cors');
@@ -65,38 +61,23 @@ userApp.use(cookieParser());
 // Analyse body requests
 userApp.use(bodyParser.urlencoded({ extended: false }));
 
-// // Setting of csurf to use customized cookie
-// const csrfProtection = csurf({
-//     cookie: {
-//         key: '_csrf',
-//         secure: false, // ligne used only for local project
-//         httpOnly: true,
-//         sameSite: true,
-//         maxAge: 24 * 60 * 60 * 1000
-//     },
-//     // Read CSRF token from header  'csrf-token'
-//     value: (req) => req.headers['csrf-token'] 
-// });
-
-// // Use csurf on all routes
-// userApp.use(csrfProtection);
 
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
 ///////////////////       ENDPOINTS      //////////////////////
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
-
+userApp.post('/verify', authenticateToken, (req, res) => {
+    
+    res.json({  valid: true,
+                tokenObject: req.tokenObject });
+});
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////       USER LOGIN      /////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
-// userApp.post('/login', csrfProtection, (req, res) => {
+
 userApp.post('/login', (req, res) => {
-
-
-//    // Generate a CSRF Token
-//   const csrfToken = req.csrfToken();
 
     // Get datas from POST request
     const { action, pseudo, password } = req.body;
@@ -138,11 +119,11 @@ userApp.post('/login', (req, res) => {
                         } else {
                             if (isMatch) {
 
-                                // Generate a random string for the secret key
-                                const secretKey = crypto.randomBytes(32).toString('hex');
+                               // Utiliser une clé secrète fixe plutôt que de la générer à chaque fois
+                                const secretKey = process.env.JWT_SECRET_KEY;
 
                                 // Generate a token with user information and the secret key
-                                const token = jwt.sign(
+                                const sessionToken = jwt.sign(
                                     {
                                         id: queryResult[0].id,
                                         firstname: queryResult[0].user_firstname,
@@ -156,6 +137,7 @@ userApp.post('/login', (req, res) => {
                                     secretKey,
                                     { expiresIn: '1h' }
                                 );
+
                                 // Generate the Json response    
                                 res.json({
                                     action: action,
@@ -169,8 +151,8 @@ userApp.post('/login', (req, res) => {
                                     status: queryResult[0].user_role,
                                     status_name: queryResult[0].user_role_name,
                                     avatar: queryResult[0].user_avatar,
-                                    token: token,
-                                    // csrfToken: csrfToken,
+                                    sessionToken: sessionToken,
+                                    
                                 });
                             } else {
                                 res.status(401).json({
@@ -390,4 +372,32 @@ const notificationMessage = {
     'add_success': 'L\'utilisateur a bien été ajouté',
 }
 
+
+// /**
+//  * 
+//  * Function to authenticate the token
+//  * 
+//  * @param {*} req 
+//  * @param {*} res 
+//  * @param {*} next 
+//  * @returns 
+//  */
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization'];
+    console.log(req.headers);
+    const token = authHeader && authHeader.split(' ')[1];
+    console.log(token);
+
+    if (token == null) return res.sendStatus(401);
+
+    // jwt.verify(token, process.env.JWT_SECRET_KEY, (err, {status}) => {
+    jwt.verify(token, process.env.JWT_SECRET_KEY, (err, tokenObject) => {
+
+        // console.log(status)
+
+        if (err) return res.sendStatus(403);
+        req.tokenObject = tokenObject;
+        next();
+    });
+}
 module.exports = userApp;

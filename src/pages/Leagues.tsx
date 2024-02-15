@@ -32,19 +32,29 @@ const [selectedLeagueId, setSelectedLeagueId] = useState<string | null>(null);
  * Function that fetches the data from the API and updates the state of matches.
  * It takes 24 in parameter which is the id of the last season.
  */
-  useEffect(() => {
-    const fetchData = async ()   => {
-      try {
-        const response = await fetch(`${API_BASE_URL}/api/cards/league/`);
-        const data = await response.json();
-        setLeagues(data);
-          console.log(data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const sessionToken = localStorage.getItem('sessionToken');
+      
+      const response = await fetch(`${API_BASE_URL}/api/cards/league/`, {
+        headers: {
+          'Authorization': `Bearer ${sessionToken}`
+        }
+      });
+      const data = await response.json();
+      if (!response.ok) {
+    
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    };
-    fetchData();
-  }, []);
+      setLeagues(data);
+      console.log(data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+  fetchData();
+}, []);
 
  /**
    * 

@@ -20,6 +20,7 @@ import { LoginContext } from '../../contexts/LoginContext';
 // Types importation
 import { UserDataType } from '../../interfaces/types';
 
+
 ////////////////////////////////////////////////////////////
 //////////////////   STYLE COMPONENTS   ////////////////////
 ////////////////////////////////////////////////////////////
@@ -129,9 +130,10 @@ const Login = ({ user }: LoginProps) => {
 
             // Traitez la réponse ici si nécessaire
             const jsonResponse = await response.json();
+
             setUser(jsonResponse);
-            localStorage.removeItem('authToken');
-           
+
+            localStorage.removeItem('sessionToken');
 
         } catch (error) {
             console.error('Erreur lors de la soumission du formulaire:', error);
@@ -142,19 +144,22 @@ const Login = ({ user }: LoginProps) => {
 
     const onLogout = () => {
 
-      
-      // on envoie une requete au serveur pour supprimer la session
-      logoutSubmit();
-         
-     // On passe le statut de connexion à true
-     setNotification({ state: true, action: 'logout' });
-
-     // Masquer UserPostNotification après 2 secondes
-      setTimeout(() => {
-          setNotification({ state: false, action: '' });
-      }, 2000);
-            // on modifie le context pour supprimer l'utilisateur
-            setUser(null);
+        
+        // on envoie une requete au serveur pour supprimer la session
+        logoutSubmit();
+        
+        setIsLoggedIn(false);
+        // On passe le statut de connexion à true
+        setNotification({ state: true, action: 'logout' });
+        
+        // Masquer UserPostNotification après 2 secondes
+        setTimeout(() => {
+            setNotification({ state: false, action: '' });
+            window.location.reload();
+        }, 2000);
+        // on modifie le context pour supprimer l'utilisateur
+        
+        
   }
 
     const onCrossClick = () => {
@@ -182,7 +187,7 @@ const Login = ({ user }: LoginProps) => {
 
     return (
         <>
-            {showLoginForm ? 
+            {(user === null) && showLoginForm ? 
                 <LoginForm 
                 // passage de props  de la valeur de l'état de showLoginForm
                 showLoginForm={showLoginForm}
@@ -207,11 +212,13 @@ const Login = ({ user }: LoginProps) => {
                 <LoginBoxRight>
                     <LoginName>
                         {user ? (
-                            <p>
-                            <span>{user.firstname} </span>
-                            <span>{user.lastname}</span>
-                        </p>
-                            ) : null}
+                            <>
+                                <p>
+                                    <span>{user.firstname} </span>
+                                    <span>{user.lastname}</span>
+                                </p>
+                            </>
+                        ) : null}
                     </LoginName>
                     <LoginAction onClick={ () => {setShowLoginForm(!showLoginForm)
                     if (isLoggedIn) {
@@ -224,8 +231,11 @@ const Login = ({ user }: LoginProps) => {
                         onCrossClick();
                     }}}>
                                                 
-                            {isLoggedIn ? (
+                            {((user)) || (isLoggedIn === true) ? (
+                                <>
                                 <p onClick={() => onLogout()}>Déconnexion</p>
+                                {showLoginForm === false}
+                                </>
                             ) : (
                                 <p>Connexion</p>
                             )}

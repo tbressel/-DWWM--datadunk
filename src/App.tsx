@@ -11,7 +11,7 @@ import styled from 'styled-components';
 
 
 // React importations
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // Context importation
@@ -55,13 +55,50 @@ const Space = styled.div`
 
 const App = () => {
 
- 
-
-
-
   // declaration of the state variables
   const [user, setUser] = useState<UserDataType | null>(null);
   const [msg, setMsg] = useState<NotificationDataType | null>(null);
+
+  useEffect(() => {
+    const sessionToken = localStorage.getItem('sessionToken');
+
+    if (sessionToken) {
+      fetch(`${API_BASE_URL}/api/users/verify`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${sessionToken}`
+        },
+        body: JSON.stringify({ sessionToken }),
+      })
+
+      .then(res => res.json())
+      
+      .then(data => {
+        if (data.valid) {
+
+          console.log('User logged');
+          console.log(data.tokenObject);
+
+          setUser(data.tokenObject);
+
+          console.log(user);
+
+
+        } else {
+          console.log('User not logged');
+          
+        }
+      })
+
+      .catch(error => {
+        console.error('An error occurred:', error);
+      
+      });
+    }
+  }, []);
+
+
 
   // const [seasonsList, setSeasonsList] = useState<any[]>([]); 
   // const [teamsList, setTeamsList] = useState<any[]>([]); 

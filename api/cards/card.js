@@ -4,10 +4,11 @@ const express = require('express');
 const cardApp = express();
 cardApp.use(express.json());
 
-
+const jwt = require('jsonwebtoken');
 /////////////////////////////////////////
 //////////    MIDDLEWARES   /////////////
 /////////////////////////////////////////
+
 
 // cors (against cross-origin requests but from http://coach.datadunk.io)
 // and configure accessiblility of the API
@@ -19,10 +20,8 @@ const corsOptions = {
 };
 cardApp.use(cors(corsOptions));
 
-
-
-
 const mysql = require('mysql');
+const { Console } = require('console');
 
 require('dotenv').config();
 
@@ -34,6 +33,7 @@ const pool = mysql.createPool({
     database: process.env.DB_DATA,
     port: process.env.DB_PORT
 });
+
 
 // Vérifie si la connexion à la base de données est réussie
 pool.getConnection((err, connection) => {
@@ -60,7 +60,7 @@ cardApp.get('/franchise/2023', (req, res) => {
     GROUP BY fg.id_franchise, f.franchise_name,fg.id_league 
     ORDER BY fg.id_franchise ASC;
     ;
-`;    
+`;
     pool.query(sql, (error, results) => {
         if (error) {
             console.error(error);
@@ -109,17 +109,17 @@ ORDER BY
     game_date DESC;
 `;
 
-pool.query(sql, [seasonId], (error, results) => {
-    if (error) {
-        console.error(error);
-        res.status(500).json({
-            message: 'Error occurred',
-            status: 'Failure'
-        });
-    } else {
-        res.json(results);
-    }
-});
+    pool.query(sql, [seasonId], (error, results) => {
+        if (error) {
+            console.error(error);
+            res.status(500).json({
+                message: 'Error occurred',
+                status: 'Failure'
+            });
+        } else {
+            res.json(results);
+        }
+    });
 });
 
 
@@ -147,7 +147,7 @@ cardApp.get('/players/2023', (req, res) => {
         WHERE fg.id_season = 24 ) 
         GROUP BY p.id, gs.id_franchise 
         ORDER BY f.id ASC;
-                          `;    
+                          `;
 
     pool.query(sql, (error, results) => {
         if (error) {
@@ -163,18 +163,17 @@ cardApp.get('/players/2023', (req, res) => {
 });
 
 
-
 cardApp.post('/matchsubmit/:season/:team/:league', async (req, res) => {
     const { season, team, league } = req.params;
 
-        var params = [];
+    var params = [];
 
-        if(season != 0) {params.push(season)}  
-        if(team != 0) {params.push(team)}  
-        if(team != 0) {params.push(team)}  
-        if(league != 0) {params.push(league)}  
-        
-        const sql = `
+    if (season != 0) { params.push(season) }
+    if (team != 0) { params.push(team) }
+    if (team != 0) { params.push(team) }
+    if (league != 0) { params.push(league) }
+
+    const sql = `
                 SELECT DISTINCT
                     g.id AS 'id_games',
                     g.game_date AS 'game_date',
@@ -207,30 +206,7 @@ cardApp.post('/matchsubmit/:season/:team/:league', async (req, res) => {
                     game_date DESC
                 `;
 
-                pool.query(sql, params, (error, results) => {
-                    if (error) {
-                        console.error(error);
-                        res.status(500).json({
-                            message: 'Error occurred',
-                            status: 'Failure'
-                        });
-                    } else {
-                        res.json(results);
-                    }});
-
-                    
-   
-                    
-     
-   
-});
-
-
-// Endpoint pour récupérer les données de la table 'franchise'
-cardApp.get('/league/', (req, res) => {
-    const sql = `SELECT * FROM league;`
-    
-    pool.query(sql, (error, results) => {
+    pool.query(sql, params, (error, results) => {
         if (error) {
             console.error(error);
             res.status(500).json({
@@ -241,8 +217,70 @@ cardApp.get('/league/', (req, res) => {
             res.json(results);
         }
     });
+
+
+
+
+
+
 });
 
 
+// Endpoint pour récupérer les données de la table 'franchise'
+
+// Endpoint pour récupérer les données de la table 'league'
+cardApp.get('/league/', authenticateToken, (req, res) => {
+    const sql = `SELECT * FROM league;`
+
+    pool.query(sql, (error, results) => {
+        if (error) {
+            console.error(error);
+            return res.status(500).json({
+                message: 'Error occurred',
+                status: 'Failure'
+            });
+        }
+
+        // If the user is not null or not authorized
+        if (req.tokenObject.status !== 2) {
+            console.log('Vous n\'avez pas les droits');
+            return res.status(666).json({
+                message: 'You are not allowed to access this resource',
+                status: 'Failure',
+            });
+        }
+
+        res.json(results);
+    });
+});
+
 
 module.exports = cardApp;
+
+/**
+ * 
+ * Function to authenticate the token
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns 
+ */
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization'];
+    console.log(req.headers);
+    const token = authHeader && authHeader.split(' ')[1];
+    console.log(token);
+
+    if (token == null) return res.sendStatus(401);
+
+    // jwt.verify(token, process.env.JWT_SECRET_KEY, (err, {status}) => {
+    jwt.verify(token, process.env.JWT_SECRET_KEY, (err, tokenObject) => {
+
+        // console.log(status)
+        // if user is null or token is not authorized
+        if (err) return res.sendStatus(999);
+        req.tokenObject = tokenObject;
+        next();
+    });
+}

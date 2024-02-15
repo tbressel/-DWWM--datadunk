@@ -140,10 +140,13 @@ const MatchSummary: React.FC<{ matchId: string, matches: MatchDataType[] }> = (p
   const { user } = useContext(LoginContext);
 
   // get the token from the local storage
-  const authToken = localStorage.getItem('authToken');
+  const sessionToken = localStorage.getItem('sessionToken');
 
-  console.log(authToken)
-  console.log(user?.token)
+  console.log(sessionToken)
+
+console.log(user)
+
+
 
 
   const [showForm, setShowForm] = useState(true);
@@ -155,7 +158,7 @@ const MatchSummary: React.FC<{ matchId: string, matches: MatchDataType[] }> = (p
   ];
   
 
-  if ((!user?.token || user?.status !== 2)) {
+  if ((!user || user.status !== 2)) {
       return (
           <>
               <h1>Vous n'avez pas les authorisations nécessaires pour accéder à cette page.</h1>
