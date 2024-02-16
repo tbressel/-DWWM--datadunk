@@ -20,62 +20,78 @@ import { API_BASE_URL } from '../config';
 
 const Leagues = () => {
 
-// Represents the state of leagues.
-const [leagues, setLeagues] = useState<LeagueDataType[]>([]);
+  // Represents the state of leagues.
+  const [leagues, setLeagues] = useState<LeagueDataType[]>([]);
+
+  // Represents the state of the selected match.
+  const [selectedLeagueId, setSelectedLeagueId] = useState<string | null>(null);
 
 
-// Represents the state of the selected match.
-const [selectedLeagueId, setSelectedLeagueId] = useState<string | null>(null);
-
-
-/**
- * Function that fetches the data from the API and updates the state of matches.
- * It takes 24 in parameter which is the id of the last season.
- */
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const sessionToken = localStorage.getItem('sessionToken');
-      
-      const response = await fetch(`${API_BASE_URL}/api/cards/league/`, {
-        headers: {
-          'Authorization': `Bearer ${sessionToken}`
-        }
-      });
-      const data = await response.json();
-      if (!response.ok) {
-    
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      setLeagues(data);
-      console.log(data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
-  fetchData();
-}, []);
-
- /**
-   * 
-   * Function that handles the selection of a match and updates the state of selectedMatchId.
-   * @param id 
+  /**
+   * Function that fetches the data from the API and updates the state of matches.
+   * It takes 24 in parameter which is the id of the last season.
    */
- const onSelectLeague = (id: number) => {
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const sessionToken = localStorage.getItem('sessionToken');
+
+  //       const response = await fetch(`${API_BASE_URL}/api/cards/league/`, {
+  //         headers: {
+  //           'Authorization': `Bearer ${sessionToken}`
+  //         }
+  //       });
+  //       const data = await response.json();
+  //       if (!response.ok) {
+
+  //         throw new Error(`HTTP error! status: ${response.status}`);
+  //       }
+  //       setLeagues(data);
+  //       console.log('Liste des ligues : ',data);
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/cards/league/`);
+        const data = await response.json();
+        setLeagues(data);
+        console.log('Liste des ligues : ', data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
+
+  /**
+    * 
+    * Function that handles the selection of a league and updates the state of selectedMatchId.
+    * @param id 
+    */
+  const onSelectLeague = (id: number) => {
     const idString = id.toString();
     setSelectedLeagueId(idString);
   };
 
-console.log(leagues);
-    return (
-        <>
-     
-    <LeaguesList leagues={leagues} onSelectLeague={onSelectLeague} />
+  // console.log(leagues);
+  return (
+    <>
 
-          {/* {selectedLeagueId ? (
+      <LeaguesList leagues={leagues} onSelectLeague={onSelectLeague} />
+
+      {/* {selectedLeagueId ? (
     <LeaguesList leagues={leagues} onSelectLeague={onSelectLeague} />
     ) : null} */}
-        </>
-    );
+    </>
+  );
 };
 export default Leagues;

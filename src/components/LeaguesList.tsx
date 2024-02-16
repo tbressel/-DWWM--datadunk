@@ -44,13 +44,13 @@ const LeaguesList: React.FC<{ leagues: LeagueDataType[]; onSelectLeague: (id: nu
     }, [props.leagues]);
     
     
-    console.log (filteredLeagues);
+    // console.log (filteredLeagues);
   
     return (
       <LeagueListContainer>
         {filteredLeagues.map((league, index) => (
-          console.log(league),
-          console.log(index),
+          // console.log(league),
+          // console.log(index),
           <LeagueCard key={index} league={league} onSelectLeague={props.onSelectLeague} />
         ))}
       </LeagueListContainer>

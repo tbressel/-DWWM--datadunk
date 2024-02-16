@@ -17,12 +17,16 @@ app.listen(port, () => {
 
 
 const cardRoutes = require('./cards/card'); 
-const statRoutes = require('./stats/stat'); 
+
+const statplayerRoutes = require('./statplayers/statplayer'); 
+const statteamRoutes = require('./statteams/statteam'); 
 const userRoutes = require('./users/user');
 const formRoutes = require('./forms/form');
 
 app.use('/api/cards', cardRoutes); 
-app.use('/api/stats', statRoutes); 
+
+app.use('/api/statplayers', statplayerRoutes); 
+app.use('/api/statteams', statteamRoutes); 
 app.use('/api/users', userRoutes); 
 app.use('/api/forms', formRoutes); 
 

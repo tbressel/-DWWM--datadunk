@@ -11,7 +11,7 @@ const Players = () => {
                 const responseStats = await fetch(`${API_BASE_URL}/api/cards/players/2023`);
                 const statsData = await responseStats.json();
                 setPlayers(statsData);
-                console.log(statsData);
+                console.log('Liste des joueurs : ',statsData);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }

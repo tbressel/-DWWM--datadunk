@@ -89,7 +89,7 @@ const LeagueCard: React.FC<{ league: LeagueDataType; onSelectLeague: (id: number
     // declaration of the props variables
     const  { id, league_logo, league_name } = props.league;
 
-    console.log(props.league.id);
+    // console.log(props.league.id);
 
 
     const onSelectLeague = () => {

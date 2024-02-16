@@ -1,3 +1,5 @@
+const { API_BASE_URL } = require('../config.js');
+
 // Dotenv library used for environment variables
 const dotenv = require('dotenv');
 dotenv.config();
@@ -46,9 +48,8 @@ userApp.use(express.json());
 
 // Setting Cors option
 const corsOptions = {
-    origin: 'http://localhost:3000', // Remplacez par l'origine de votre client
-    credentials: true, // Autorise les credentials
-    optionsSuccessStatus: 200 // Réponse de succès pour les requêtes OPTIONS pré-vol
+    origin: { API_BASE_URL },
+    optionsSuccessStatus: 200 
 };
 
 // Using Cors with previous setted options
@@ -102,7 +103,7 @@ userApp.post('/login', (req, res) => {
             if (error) {
                 console.error(error);
                 res.status(500).json({
-                    message: 'Fail of this request',
+                    message: notificationMessage.login_failed,
                     status: 'Failure'
                 });
             } else {
@@ -113,7 +114,7 @@ userApp.post('/login', (req, res) => {
                         if (err) {
                             console.error(err);
                             res.status(500).json({
-                                message: 'Passwords are not the same',
+                                message: notificationMessage.login_failed,
                                 status: 'Failure'
                             });
                         } else {
@@ -156,7 +157,7 @@ userApp.post('/login', (req, res) => {
                                 });
                             } else {
                                 res.status(401).json({
-                                    message: 'Wrong password or nikename',
+                                    message: notificationMessage.login_failed,
                                     status: 'Failure'
                                 });
                             }

@@ -12,6 +12,12 @@ import React, {useState, useEffect, useContext} from 'react';
 // Context importation
 import { LoginContext } from '../../contexts/LoginContext';
 
+// Components importations
+import UserPostNotification from '../UserPostNotification';
+
+// Context importation
+import { NotificationContext } from "../../contexts/NotificationContext";
+
 // Config importation
 import { API_BASE_URL } from '../../config';
 
@@ -116,6 +122,10 @@ interface LoginFormProps {
 const LoginForm = (props: LoginFormProps) => {
 
 
+    const [isNotification, setNotification] = useState({state :false, action: ''});
+    // declaration of the global context variables
+    const { setMsg } = useContext(NotificationContext);
+
     // Get the user from the context
     const { user, setUser } = useContext(LoginContext);
 
@@ -139,12 +149,12 @@ const LoginForm = (props: LoginFormProps) => {
                 headers: {
                     'Content-Type': 'application/json',                
                 },
-                body: JSON.stringify(formData),
-                credentials: 'include'
+                body: JSON.stringify(formData)
             });
 
             if (!response.ok) {
                 throw new Error('POST request error');
+                
             } else {
                 const jsonResponse = await response.json();
 
@@ -156,6 +166,7 @@ const LoginForm = (props: LoginFormProps) => {
             }
 
         } catch (error) {
+            
             console.error('Error during the form send', error);
         }
     };

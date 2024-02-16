@@ -145,7 +145,7 @@ const UserPrevNotification = ({ onCancel, onConfirm, message }: UserPrevNotifica
     // declaration of the global context variables
     const { user } = useContext(LoginContext);
  
-    
+     
    return (
         <>
             <Mask>

@@ -229,7 +229,7 @@ cardApp.post('/matchsubmit/:season/:team/:league', async (req, res) => {
 // Endpoint pour récupérer les données de la table 'franchise'
 
 // Endpoint pour récupérer les données de la table 'league'
-cardApp.get('/league/', authenticateToken, (req, res) => {
+cardApp.get('/league/', (req, res) => {
     const sql = `SELECT * FROM league;`
 
     pool.query(sql, (error, results) => {
@@ -239,20 +239,38 @@ cardApp.get('/league/', authenticateToken, (req, res) => {
                 message: 'Error occurred',
                 status: 'Failure'
             });
+        } else {
+
+            res.json(results);
         }
 
-        // If the user is not null or not authorized
-        if (req.tokenObject.status !== 2) {
-            console.log('Vous n\'avez pas les droits');
-            return res.status(666).json({
-                message: 'You are not allowed to access this resource',
-                status: 'Failure',
-            });
-        }
-
-        res.json(results);
     });
 });
+// // Endpoint pour récupérer les données de la table 'league'
+// cardApp.get('/league/', authenticateToken, (req, res) => {
+//     const sql = `SELECT * FROM league;`
+
+//     pool.query(sql, (error, results) => {
+//         if (error) {
+//             console.error(error);
+//             return res.status(500).json({
+//                 message: 'Error occurred',
+//                 status: 'Failure'
+//             });
+//         }
+
+//         // If the user is not null or not authorized
+//         if (req.tokenObject.status !== 2) {
+//             console.log('Vous n\'avez pas les droits');
+//             return res.status(666).json({
+//                 message: 'You are not allowed to access this resource',
+//                 status: 'Failure',
+//             });
+//         }
+
+//         res.json(results);
+//     });
+// });
 
 
 module.exports = cardApp;

@@ -148,7 +148,7 @@ const MatchSummaryPlayers: React.FC<{ matchId: string, matches: MatchDataType[] 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/stats/matchsummaryplayers/${props.matchId}`);
+        const response = await fetch(`${API_BASE_URL}/api/statplayers/matchsummaryplayers/${props.matchId}`);
         const data = await response.json();
         setSummaryPlayers(data);
         // console.log(data);

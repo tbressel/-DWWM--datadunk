@@ -190,7 +190,7 @@ const ToolTips = styled.div`
     padding: 4px;
   }
 `
-  
+   
 ////////////////////////////////////////////////////////////
 //////////////////   MAIN COMPONENT   //////////////////////
 ////////////////////////////////////////////////////////////
@@ -216,7 +216,7 @@ const MatchSummaryTeams: React.FC<{ matchId: string, matches: MatchDataType[] }>
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/stats/matchsummaryteams/${props.matchId}`);
+        const response = await fetch(`${API_BASE_URL}/api/statteams/matchsummaryteams/${props.matchId}`);
         const data = await response.json();
         setSummary(data);
         setEfficiency(data);

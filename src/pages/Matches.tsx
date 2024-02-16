@@ -44,7 +44,7 @@ const Matches = () => {
         const response = await fetch(`${API_BASE_URL}/api/cards/games/24`);
         const data = await response.json();
         setMatches(data);
-        // console.log(data);
+        console.log("Liste des matchs",data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
