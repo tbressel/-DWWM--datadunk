@@ -204,8 +204,8 @@ const MatchSummary: React.FC<{ matchId: string, matches: MatchDataType[] }> = (p
   ];
   
 
-  // if (user) {
-  if (user?.status !== 2) {
+  if (user) {
+  // if (user?.status !== 2) {
     return (
       <>
         <MainContainer>

@@ -1,5 +1,5 @@
 // production settings
-module.exports.API_BASE_URL = 'http://coach.datadunk.io';
+module.exports.API_BASE_URL = 'https://coach.datadunk.io';
 module.exports.API_LISTEN_PORT = 4000;
 
 

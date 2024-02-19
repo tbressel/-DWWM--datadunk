@@ -13,7 +13,7 @@ const formApp = express();
 const cors = require('cors');
 
 const corsOptions = {
-    credentials: true,
+    // credentials: true,
     origin: { API_BASE_URL },
     optionsSuccessStatus: 200
 };

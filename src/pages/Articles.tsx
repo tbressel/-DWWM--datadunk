@@ -1,11 +1,11 @@
 
 import { useContext } from "react";
+
 import { LoginContext } from "../contexts/LoginContext";
 
-
 import styled from "styled-components";
-import { colors } from "../colors";
 
+import { colors } from "../colors";
 
 ////////////////////////////////////////////////////////////
 //////////////////   STYLE COMPONENTS   ////////////////////
@@ -35,7 +35,7 @@ const NotificationContainer = styled.div`
     border-radius: 20px;
     background: ${colors.blanc};
     box-shadow: #d0d0d0 5px 5px 5px;
-    z-index: 3;
+    z-index: 0;
 `;
 const NotificationTitle = styled.div`
     color: #000;
@@ -60,8 +60,6 @@ const NotificationTitle = styled.div`
           width: 150px
         }
 `;
-
-
 
 ////////////////////////////////////////////////////////////
 //////////////////   MAIN COMPONENT   //////////////////////
