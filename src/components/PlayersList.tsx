@@ -27,11 +27,13 @@ const PlayersListContainer = styled.div`
     border-radius: 10px;
 `;
 
+
 ////////////////////////////////////////////////////////////
 //////////////////   MAIN COMPONENT   //////////////////////
 ////////////////////////////////////////////////////////////
 
-const PlayersList: React.FC< {players: PlayerDataType[]} > = (props) => {    
+const PlayersList: React.FC< {players: PlayerDataType[]} > = (props) => {   
+     
     return (
         <PlayersListContainer>
             {props.players.map((player, index) => (

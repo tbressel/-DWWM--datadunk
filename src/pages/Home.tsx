@@ -1,4 +1,5 @@
-import { useContext } from "react";
+import { useContext, useEffect,useState } from "react";
+import { API_BASE_URL } from "../config";
 
 import { LoginContext } from "../contexts/LoginContext";
 
@@ -6,6 +7,7 @@ import styled from "styled-components";
 import { colors } from "../colors";
 
 
+import { MatchSummaryTeamsDataType } from '../interfaces/types';
 
 ////////////////////////////////////////////////////////////
 //////////////////   STYLE COMPONENTS   ////////////////////
@@ -62,10 +64,38 @@ const NotificationTitle = styled.div`
 `;
 
 
+
 ////////////////////////////////////////////////////////////
 //////////////////   MAIN COMPONENT   //////////////////////
 ////////////////////////////////////////////////////////////
 const Home = () => {
+
+  const [summary, setSummary] = useState<MatchSummaryTeamsDataType[]>([]);
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/statteams/matchsummaryteams/26501`);
+        const data = await response.json();
+        setSummary(data);
+
+        console.log(data);
+
+      } catch (error) {
+        console.error('Erreur lors du chargement des données:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
+
+
+
+
+
 
   const { user } = useContext(LoginContext);
 

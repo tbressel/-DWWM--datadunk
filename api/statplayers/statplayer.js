@@ -166,11 +166,22 @@ statApp.get('/matchsummaryplayers/:id', async (req, res) => {
         }
     });
     
-    // Fonction pour calculer la moyenne d'une colonne donnée
     function calculateAverage(array, columnName) {
-        const sum = array.reduce((total, item) => total + (item[columnName] || 0), 0);
-        const average = sum / array.length;
+        // Filter out zero values before calculating the sum
+        const filteredArray = array.filter(item => item[columnName] !== 0);
+    
+        // Calculate the sum of non-zero values
+        const sum = filteredArray.reduce((total, item) => total + (item[columnName] || 0), 0);
+    
+        // Calculate the number of non-zero values
+        const nonZeroCount = filteredArray.reduce((count, item) => count + (item[columnName] > 0 ? 1 : 0), 0);
+    
+        // Calculate the average
+        const average = sum / nonZeroCount;
+    
+        // Round the average to two decimal places
         const roundedAverage = Number(average.toFixed(2));
+    
         return isNaN(roundedAverage) ? 0 : roundedAverage;
     }
     

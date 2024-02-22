@@ -90,7 +90,7 @@ statApp.get('/matchsummaryteams/:id', async (req, res) => {
                 uniqueFranchiseArray[franchiseId].push(item);
             }
             const arrays = Object.values(uniqueFranchiseArray);
-
+           
             // Add one row with the sum of each columns
             for (const array of arrays) {
                 const globalStatRow = {
@@ -104,6 +104,7 @@ statApp.get('/matchsummaryteams/:id', async (req, res) => {
                     threeT: 0,
                     lr: 0,
                     lt: 0,
+                    lPerc: 0,
                     ro: 0,
                     rd: 0,
                     rt: 0,
@@ -116,8 +117,8 @@ statApp.get('/matchsummaryteams/:id', async (req, res) => {
                     eval: 0,
                     plusMinus: 0
                 };
-
                 // Columns Sum
+             
                 for (const item of array) {
                     globalStatRow.fiveD += item.fiveD || 0;
                     globalStatRow.min += item.min || 0;
@@ -127,7 +128,7 @@ statApp.get('/matchsummaryteams/:id', async (req, res) => {
                     globalStatRow.threeR += item.threeR || 0;
                     globalStatRow.threeT += item.threeT || 0;
                     globalStatRow.lr += item.lr || 0;
-                    globalStatRow.lt += item.lt || 0;
+                    globalStatRow.lt += item.lt || 0;   
                     globalStatRow.ro += item.ro || 0;
                     globalStatRow.rd += item.rd || 0;
                     globalStatRow.rt += item.rt || 0;
@@ -140,106 +141,285 @@ statApp.get('/matchsummaryteams/:id', async (req, res) => {
                     globalStatRow.eval += item.eval || 0;
                     globalStatRow.plusMinus += item.plusMinus || 0;
                 }
-
+              
                 // Specific column average
                 globalStatRow.twoPerc = calculateAverage(array, 'twoPerc');
                 globalStatRow.threetPerc = calculateAverage(array, 'threetPerc');
-                globalStatRow.lPerc = calculateAverage(array, 'lPerc');
+                globalStatRow.lPerc = globalStatRow.lr / globalStatRow.lt * 100;
 
+                // push all added row into the array
                 array.push(globalStatRow);
             }
+            // rebuild a nwe array from this array.
+            const globalArrays = arrays.map(array => array[array.length - 1]);
+            console.log(globalArrays);
 
-            const globalStatArray = arrays.map(array => array[array.length - 1]);
-            // console.log(globalStatArray);
+            let TeamA = globalArrays[0];
+            let TeamB = globalArrays[1];
+
+           
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////                 EFFICACITES OFFENSIVES ET DEFENSIVES              /////////////////////// 
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            possTeamA = (TeamA.twoT + TeamA.threeT) + (0.44 * TeamA.lt) + (TeamA.bp - TeamA.ro)
+            possTeamB = (TeamB.twoT + TeamB.threeT) + (0.44 * TeamB.lt) + (TeamB.bp - TeamB.ro)
+            
+            scPossTeamA = (TeamA.twoR + TeamA.threeR)  + (1 - ((1 - (TeamA.lr / TeamA.lt))^2) ) + (TeamA.lt * 0.4)
+            scPossTeamB = (TeamB.twoR + TeamB.threeR)  + (1 - ((1 - (TeamB.lr / TeamB.lt))^2) ) + (TeamB.lt * 0.4)
+            
+                        const offdefEfficiency = [
+                            {
+                                id_franchise: TeamA.id_franchise,
+                                Poss: possTeamA,
+                                Action: null,
+                                ORtg: Math.round(100 * TeamA.pts / (possTeamA), 1),
+                                FloorPerc: null,
+                                DRgt: Math.round(100 * TeamB.pts / possTeamB, 1),
+                                StopPerc: null,
+                                netRtg: null,
+                            },
+                            {
+                                id_franchise: TeamB.id_franchise,
+                                Poss: possTeamB,
+                                Action: null,
+                                ORtg: Math.round(100 * TeamB.pts / (possTeamB), 1),
+                                FloorPerc: null,
+                                DRgt: Math.round(100 * TeamA.pts / possTeamA, 1),
+                                StopPerc: null,
+                                netRtg: null,
+                            },               
+                        ]
+
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////                          FOUR FACTORS                             /////////////////////// 
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            
+            // Add one row with the sum of each column
+            
+            const fourFactor = [
+                {   
+                    id_franchise: TeamA.id_franchise,
+                    eFGPerc: Math.round((((TeamA.twoR + TeamA.threeR) + 0.5 * TeamA.threeR) / (TeamA.twoT + TeamA.threeT)) * 100),
+                    twoPM: TeamA.twoR,
+                    twoPA: TeamA.twoT,
+                    twoPerc: TeamA.twoPerc,
+                    threePM: TeamA.threeR,
+                    threePA: TeamA.threeT,
+                    threePerc: TeamA.threePerc,
+                    ftm: TeamA.lr,
+                    fta: TeamA.lt,
+                    tir2pPerc: Math.round((TeamA.twoR * 100) / TeamA.twoT),
+                    tir3pPerc: Math.round((TeamA.threeR * 100) / TeamA.threeT),
+                },
+                {
+                    id_franchise: TeamB.id_franchise,
+                    eFGPerc: Math.round((((TeamB.twoR + TeamB.threeR) + 0.5 * TeamB.threeR) / (TeamB.twoT + TeamB.threeT)) * 100),
+                    twoPM: TeamB.twoR,
+                    twoPA: TeamB.twoT,
+                    twoPerc: TeamB.twoPerc,
+                    threePM: TeamB.threeR,
+                    threePA: TeamB.threeT,
+                    threePerc: TeamB.threePerc,
+                    ftm: TeamB.lr,
+                    fta: TeamB.lt,
+                    tir2pPerc: Math.round((TeamB.twoR * 100) / TeamB.twoT),
+                    tir3pPerc: Math.round((TeamB.threeR * 100) / TeamB.threeT),
+                },
+            ]
+            
+            console.log(fourFactor);
+          
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////            STATISTIQUES DE REUSSITE ET DE TENDANCE AUX TIRES      /////////////////////// 
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+            const shootTryStats = [
+                {   
+                    id_franchise: TeamA.id_franchise,
+                    eFGPerc: Math.round((((TeamA.twoR + TeamA.threeR) + 0.5 * TeamA.threeR) / (TeamA.twoT + TeamA.threeT)) * 100),
+                    twoPM: TeamA.twoR,
+                    twoPA: TeamA.twoT,
+                    twoPerc: TeamA.twoPerc,
+                    threePM: TeamA.threeR,
+                    threePA: TeamA.threeT,
+                    threePerc: TeamA.threePerc,
+                    ftm: TeamA.lr,
+                    fta: TeamA.lt,
+                    ftPerc: TeamA.lPerc,
+                    tir2pPerc: Math.round((TeamA.twoR * 100) / TeamA.twoT),
+                    tir3pPerc: Math.round((TeamA.threeR * 100) / TeamA.threeT)
+                },
+                {
+                    id_franchise: TeamB.id_franchise,
+                    eFGPerc: Math.round((((TeamB.twoR + TeamB.threeR) + 0.5 * TeamB.threeR) / (TeamB.twoT + TeamB.threeT)) * 100),
+                    twoPM: TeamB.twoR,
+                    twoPA: TeamB.twoT,
+                    twoPerc: TeamB.twoPerc,
+                    threePM: TeamB.threeR,
+                    threePA: TeamB.threeT,
+                    threePerc: TeamB.threePerc,
+                    ftm: TeamB.lr,
+                    fta: TeamB.lt,
+                    ftPerc: TeamB.lPerc,
+                    tir2pPerc: Math.round((TeamB.twoR * 100) / TeamB.twoT),
+                    tir3pPerc: Math.round((TeamB.threeR * 100) / TeamB.threeT)
+                },
+            ]
+
+            console.log(shootTryStats);
+
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////     STATISTIQUES DE REUSSITE ET DE TENDANCE AUX TIRS - DEFENSE    /////////////////////// 
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            const shootTryStatsDefense = [
+                {   
+                    id_franchise: TeamA.id_franchise,
+                    eFGPerc: Math.round((((TeamB.twoR + TeamB.threeR) + 0.5 * TeamB.threeR) / (TeamB.twoT + TeamB.threeT)) * 100),
+                    twoPM: TeamB.twoR,
+                    twoPA: TeamB.twoT,
+                    twoPerc: TeamB.twoPerc,
+                    threePM: TeamB.threeR,
+                    threePA: TeamB.threeT,
+                    threePerc: TeamB.threePerc,
+                    ftm: TeamB.lr,
+                    fta: TeamB.lt,
+                    ftPerc: TeamB.lPerc,
+                    tir2pPerc: Math.round((TeamB.twoR * 100) / TeamB.twoT),
+                    tir3pPerc: Math.round((TeamB.threeR * 100) / TeamB.threeT)
+                },
+                {
+                    id_franchise: TeamB.id_franchise,
+                    eFGPerc: Math.round((((TeamB.twoR + TeamB.threeR) + 0.5 * TeamB.threeR) / (TeamB.twoT + TeamB.threeT)) * 100),
+                    twoPM: TeamB.twoR,
+                    twoPA: TeamB.twoT,
+                    twoPerc: TeamB.twoPerc,
+                    threePM: TeamB.threeR,
+                    threePA: TeamB.threeT,
+                    threePerc: TeamB.threePerc,
+                    ftm: TeamB.lr,
+                    fta: TeamB.lt,
+                    ftPerc: TeamB.lPerc,
+                    tir2pPerc: Math.round((TeamB.twoR * 100) / TeamB.twoT),
+                    tir3pPerc: Math.round((TeamB.threeR * 100) / TeamB.threeT)
+                },
+            ]
+
+            console.log(shootTryStatsDefense);
 
 
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            ////////////////////////////          EFFICACITES OFFENSIVES ET DEFENSIVES          ///////////////////////// 
+            ///////////////////            STATISTIQUES DE REBOND ET EFFICACITE AU REBOND         /////////////////////// 
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-            // Add one row with the sum of each columns
-// Add one row with the sum of each columns
-for (const array of arrays) {
-    const defOffEfficiency = {
-        id_franchise: array[0].id_franchise,
-        fiveD: 0,
-        min: 0,
-        pts: 0,
-        twoR: 0,
-        twoT: 0,
-        threeR: 0,
-        threeT: 0,
-        lr: 0,
-        lt: 0,
-        ro: 0,
-        rd: 0,
-        rt: 0,
-        pd: 0,
-        bp: 0,
-        in: 0,
-        ct: 0,
-        fte: 0,
-        cs: 0,
-        eval: 0,
-        plusMinus: 0
-    };
-                // Columns Sum
-                for (const item of array) {
-                    defOffEfficiency.fiveD += item.fiveD || 0;
-                    defOffEfficiency.min += item.min || 0;
-                    defOffEfficiency.pts += item.pts || 0;
-                    defOffEfficiency.twoR += item.twoR || 0;
-                    defOffEfficiency.twoT += item.twoT || 0;
-                    defOffEfficiency.threeR += item.threeR || 0;
-                    defOffEfficiency.threeT += item.threeT || 0;
-                    defOffEfficiency.lr += item.lr || 0;
-                    defOffEfficiency.lt += item.lt || 0;
-                    defOffEfficiency.ro += item.ro || 0;
-                    defOffEfficiency.rd += item.rd || 0;
-                    defOffEfficiency.rt += item.rt || 0;
-                    defOffEfficiency.pd += item.pd || 0;
-                    defOffEfficiency.bp += item.bp || 0;
-                    defOffEfficiency.in += item.in || 0;
-                    defOffEfficiency.ct += item.ct || 0;
-                    defOffEfficiency.fte += item.fte || 0;
-                    defOffEfficiency.cs += item.cs || 0;
-                    defOffEfficiency.eval += item.eval || 0;
-                    defOffEfficiency.plusMinus += item.plusMinus || 0;
-                }
+            // Add one row with the sum of each column
+            const rebArrays = [
+                {
+                    id_franchise: TeamA.id_franchise,
+                    Oreb: TeamA.ro,
+                    OrebPerc: Math.round((TeamA.ro / (TeamA.ro + TeamB.rd)) * 100),
+                    Dreb: TeamA.rd,
+                    DrebPerc:  Math.round((TeamA.rd / (TeamA.rd + TeamB.ro)) * 100),
+                    reb: TeamA.rt,
+                    rebPerc: Math.round((TeamA.rt / (TeamA.rt + TeamB.rt)) * 100)
+                },
+                {
+                    id_franchise: TeamB.id_franchise,
+                    Oreb: TeamB.ro,
+                    OrebPerc: Math.round((TeamB.ro / (TeamB.ro + TeamA.rd)) * 100),
+                    Dreb: TeamB.rd,
+                    DrebPerc:  Math.round((TeamB.rd / (TeamB.rd + TeamA.ro)) * 100),
+                    reb: TeamB.rt,
+                    rebPerc: Math.round((TeamB.rt / (TeamB.rt + TeamA.rt)) * 100)
+                },
+            ]
 
-                // Specific column average
-                defOffEfficiency.twoPerc = calculateAverage(array, 'twoPerc');
-                defOffEfficiency.threetPerc = calculateAverage(array, 'threetPerc');
-                defOffEfficiency.lPerc = calculateAverage(array, 'lPerc');
+            console.log(rebArrays);
 
-                array.push(defOffEfficiency);
-            }
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////                 TENDANCES OFFENSIVES ET DEFENSIVES              /////////////////////// 
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            
+                        const offdefTendances = [
+                            {
+                                id_franchise: TeamA.id_franchise,
+                                astPerc: possTeamA,
+                                astTov: null,
+                                threePaPoss: null,
+                                ftaPoss: null,
+                                StlPerc: null,
+                                blkPerc: null
 
-                res.json(globalStatArray);
-            }
-        });
+                            },
+                            {
+                                id_franchise: TeamB.id_franchise,
+                                astPerc: possTeamA,
+                                astTov: null,
+                                threePaPoss: null,
+                                ftaPoss: null,
+                                StlPerc: null,
+                                blkPerc: null
+                            },               
+                        ]
 
 
+            res.json([
+                globalArrays,
+                offdefEfficiency,
+                fourFactor,
+                shootTryStats, 
+                rebArrays,
+                shootTryStatsDefense,
+                offdefTendances 
+            ]);
+        }
+    });
+    
+    
 
 });
 
 
+
 /**
+ * Function to calculate the average of a column, excluding zero values
  * 
- * Function to calculate the average of a column
- * 
- * @param {*} array 
- * @param {*} columnName 
- * @returns 
+ * @param {Array} array - The array of objects
+ * @param {string} columnName - The name of the column
+ * @returns {number} - The average value
  */
 function calculateAverage(array, columnName) {
-    const sum = array.reduce((total, item) => total + (item[columnName] || 0), 0);
-    const average = sum / array.length;
+    // Filter out zero values before calculating the sum
+    const filteredArray = array.filter(item => item[columnName] !== 0);
+
+    // Calculate the sum of non-zero values
+    const sum = filteredArray.reduce((total, item) => total + (item[columnName] || 0), 0);
+
+    // Calculate the number of non-zero values
+    const nonZeroCount = filteredArray.reduce((count, item) => count + (item[columnName] > 0 ? 1 : 0), 0);
+
+    // Calculate the average
+    const average = sum / nonZeroCount;
+
+    // Round the average to two decimal places
     const roundedAverage = Number(average.toFixed(2));
+
     return isNaN(roundedAverage) ? 0 : roundedAverage;
 }
+
 
 
 

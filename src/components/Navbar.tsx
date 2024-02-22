@@ -29,12 +29,12 @@ const BurgerLine = styled.div`
     margin-top: 6px;
     margin-bottom: 6px;
     background-color: #ffffff;
-`;
+`
 const Img = styled.img`
     margin-left: 20px;
     width: 35px;
     height: 37px;
-`;
+`
 const NavbarWrapper = styled.div`
         display: flex;
         flex-direction: row;
@@ -50,10 +50,9 @@ const NavbarWrapper = styled.div`
             align-items: center;
             padding-top: 0px;
             padding-bottom: 0px;
-
         }
+`
 
-`;
 const BurgerContainer = styled.div`
     cursor: pointer;
     width: 30px;
@@ -107,3 +106,5 @@ const Navbar = () => {
     );
 };
 export default Navbar;
+
+

@@ -29,16 +29,14 @@ const Img = styled.img`
 
 @media screen and (min-width: 768px) {
     display: none;
-}
-`;
-
+}`
 
 const Logo = styled.img`
     height: 3rem;
 
 @media screen and (min-width: 768px) {
     display: none;
-}`;
+}`
 
 
 const H1 = styled.h1`
@@ -47,7 +45,7 @@ const H1 = styled.h1`
  
 @media screen and (min-width: 768px) {
     display: none;
-}`;
+}`
 
 
 const Menu = styled.ul`
@@ -61,7 +59,7 @@ const Menu = styled.ul`
     flex-direction: row;
     gap: 5px;
     height: fit-content;
-}`;
+}`
 
 
 const Li = styled.li`
@@ -72,21 +70,19 @@ const Li = styled.li`
     transition: 200ms ease-in-out;
     border-radius: 20px;
 
-
 @media screen and (min-width: 768px) {
     padding: 20px;
     &:hover {
             background-color: ${colors.corail};
             transition: 200ms ease-in-out;
     }
-}
-`;
+}`
 
 
 const MenuItem = styled.span`
     font-family: 'Gibson Medium';
     color: ${colors.blanc};
-`;
+`
 
 /////////////////////////////////////////////////////////////
 //////////////////   INTERFACE TYPES   //////////////////////
@@ -133,8 +129,8 @@ const Navigation = (props: NavigationProps) => {
         background-color: ${colors.bleu};
 
         @media screen and (min-width: 768px) {
-            width: 100%;
             position: initial;
+            width: 100%;
             padding: 0;
         }
     `;
@@ -153,23 +149,21 @@ const Navigation = (props: NavigationProps) => {
                     {Object.keys(navigationData).map(key => (
                         <NavLink key={key} to={navigationData[key].path} onClick={props.onCloseMenu}>
                             <Li>
-                                <Img className={key} src={`assets/images/icons/${navigationData[key].icon}`} alt="" />
+                                <Img className={key} src={`assets/images/icons/${navigationData[key].icon}`} alt={navigationData[key].name} />
                                 <MenuItem className='menu-item'>{navigationData[key].name}</MenuItem>
                             </Li>
                         </NavLink>
                     ))}
-
                     {
                         (user?.status === 2) ?
                             (
                                 <Li onClick={props.onCloseMenu}>
-                                    <Img src={`assets/images/icons/icon-admin.svg`} alt="" />
+                                    <Img src={`assets/images/icons/icon-admin.svg`} alt="admin" />
                                     <NavLink to="admin">
                                         <MenuItem className='menu-item'>ADMIN</MenuItem>
                                     </NavLink>
                                 </Li>
                             ) : null
-
                     }
                 </Menu>
             </ Nav>
