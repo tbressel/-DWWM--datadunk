@@ -286,18 +286,14 @@ module.exports = cardApp;
  */
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
-    console.log(req.headers);
     const token = authHeader && authHeader.split(' ')[1];
-    console.log(token);
 
     if (token == null) return res.sendStatus(401);
 
-    // jwt.verify(token, process.env.JWT_SECRET_KEY, (err, {status}) => {
     jwt.verify(token, process.env.JWT_SECRET_KEY, (err, tokenObject) => {
 
-        // console.log(status)
         // if user is null or token is not authorized
-        if (err) return res.sendStatus(999);
+        if (err) return res.sendStatus(666);
         req.tokenObject = tokenObject;
         next();
     });

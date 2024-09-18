@@ -40,17 +40,12 @@ interface LeaguesListDataType {
 //////////////////   STYLE COMPONENTS   ////////////////////
 ////////////////////////////////////////////////////////////
 
-
 const FilterContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
     margin: 20px;
-    @media screen and (min-width: 768px) {
-           
-
-        }
-`;
+`
 const FilterForm = styled.form`
     display: flex;
     flex-direction: column;
@@ -62,88 +57,15 @@ const FilterForm = styled.form`
            justify-content: space-between;
 
         }
-`;
+`
 const FilterSelect = styled.select`
     padding: 15px;
     margin: 15px;
     border-radius: 15px;
     @media screen and (min-width: 768px) {
             min-width: 25%;
-
-        }
-`;
-const SwitchContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    width: 100%;
-
-`;
-const SwitchText = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 0px 5px;
-`;
-const ButtonContainer = styled.div`
-    display: flex;
-    height: 28px;
-    padding: 2px;
-    border-radius: 9px;
-    background: ${colors.violet2};
-`;
-const ButtonLeft = styled.div`
-    display: flex;
-    padding: 3px 10px;
-    border-radius: 7px;
-    transition: 300ms ease-in-out;
-
-
-    &.active {
-        border: 0.5px solid rgba(0, 0, 0, 0.04);
-        background: ${colors.violet1};
-        box-shadow: 0px 3px 1px 0px rgba(0, 0, 0, 0.04), 0px 3px 8px 0px rgba(0, 0, 0, 0.12);
-        font-family: 'Barlow Bold';
-        transition: 300ms ease-in-out;
     }
-
-p {
-    display: flex;
-    width: 40px;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-    font-size: 13px;
-}
-`;
-const ButtonRight = styled.div`
-    display: flex;
-    padding: 3px 10px;
-    border-radius: 7px;
-    font-family: 'Barlow Regular';
-    transition: 300ms ease-in-out;
-
-
-    &.active {
-        border: 0.5px solid rgba(0, 0, 0, 0.04);
-        background: ${colors.violet1};
-        box-shadow: 0px 3px 1px 0px rgba(0, 0, 0, 0.04), 0px 3px 8px 0px rgba(0, 0, 0, 0.12);
-        font-family: 'Barlow Bold';
-        transition: 300ms ease-in-out;
-
-    }
-
-p {
-    display: flex;
-    width: 47px;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-    font-size: 13px;
-
-
-}
-`;
+`
 const FilterButton = styled.button` 
 text-align: center;
   border-radius: 50%;
@@ -151,15 +73,7 @@ text-align: center;
   height: 83px;
   margin-left: auto;
   margin-right: auto;
-
-
-@media screen and (min-width: 768px) {
-
-
-        }
-
-
-`;
+`
 ////////////////////////////////////////////////////////////
 //////////////////   MAIN COMPONENT   //////////////////////
 ////////////////////////////////////////////////////////////
@@ -246,12 +160,12 @@ const [showForm, setShowForm] = useState(false);
     
           if (response.ok) {
             let data = await response.json();
-            // console.log('Données reçues : ', data);
-            // console.log('Formulaire OK');
             onFilterChange(data);
+
           } else {
             console.error('Erreur lors de la soumission du formulaire');
           }
+          
         } catch (error) {
           console.error('Erreur lors de la soumission du formulaire:', error);
         }
@@ -269,14 +183,10 @@ const [showForm, setShowForm] = useState(false);
 
     return (
         <FilterContainer>
-           
-
-
            <SwitchFilter showForm={showForm} setShowForm={setShowForm} switchText={switchText}/>
-
-
             {showForm && (
                 <FilterForm onSubmit={handleSubmit}>
+                    
                     <FilterSelect value={formData.selectedTeam} onChange={handleOptionTeam}>
                     <option value="0">Sélection d'une équipe</option>
                         {teamsList.map((team) => (

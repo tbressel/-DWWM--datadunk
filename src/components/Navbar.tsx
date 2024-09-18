@@ -54,7 +54,6 @@ const NavbarWrapper = styled.div`
 `
 
 const BurgerContainer = styled.div`
-    cursor: pointer;
     width: 30px;
     margin-right: 20px;
 

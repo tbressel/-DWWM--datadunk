@@ -46,6 +46,9 @@
                 fpr_op,
                 eval_op,                // Stats
 TM POSS              $poss,
+
+$ScPoss = (twoR + threeR) + (1 - (1 - (lt > 0 ? lr / lt : 0))^2) * lt * 0.4,
+
 DTM POSS             $poss_op,
 Off Rtg               $poss > 0 ? round(100 * $pointEquipe / $poss, 1) : 0,
 Def Rtg                $poss_op > 0 ? round(100 * $pointEquipeOpp / $poss_op, 1) : 0,

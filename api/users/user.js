@@ -68,8 +68,7 @@ userApp.use(bodyParser.urlencoded({ extended: false }));
 ///////////////////       ENDPOINTS      //////////////////////
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
-userApp.post('/verify', authenticateToken, (req, res) => {
-    
+userApp.post('/verify', authenticateToken, (req, res) => {   
     res.json({  valid: true,
                 tokenObject: req.tokenObject });
 });
@@ -120,7 +119,7 @@ userApp.post('/login', (req, res) => {
                         } else {
                             if (isMatch) {
 
-                               // Utiliser une clé secrète fixe plutôt que de la générer à chaque fois
+                               // Secret key for the token
                                 const secretKey = process.env.JWT_SECRET_KEY;
 
                                 // Generate a token with user information and the secret key
@@ -152,9 +151,9 @@ userApp.post('/login', (req, res) => {
                                     status: queryResult[0].user_role,
                                     status_name: queryResult[0].user_role_name,
                                     avatar: queryResult[0].user_avatar,
-                                    sessionToken: sessionToken,
-                                    
+                                    sessionToken: sessionToken,  
                                 });
+
                             } else {
                                 res.status(401).json({
                                     message: notificationMessage.login_failed,
@@ -385,17 +384,11 @@ const notificationMessage = {
 //  */
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
-    console.log(req.headers);
     const token = authHeader && authHeader.split(' ')[1];
-    console.log(token);
 
     if (token == null) return res.sendStatus(401);
 
-    // jwt.verify(token, process.env.JWT_SECRET_KEY, (err, {status}) => {
     jwt.verify(token, process.env.JWT_SECRET_KEY, (err, tokenObject) => {
-
-        // console.log(status)
-
         if (err) return res.sendStatus(403);
         req.tokenObject = tokenObject;
         next();

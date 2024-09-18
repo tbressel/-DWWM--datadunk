@@ -166,8 +166,10 @@ statApp.get('/matchsummaryteams/:id', async (req, res) => {
             possTeamA = (TeamA.twoT + TeamA.threeT) + (0.44 * TeamA.lt) + (TeamA.bp - TeamA.ro)
             possTeamB = (TeamB.twoT + TeamB.threeT) + (0.44 * TeamB.lt) + (TeamB.bp - TeamB.ro)
             
-            scPossTeamA = (TeamA.twoR + TeamA.threeR)  + (1 - ((1 - (TeamA.lr / TeamA.lt))^2) ) + (TeamA.lt * 0.4)
-            scPossTeamB = (TeamB.twoR + TeamB.threeR)  + (1 - ((1 - (TeamB.lr / TeamB.lt))^2) ) + (TeamB.lt * 0.4)
+            scPossTeamA = (TeamA.twoR + TeamA.threeR) + (1 - (1 - (TeamA.lt > 0 ? TeamA.lr / TeamA.lt : 0))^2) * TeamA.lt * 0.4
+            // scPossTeamA = (TeamA.twoR + TeamA.threeR)  + (1 - ((1 - (TeamA.lr / TeamA.lt))^2) ) + (TeamA.lt * 0.4)
+            scPossTeamB = (TeamB.twoR + TeamB.threeR) + (1 - (1 - (TeamB.lt > 0 ? TeamB.lr / TeamB.lt : 0))^2) * TeamB.lt * 0.4
+            // scPossTeamB = (TeamB.twoR + TeamB.threeR)  + (1 - ((1 - (TeamB.lr / TeamB.lt))^2) ) + (TeamB.lt * 0.4)
             
                         const offdefEfficiency = [
                             {
@@ -175,7 +177,7 @@ statApp.get('/matchsummaryteams/:id', async (req, res) => {
                                 Poss: possTeamA,
                                 Action: null,
                                 ORtg: Math.round(100 * TeamA.pts / (possTeamA), 1),
-                                FloorPerc: null,
+                                FloorPerc: Math.round((scPossTeamA / possTeamA) * 100),
                                 DRgt: Math.round(100 * TeamB.pts / possTeamB, 1),
                                 StopPerc: null,
                                 netRtg: null,
@@ -185,7 +187,7 @@ statApp.get('/matchsummaryteams/:id', async (req, res) => {
                                 Poss: possTeamB,
                                 Action: null,
                                 ORtg: Math.round(100 * TeamB.pts / (possTeamB), 1),
-                                FloorPerc: null,
+                                FloorPerc: Math.round((scPossTeamB / possTeamB) * 100),
                                 DRgt: Math.round(100 * TeamA.pts / possTeamA, 1),
                                 StopPerc: null,
                                 netRtg: null,
